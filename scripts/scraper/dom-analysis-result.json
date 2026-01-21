@@ -1,0 +1,72 @@
+{
+  "tables": [
+    {
+      "index": 0,
+      "className": "hr-tableBigRace",
+      "id": "",
+      "rowCount": 3,
+      "firstRowHTML": "<tr>\n              <td class=\"hr-tableBigRace__data hr-tableBigRace__data--grade\">\n            <span class=\"hr-label hr-label--g3\">GIII</span>\n              </td>\n              <td class=\"hr-tableBigRace__data hr-tableBigRace__data--date\">\n                <div class=\"hr-tableBigRace__date\">1月24日（土）</div>\n                <div class=\"hr-tableBigRace__turf\">小倉11R</div>\n              </td>\n              <td class=\"hr-tableBigRace__data\">\n                <div class=\"hr-textList\">\n                  <s"
+    },
+    {
+      "index": 1,
+      "className": "hr-tableLeft hr-tableLeft--oneColumn",
+      "id": "",
+      "rowCount": 4,
+      "firstRowHTML": "<tr>\n              <th class=\"hr-tableLeft__head\" scope=\"row\" rowspan=\"2\">\n                <time datetime=\"2026-01-17\">1月17日（土）</time>\n              </th>\n                  <td class=\"hr-tableLeft__raceInfo\">\n                    <a href=\"https://sports.yahoo.co.jp/keiba/race/list/26060106\" data-cl-params=\"_cl_module:raceinfo;_cl_link:nlocdt\" data-cl_cl_index=\"3\">1回中山6日</a>\n                    \n                  </td>\n              <td class=\"hr-tableLeft__data\">\n                <div class=\"hr-ta"
+    },
+    {
+      "index": 2,
+      "className": "hr-tableLeft hr-tableLeft--oneColumn",
+      "id": "",
+      "rowCount": 6,
+      "firstRowHTML": "<tr>\n              <th class=\"hr-tableLeft__head\" scope=\"row\" rowspan=\"2\">\n                <time datetime=\"2026-01-10\">1月10日（土）</time>\n              </th>\n                <td class=\"hr-tableLeft__raceInfo\">\n                  <a href=\"https://sports.yahoo.co.jp/keiba/race/list/26060103\" data-cl-params=\"_cl_module:raceinfo;_cl_link:plocdt\" data-cl_cl_index=\"11\">1回中山3日</a>\n                  \n                </td>\n              <td class=\"hr-tableLeft__data\">\n                <a class=\"hr-tableLeft__"
+    }
+  ],
+  "gradeElements": [
+    {
+      "keyword": "G1",
+      "count": 32,
+      "sample": {
+        "tagName": "HTML",
+        "className": "",
+        "text": "\n    \n    \n      \n      競馬 - スポーツナビ\n      \n      \n      \n      \n      \n      \n      \n      \n      \n "
+      }
+    },
+    {
+      "keyword": "G2",
+      "count": 22,
+      "sample": {
+        "tagName": "HTML",
+        "className": "",
+        "text": "\n    \n    \n      \n      競馬 - スポーツナビ\n      \n      \n      \n      \n      \n      \n      \n      \n      \n "
+      }
+    },
+    {
+      "keyword": "G3",
+      "count": 32,
+      "sample": {
+        "tagName": "HTML",
+        "className": "",
+        "text": "\n    \n    \n      \n      競馬 - スポーツナビ\n      \n      \n      \n      \n      \n      \n      \n      \n      \n "
+      }
+    },
+    {
+      "keyword": "重賞",
+      "count": 46,
+      "sample": {
+        "tagName": "HTML",
+        "className": "",
+        "text": "\n    \n    \n      \n      競馬 - スポーツナビ\n      \n      \n      \n      \n      \n      \n      \n      \n      \n "
+      }
+    },
+    {
+      "keyword": "グレード",
+      "count": 10,
+      "sample": {
+        "tagName": "HTML",
+        "className": "",
+        "text": "\n    \n    \n      \n      競馬 - スポーツナビ\n      \n      \n      \n      \n      \n      \n      \n      \n      \n "
+      }
+    }
+  ]
+}

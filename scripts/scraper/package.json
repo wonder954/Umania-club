@@ -1,0 +1,14 @@
+{
+    "name": "umania-scraper",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "JRA race scraper for Umania Club",
+    "main": "scrape.js",
+    "scripts": {
+        "scrape": "node scrape.js"
+    },
+    "dependencies": {
+        "puppeteer": "^21.0.0",
+        "firebase-admin": "^12.0.0"
+    }
+}
