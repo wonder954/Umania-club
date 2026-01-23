@@ -29,11 +29,13 @@ async function syncRaces() {
             console.log(`  [${i + 1}/${weeklyRaces.length}] ${race.title} を取得中...`);
 
             try {
-                const horses = await fetchRaceDetailYahoo(race.detailUrl);
+                const { date, horses } = await fetchRaceDetailYahoo(race.detailUrl);
+
                 racesWithHorses.push({
-                    yahooRace: race,
-                    horses: horses
+                    yahooRace: { ...race, date },
+                    horses
                 });
+
                 console.log(`    ✅ ${horses.length} 頭の馬情報を取得`);
             } catch (error) {
                 console.error(`    ❌ エラー: ${error.message}`);
@@ -83,7 +85,10 @@ async function syncRaces() {
         console.log('\n📊 保存されたレース一覧:');
         Object.values(racesObject).forEach((race, index) => {
             console.log(`  ${index + 1}. [${race.grade}] ${race.name} (${race.date})`);
-            console.log(`     ${race.course} - ${race.horses.length}頭`);
+            const c = race.course;
+            console.log(
+                `     ${c.surface ?? ''}${c.direction ?? ''}${c.courseDetail ?? ''} ${c.distance ?? ''}m - ${race.horses.length}頭`
+            );
         });
 
         console.log('\n🎉 同期完了！Next.jsで確認してください。');

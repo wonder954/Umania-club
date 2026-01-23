@@ -5,12 +5,14 @@ import { toPng } from "html-to-image";
 type Props = {
     raceName: string;
     courseText: string;
+    grade: string;
+    date: string;
     prediction: Record<string, string>; // marks
-    horses: { number?: number; name: string }[];
+    horses: { number?: number | string; name: string }[];
     comment?: string;
 };
 
-export default function ShareImageGenerator({ raceName, courseText, prediction, horses, comment }: Props) {
+export default function ShareImageGenerator({ raceName, courseText, grade, date, prediction, horses, comment }: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -39,19 +41,31 @@ export default function ShareImageGenerator({ raceName, courseText, prediction, 
         window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
     };
 
-    // Sort horses by mark priority for display? Or loop all?
-    // Design request: "Center: Marks + Horse Names (Vertical)"
-    // Let's filter only marked horses for the image to keep it clean, or show top ones.
-    const markedHorses = horses.filter(h => prediction[h.number?.toString() || ""]);
+    const MARK_ORDER: Record<string, number> = { "◎": 1, "○": 2, "〇": 2, "▲": 3, "△": 4 };
 
-    // Sort order: ◎(1) > ○(2) > ▲(3) > △(4) > ☆(5)
-    // Assuming simpler sort or just mapped order for now.
-    const markOrder: Record<string, number> = { "◎": 1, "○": 2, "▲": 3, "△": 4, "☆": 5 };
-    markedHorses.sort((a, b) => {
-        const markA = prediction[a.number?.toString() || ""];
-        const markB = prediction[b.number?.toString() || ""];
-        return (markOrder[markA] || 99) - (markOrder[markB] || 99);
-    });
+    const markedHorses = Object.entries(prediction)
+        .map(([key, mark]) => {
+            const horse =
+                horses.find(h => String(h.number) === key) ||
+                horses.find(h => h.name === key);
+
+            return {
+                mark,
+                number: horse?.number ?? null,
+                name: horse?.name ?? key,
+            };
+        })
+        .filter(h => h.mark)
+        .sort((a, b) => {
+            const diff = (MARK_ORDER[a.mark] || 99) - (MARK_ORDER[b.mark] || 99);
+            if (diff !== 0) return diff;
+            return (Number(a.number) ?? 999) - (Number(b.number) ?? 999);
+        });
+
+    // compact モード判定: 5頭以上で2列
+    const isCompact = markedHorses.length >= 5;
+
+    // スタイル定義（パディングはJSXで適用）
 
     return (
         <div className="mt-6 flex flex-col items-center">
@@ -64,17 +78,12 @@ export default function ShareImageGenerator({ raceName, courseText, prediction, 
                 {loading ? "画像生成中..." : "SNSシェア用画像を生成する"}
             </button>
 
-            {/* 
-        Hidden Container for Image Generation 
-        Size: 1200x630 (OGP Standard)
-        Style: Newspaper / Retro
-      */}
+            {/* Hidden Container for Image Generation */}
             <div className="fixed top-0 left-0 -z-50 opacity-0 pointer-events-none">
                 <div
                     ref={ref}
-                    className="w-[1200px] h-[630px] bg-[#f8f7f2] text-gray-900 font-serif p-16 flex flex-col relative overflow-hidden"
+                    className="w-[1200px] h-[630px] bg-[#f8f7f2] text-gray-900 font-serif p-12 flex flex-col relative overflow-hidden box-border"
                     style={{
-                        // Simple grid pattern css
                         backgroundImage: `
               linear-gradient(#e5e5e5 1px, transparent 1px),
               linear-gradient(90deg, #e5e5e5 1px, transparent 1px)
@@ -82,43 +91,51 @@ export default function ShareImageGenerator({ raceName, courseText, prediction, 
                         backgroundSize: "40px 40px"
                     }}
                 >
-                    {/* Decorative Border */}
-                    <div className="absolute inset-4 border-2 border-gray-800 pointer-events-none"></div>
-                    <div className="absolute inset-6 border border-gray-400 pointer-events-none"></div>
-
-                    {/* Header */}
-                    <div className="relative z-10 text-center border-b-4 border-gray-900 pb-6 mb-8 bg-[#f8f7f2]/80 backdrop-blur-sm mx-auto w-full">
-                        <h2 className="text-2xl font-bold text-gray-600 mb-2 tracking-widest">{courseText}</h2>
-                        <h1 className="text-7xl font-black text-gray-900 tracking-tighter" style={{ fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", serif' }}>
+                    {/* Header (unchanged) */}
+                    <div className="relative z-10 text-center border-b-4 border-gray-900 pb-4 mb-4 bg-[#f8f7f2]/80 backdrop-blur-sm mx-auto w-full">
+                        <div className="flex justify-center items-center gap-4 mb-1 text-gray-600 font-bold tracking-widest text-lg">
+                            <span className="bg-gray-200 px-3 py-1 rounded-sm text-gray-800">{date}</span>
+                            <span className="bg-yellow-400 text-black px-3 py-1 rounded-sm shadow-sm">{grade}</span>
+                            <span>{courseText}</span>
+                        </div>
+                        <h1 className="text-6xl font-black text-gray-900 tracking-tighter" style={{ fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", serif' }}>
                             {raceName}
                         </h1>
                     </div>
 
                     {/* Main Content (Predictions) */}
-                    <div className="flex-1 flex flex-col justify-center items-center relative z-10">
-                        <div className="bg-white/90 p-8 shadow-sm border border-gray-300 w-full max-w-3xl">
+                    <div className="flex-1 flex flex-col justify-center items-center relative z-10 min-h-0">
+                        <div className={`bg-white/95 px-12 shadow-sm border border-gray-300 w-full flex items-center justify-center ${isCompact ? "max-w-5xl" : "max-w-4xl"}`}>
                             {markedHorses.length > 0 ? (
-                                markedHorses.map((h) => {
-                                    const mark = prediction[h.number?.toString() || ""];
-                                    return (
-                                        <div key={h.name} className="flex items-end gap-6 mb-5 last:mb-0 border-b border-dashed border-gray-300 pb-2 last:border-0 last:pb-0">
-                                            <span className={`
-                        text-5xl font-bold leading-none
-                        ${mark === "◎" ? "text-red-600" :
-                                                    mark === "○" ? "text-blue-600" :
-                                                        mark === "▲" ? "text-green-600" : "text-gray-800"}
-                      `}>
-                                                {mark}
-                                            </span>
-                                            <span className="text-5xl font-bold font-mono text-gray-800 w-24 text-center">{h.number}</span>
-                                            <span className="text-5xl font-bold text-gray-900 tracking-tight" style={{ fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", serif' }}>
-                                                {h.name}
-                                            </span>
-                                        </div>
-                                    );
-                                })
+                                <div className={`w-full ${isCompact ? "grid grid-cols-2 gap-x-6 gap-y-6 py-6" : "flex flex-col items-center gap-y-1 py-6"}`}>
+                                    {markedHorses.map((h) => {
+                                        const mark = h.mark === "○" ? "〇" : h.mark;
+
+                                        return (
+                                            <div key={h.name} className={`flex items-center ${isCompact ? "w-full" : "w-[560px]"}`}>
+                                                <span className={`
+                                                    font-bold leading-none text-center flex-shrink-0
+                                                    ${isCompact ? "text-5xl w-20" : "text-6xl w-24"}
+                                                    ${mark === "◎" ? "text-red-600" :
+                                                        mark === "〇" ? "text-blue-600" :
+                                                            mark === "▲" ? "text-green-600" : "text-gray-800"}
+                                                `}>
+                                                    {mark}
+                                                </span>
+                                                {h.number && (
+                                                    <span className={`font-mono font-bold text-gray-500 text-right mr-3 flex-shrink-0 ${isCompact ? "text-2xl w-14" : "text-3xl w-20"}`}>
+                                                        {h.number}番
+                                                    </span>
+                                                )}
+                                                <span className={`font-bold text-gray-900 truncate ${isCompact ? "text-3xl" : "text-4xl"}`} style={{ fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", serif' }}>
+                                                    {h.name}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             ) : (
-                                <p className="text-2xl text-center text-gray-400">注目馬なし</p>
+                                <p className="text-3xl text-center text-gray-400 font-bold py-10">注目馬なし</p>
                             )}
                         </div>
                     </div>
@@ -135,11 +152,21 @@ export default function ShareImageGenerator({ raceName, courseText, prediction, 
                                 </div>
                             )}
                         </div>
-                        <div className="text-right">
-                            <p className="text-sm font-bold text-gray-500 mb-1 tracking-widest">KEIBA YOSO</p>
-                            <p className="text-4xl font-black text-gray-900 tracking-widest" style={{ fontFamily: 'serif' }}>
-                                UMANIA CLUB
-                            </p>
+                        <div className="flex items-end justify-end space-x-3">
+                            <img
+                                src="/umania-club logo.png"
+                                alt="UMANIA CLUB Logo"
+                                className="h-12 w-auto translate-y-1"
+                            />
+                            <div className="text-right">
+                                <p className="text-sm font-bold text-gray-500 tracking-widest">KEIBA YOSO</p>
+                                <p
+                                    className="text-4xl font-black text-gray-900 tracking-widest"
+                                    style={{ fontFamily: 'serif' }}
+                                >
+                                    UMANIA CLUB
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -158,11 +185,18 @@ export default function ShareImageGenerator({ raceName, courseText, prediction, 
                 <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
                     <div className="bg-white rounded-xl p-4 max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-auto">
                         <div className="flex justify-between items-center border-b pb-2">
-                            <div>
+                            <div className="flex-1">
                                 <h3 className="font-bold text-lg">シェア用画像生成完了！</h3>
-                                <p className="text-sm text-gray-500">長押し/右クリックで画像を保存して、SNSでシェアしてください</p>
+                                <p className="text-sm text-gray-500">
+                                    長押し/右クリックで画像を保存して、SNSでシェアしてください
+                                </p>
                             </div>
-                            <button onClick={() => setImageUrl(null)} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                            <button
+                                onClick={() => setImageUrl(null)}
+                                className="text-gray-400 hover:text-gray-600 text-2xl"
+                            >
+                                ×
+                            </button>
                         </div>
 
                         <div className="bg-gray-100 p-2 rounded border flex justify-center">

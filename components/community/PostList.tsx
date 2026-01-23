@@ -157,16 +157,49 @@ export default function PostList({ raceId, race }: Props) {
                     {/* Prediction Marks */}
                     {Object.keys(post.prediction).length > 0 && (
                         <div className="flex gap-2 mb-3 overflow-x-auto">
-                            {Object.entries(post.prediction).map(([horseNum, mark]) => {
-                                const horse = race?.horses.find((h: any) => h.number === parseInt(horseNum));
-                                return (
-                                    <span key={horseNum} className="inline-flex items-center bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-300 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm">
-                                        <span className="font-bold mr-1.5 text-lg">{mark}</span>
-                                        <span className="text-gray-700 font-mono mr-2">{horseNum}番</span>
-                                        {horse && <span className="text-gray-900 font-bold">{horse.name}</span>}
+                            {Object.entries(post.prediction)
+                                .map(([key, mark]) => {
+                                    // key は 馬番 or 馬名
+                                    const horse =
+                                        race?.horses.find((h: any) => String(h.number) === key) ||
+                                        race?.horses.find((h: any) => h.name === key);
+
+                                    return {
+                                        mark,
+                                        number: horse?.number ?? null,
+                                        name: horse?.name ?? key, // 馬名が取れない場合は key をそのまま
+                                    };
+                                })
+                                .sort((a, b) => {
+                                    const order: Record<string, number> = {
+                                        "◎": 1,
+                                        "〇": 2,
+                                        "○": 2, // 互換性のため追加
+                                        "▲": 3,
+                                        "△": 4,
+                                    };
+
+                                    // 1. 印の優先順位
+                                    const diff = (order[a.mark] || 99) - (order[b.mark] || 99);
+                                    if (diff !== 0) return diff;
+
+                                    // 2. 馬番順
+                                    return (a.number ?? 999) - (b.number ?? 999);
+                                })
+                                .map((item) => (
+                                    <span
+                                        key={`${item.name}-${item.mark}`}
+                                        className="inline-flex items-center bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-300 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm whitespace-nowrap"
+                                    >
+                                        <span className="font-bold mr-1.5 text-lg">
+                                            {item.mark === "○" ? "〇" : item.mark}
+                                        </span>
+                                        {item.number && (
+                                            <span className="text-gray-700 font-mono mr-2">{item.number}番</span>
+                                        )}
+                                        <span className="text-gray-900 font-bold">{item.name}</span>
                                     </span>
-                                );
-                            })}
+                                ))}
                         </div>
                     )}
 

@@ -14,7 +14,7 @@ export type Bet = {
 };
 
 type Props = {
-    horses: { number?: number; name: string }[];
+    horses: { number?: number | string; name: string }[];
     bets: Bet[];
     onChange: (bets: Bet[]) => void;
 };
@@ -43,7 +43,10 @@ export default function BettingForm({ horses, bets, onChange }: Props) {
         }
     }, [selectedType, selectedHorses]);
 
-    const toggleHorse = (num: number) => {
+    const toggleHorse = (numStr: number | string) => {
+        const num = Number(numStr);
+        if (isNaN(num)) return; // 数値化できない場合は無視
+
         if (selectedHorses.includes(num)) {
             setSelectedHorses(selectedHorses.filter(n => n !== num));
         } else {
@@ -103,7 +106,7 @@ export default function BettingForm({ horses, bets, onChange }: Props) {
                             disabled={!h.number}
                             className={`
                 aspect-square rounded flex items-center justify-center font-mono font-bold text-lg
-                ${selectedHorses.includes(h.number!)
+                ${selectedHorses.includes(Number(h.number))
                                     ? "bg-blue-500 text-white shadow-inner"
                                     : "bg-white border text-gray-700 hover:bg-gray-100"}
               `}

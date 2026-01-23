@@ -4,8 +4,6 @@
 
 /**
  * レースIDをURLから抽出
- * @param {string} url - Yahoo!競馬のURL
- * @returns {string} レースID (例: "2610010111")
  */
 export function extractRaceIdFromUrl(url) {
     const match = url.match(/\/(\d+)\/?$/);
@@ -14,38 +12,29 @@ export function extractRaceIdFromUrl(url) {
 
 /**
  * 日本語の日付を YYYY-MM-DD 形式に変換
- * @param {string} dateStr - 日本語日付 (例: "1月24日（土）")
- * @returns {string} ISO形式の日付 (例: "2026-01-24")
+ * 例: "2026年1月25日（日）" → "2026-01-25"
  */
 export function parseJapaneseDate(dateStr) {
-    const year = new Date().getFullYear();
-    const match = dateStr.match(/(\d+)月(\d+)日/);
+    if (!dateStr) {
+        console.warn(`parseJapaneseDate: dateStr is null`);
+        return '';
+    }
 
+    const match = dateStr.match(/(\d+)年(\d+)月(\d+)日/);
     if (!match) {
         console.warn(`Failed to parse date: ${dateStr}`);
         return '';
     }
 
-    const month = match[1].padStart(2, '0');
-    const day = match[2].padStart(2, '0');
+    const year = match[1];
+    const month = match[2].padStart(2, '0');
+    const day = match[3].padStart(2, '0');
 
     return `${year}-${month}-${day}`;
 }
 
 /**
- * 競馬場名を抽出
- * @param {string} turfText - コーステキスト (例: "小倉11R")
- * @returns {string} 競馬場名 (例: "小倉")
- */
-export function extractCourse(turfText) {
-    return turfText.replace(/\d+R$/, '').trim();
-}
-
-/**
  * Yahoo!競馬のレースデータを既存のRace型に変換
- * @param {Object} yahooRace - fetchWeeklyRacesYahoo() の返却データ
- * @param {Array} horses - fetchRaceDetailYahoo() の返却データ
- * @returns {Object} Race型のオブジェクト
  */
 export function convertYahooRaceToRace(yahooRace, horses) {
     const raceId = extractRaceIdFromUrl(yahooRace.detailUrl);
@@ -54,24 +43,35 @@ export function convertYahooRaceToRace(yahooRace, horses) {
         id: raceId,
         name: yahooRace.title,
         date: parseJapaneseDate(yahooRace.date),
-        course: extractCourse(yahooRace.turf),
+
+        // ★ turfText はもう存在しないので削除
+        // course は「競馬場名」ではなく「コース情報（芝・右・外など）」に変更
+        course: {
+            surface: yahooRace.surface ?? null,
+            direction: yahooRace.direction ?? null,
+            courseDetail: yahooRace.courseDetail ?? null,
+            distance: yahooRace.distance ?? null,
+        },
+
         grade: yahooRace.grade,
-        distance: null, // Yahoo!データからは取得できないため null
-        track: null,    // Yahoo!データからは取得できないため null
-        weightType: null, // Yahoo!データからは取得できないため null
+        distance: yahooRace.distance ?? null,
+        track: yahooRace.surface ?? null,
+        weightType: yahooRace.weightType ?? null,
+
         horses: horses.map(horse => ({
             number: horse.number,
             name: horse.name,
-            jockey: horse.jockey
+            jockey: horse.jockey,
+            frame: horse.frame,
+            weight: horse.weight,
         })),
+
         result: null
     };
 }
 
 /**
- * 複数のレースデータをまとめてRace型に変換し、IDをキーとしたオブジェクトを返す
- * @param {Array} racesWithHorses - [{ yahooRace, horses }] の配列
- * @returns {Object} { raceId: Race } の形式
+ * 複数レースをまとめて Race 型に変換
  */
 export function convertToRacesObject(racesWithHorses) {
     const racesObj = {};

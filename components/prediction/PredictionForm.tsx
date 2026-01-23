@@ -11,16 +11,32 @@ import ShareImageGenerator from "@/components/share/ShareImageGenerator";
 
 type Props = {
     race: Race;
+
+    // ★ RacePage から受け取る state
+    prediction: Record<string, string>;
+    setPrediction: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+
+    bets: Bet[];
+    setBets: React.Dispatch<React.SetStateAction<Bet[]>>;
+
+    comment: string;
+    setComment: React.Dispatch<React.SetStateAction<string>>;
+
     onPostSuccess?: () => void;
 };
 
-export default function PredictionForm({ race, onPostSuccess }: Props) {
+export default function PredictionForm({
+    race,
+    prediction,
+    setPrediction,
+    bets,
+    setBets,
+    comment,
+    setComment,
+    onPostSuccess
+}: Props) {
     const { user, loginAnonymous } = useAuth();
 
-    // State
-    const [prediction, setPrediction] = useState<Record<string, string>>({});
-    const [bets, setBets] = useState<Bet[]>([]);
-    const [comment, setComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -30,7 +46,6 @@ export default function PredictionForm({ race, onPostSuccess }: Props) {
         if (!user) {
             await loginAnonymous();
 
-            // ★ ここが重要：ログイン完了を待つ
             await new Promise((resolve) => {
                 const unsub = onAuthStateChanged(auth, (u) => {
                     if (u) {
@@ -86,7 +101,9 @@ export default function PredictionForm({ race, onPostSuccess }: Props) {
                 <div className="flex flex-col items-center">
                     <ShareImageGenerator
                         raceName={race.name}
-                        courseText={`${race.course} ${race.distance}m`}
+                        courseText={`${race.course.surface} ${race.course.distance}m（${race.course.direction}${race.course.courseDetail}）`}
+                        grade={race.grade || ""}
+                        date={race.date || ""}
                         prediction={prediction}
                         horses={race.horses}
                         comment={comment}
@@ -114,30 +131,36 @@ export default function PredictionForm({ race, onPostSuccess }: Props) {
 
             <div className="p-6 space-y-8">
 
-                {/* Section 1: Marks */}
-                <section>
-                    <h3 className="text-lg font-bold border-l-4 border-red-500 pl-3 mb-4">印</h3>
-                    <MarkSelector
-                        horses={race.horses}
-                        value={prediction}
-                        onChange={setPrediction}
-                    />
-                </section>
-
-                {/* Section 2: Bets */}
+                {/* Section: Bets */}
                 <section>
                     <h3 className="text-lg font-bold border-l-4 border-blue-500 pl-3 mb-4">買い目</h3>
-                    <BettingForm
-                        horses={race.horses}
-                        bets={bets}
-                        onChange={setBets}
-                    />
-                    <div className="mt-2 text-right font-bold text-gray-700">
-                        合計: {totalPoints} 点
-                    </div>
+
+                    {race.horses.some(h => h.number) ? (
+                        <>
+                            <BettingForm
+                                horses={race.horses}
+                                bets={bets}
+                                onChange={setBets}
+                            />
+                            <div className="mt-2 text-right font-bold text-gray-700">
+                                合計: {totalPoints} 点
+                            </div>
+                        </>
+                    ) : (
+                        <div className="bg-gray-100 p-6 rounded-lg text-center border overflow-hidden relative">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl text-gray-500 pointer-events-none select-none">
+                                ?
+                            </div>
+                            <p className="text-gray-600 font-bold mb-2">出馬表確定待ち</p>
+                            <p className="text-sm text-gray-500">
+                                枠順・馬番が確定後（金曜日頃）、<br />
+                                買い目の入力が可能になります。
+                            </p>
+                        </div>
+                    )}
                 </section>
 
-                {/* Section 3: Comment */}
+                {/* Section: Comment */}
                 <section>
                     <h3 className="text-lg font-bold border-l-4 border-green-500 pl-3 mb-4">コメント</h3>
                     <textarea
