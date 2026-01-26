@@ -45,6 +45,8 @@ export default function RacePage({ params }: { params: { raceId: string } }) {
             {/* Race Info Card */}
             <section className="bg-white rounded-lg shadow-md p-6 border-l-8 border-yellow-500 w-full max-w-4xl mx-auto mt-6">
                 <div className="flex flex-col gap-4">
+
+                    {/* 上段：グレード + 日付 */}
                     <div className="flex items-center gap-2">
                         <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">
                             {race.grade}
@@ -52,6 +54,12 @@ export default function RacePage({ params }: { params: { raceId: string } }) {
                         <span className="text-gray-500 text-sm">{race.date}</span>
                     </div>
 
+                    {/* 中段：場所 / レース番号 */}
+                    <p className="text-gray-600 text-sm font-medium ml-1">
+                        {race.place} / {race.raceNumber}
+                    </p>
+
+                    {/* タイトル行 */}
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                         <Image
                             src="/umania-club%20logo.png"
@@ -65,6 +73,7 @@ export default function RacePage({ params }: { params: { raceId: string } }) {
                         </h1>
                     </div>
 
+                    {/* コース情報 */}
                     <p className="text-gray-600 font-medium ml-1">
                         {race.course.surface} {race.course.distance}m（
                         {race.course.direction}

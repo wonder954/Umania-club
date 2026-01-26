@@ -9,6 +9,9 @@ export type Race = {
     id: string;
     name: string;
     date: string;
+    place?: string;        // ← 追加
+    raceNumber?: string;   // ← 追加
+
 
     course: {
         surface: string;       // 芝 or ダート

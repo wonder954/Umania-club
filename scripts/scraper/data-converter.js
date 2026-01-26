@@ -42,7 +42,9 @@ export function convertYahooRaceToRace(yahooRace, horses) {
     return {
         id: raceId,
         name: yahooRace.title,
-        date: parseJapaneseDate(yahooRace.date),
+        date: parseJapaneseDate(yahooRace.date) || parseJapaneseDate(yahooRace.originalDate), // detail page date takes precedence
+        place: yahooRace.place ?? null,
+        raceNumber: yahooRace.raceNumber ?? null,
 
         // ★ turfText はもう存在しないので削除
         // course は「競馬場名」ではなく「コース情報（芝・右・外など）」に変更

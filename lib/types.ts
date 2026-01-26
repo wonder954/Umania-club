@@ -38,6 +38,8 @@ export type Race = {
     name: string;
     date: string;
     course: string;
+    raceNumber?: string;
+    place?: string;
     grade?: string;
     distance?: number;
     track?: string;

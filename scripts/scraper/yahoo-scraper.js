@@ -99,7 +99,6 @@ export async function fetchRaceDetailYahoo(url) {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         );
 
-        // ページタイプ判定（重要：denuma → denma）
         const isRegistPage = url.includes('/race/regist/');
         const isDenmaPage = url.includes('/race/denma/');
         const isResultPage = url.includes('/race/result/');
@@ -112,130 +111,102 @@ export async function fetchRaceDetailYahoo(url) {
                     ? 'result'
                     : 'unknown';
 
-        console.log(`Page type: ${pageType}`);
-        console.log(`Navigating to: ${url}`);
-
         await page.goto(url, {
             waitUntil: 'networkidle0',
             timeout: 30000,
         });
 
-        // ★ レース日付を取得（今回のエラー原因の解消ポイント）
-        let raceDate = null;
-        try {
-            raceDate = await page.$eval(
-                '.hr-predictRaceInfo__date .hr-predictRaceInfo__text',
-                el => el.textContent.trim()
-            );
-        } catch {
-            console.log('Race date not found');
-        }
+        // ★ レース番号・日付・場所を取得
+        const raceInfo = await page.evaluate(() => {
+            const number = document
+                .querySelector('.hr-predictRaceInfo__raceNumber')
+                ?.textContent?.trim() || null;
 
-        console.log('Extracting horse data...');
+            const dateTexts = Array.from(
+                document.querySelectorAll('.hr-predictRaceInfo__date .hr-predictRaceInfo__text')
+            ).map(el => el.textContent.trim());
 
+            const date = dateTexts[0] || null; // "2026年1月24日（土）"
+            const placeRaw = dateTexts[1] || null; // "1回小倉1日"
+
+            let place = null;
+            if (placeRaw) {
+                const m = placeRaw.match(/回(.+?)\d/);
+                place = m ? m[1] : null; // "小倉"
+            }
+
+            return { number, date, place };
+        });
+
+        // ★ 馬データ取得（既存処理）
         const horses = await page.evaluate((pageType) => {
             const results = [];
             const horseTable = document.querySelector('.hr-table');
 
-            if (!horseTable) {
-                console.log('Horse table not found');
-                return results;
-            }
+            if (!horseTable) return results;
 
             const rows = horseTable.querySelectorAll('tbody tr');
-            console.log(`Found ${rows.length} horse rows (page type: ${pageType})`);
 
-            rows.forEach((row, index) => {
-                try {
-                    // 特別登録ページ
-                    if (pageType === 'regist') {
-                        const horseCell = row.querySelector('.hr-table__data--horse');
-                        const nameLink = horseCell?.querySelector('a');
-                        const name = nameLink?.textContent?.trim() || '';
+            rows.forEach((row) => {
+                if (pageType === 'regist') {
+                    const horseCell = row.querySelector('.hr-table__data--horse');
+                    const name = horseCell?.querySelector('a')?.textContent?.trim() || null;
 
-                        const horseText = horseCell?.textContent?.trim() || '';
-                        const sexAgeMatch = horseText.match(/([牡牝セ])(\d+)/);
-                        const sex = sexAgeMatch ? sexAgeMatch[1] : null;
-                        const age = sexAgeMatch ? parseInt(sexAgeMatch[2]) : null;
-
-                        const weightCell = row.querySelector('.hr-table__data--weight');
-                        const weightText = weightCell?.textContent?.trim() || '';
-                        const weight = weightText ? parseFloat(weightText) : null;
-
-                        const jockeyCell = row.querySelector('.hr-table__data--jockey');
-                        const trainerLink = jockeyCell?.querySelector('a');
-                        const trainer = trainerLink?.textContent?.trim() || null;
-
-                        if (name) {
-                            results.push({
-                                frame: null,
-                                number: null,
-                                name,
-                                sex,
-                                age,
-                                jockey: null,
-                                weight,
-                                odds: null,
-                                popularity: null,
-                                trainer,
-                            });
-                        }
-                    } else {
-                        // ★ 出馬表ページ（denma）・結果ページ（result）
-
-                        // 枠番
-                        const frame = row.querySelector('.hr-icon__bracketNum')
-                            ?.textContent?.trim() || null;
-
-                        // 馬番（2つ目の number セル）
-                        const numberCells = row.querySelectorAll('.hr-table__data--number');
-                        const number = numberCells[1]?.textContent?.trim() || null;
-
-                        // 馬名・性齢
-                        const nameCell = row.querySelectorAll('.hr-table__data--name')[0];
-                        const name = nameCell?.querySelector('a')?.textContent?.trim() || null;
-
-                        const sexAgeText =
-                            nameCell?.querySelector('p')?.textContent?.trim() || '';
-                        const sexAgeMatch = sexAgeText.match(/^([牡牝セ])(\d+)/);
-                        const sex = sexAgeMatch?.[1] || null;
-                        const age = sexAgeMatch ? parseInt(sexAgeMatch[2]) : null;
-
-                        // 騎手・斤量
-                        const jockeyCell = row.querySelectorAll('.hr-table__data--name')[1];
-                        const jockey =
-                            jockeyCell?.querySelector('a')?.textContent?.trim() || null;
-
-                        const weightText =
-                            jockeyCell?.querySelector('p')?.textContent?.trim() || '';
-                        const weight = weightText ? parseFloat(weightText) : null;
-
+                    if (name) {
                         results.push({
-                            frame,
-                            number,
+                            frame: null,
+                            number: null,
                             name,
-                            sex,
-                            age,
-                            jockey,
-                            weight,
+                            sex: null,
+                            age: null,
+                            jockey: null,
+                            weight: null,
                         });
                     }
-                } catch (error) {
-                    console.error(`Error parsing horse row ${index}:`, error);
+                } else {
+                    const frame = row.querySelector('.hr-icon__bracketNum')
+                        ?.textContent?.trim() || null;
+
+                    const numberCells = row.querySelectorAll('.hr-table__data--number');
+                    const number = numberCells[1]?.textContent?.trim() || null;
+
+                    const nameCell = row.querySelectorAll('.hr-table__data--name')[0];
+                    const name = nameCell?.querySelector('a')?.textContent?.trim() || null;
+
+                    const sexAgeText = nameCell?.querySelector('p')?.textContent?.trim() || '';
+                    const sexAgeMatch = sexAgeText.match(/^([牡牝セ])(\d+)/);
+                    const sex = sexAgeMatch?.[1] || null;
+                    const age = sexAgeMatch ? parseInt(sexAgeMatch[2]) : null;
+
+                    const jockeyCell = row.querySelectorAll('.hr-table__data--name')[1];
+                    const jockey = jockeyCell?.querySelector('a')?.textContent?.trim() || null;
+
+                    const weightText = jockeyCell?.querySelector('p')?.textContent?.trim() || '';
+                    const weight = weightText ? parseFloat(weightText) : null;
+
+                    results.push({
+                        frame,
+                        number,
+                        name,
+                        sex,
+                        age,
+                        jockey,
+                        weight,
+                    });
                 }
             });
 
             return results;
         }, pageType);
 
-        console.log(`Extracted ${horses.length} horses from ${pageType} page`);
+        // ★ 追加した raceInfo を返す
+        return {
+            raceNumber: raceInfo.number,
+            date: raceInfo.date,
+            place: raceInfo.place,
+            horses,
+        };
 
-        // ★ raceDate を返すように変更
-        return { date: raceDate, horses };
-
-    } catch (error) {
-        console.error('Error in fetchRaceDetailYahoo:', error);
-        throw error;
     } finally {
         await browser.close();
     }

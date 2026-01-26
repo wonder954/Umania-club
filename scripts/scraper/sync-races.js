@@ -29,10 +29,16 @@ async function syncRaces() {
             console.log(`  [${i + 1}/${weeklyRaces.length}] ${race.title} を取得中...`);
 
             try {
-                const { date, horses } = await fetchRaceDetailYahoo(race.detailUrl);
+                const { date, raceNumber, place, horses } = await fetchRaceDetailYahoo(race.detailUrl);
 
                 racesWithHorses.push({
-                    yahooRace: { ...race, date },
+                    yahooRace: {
+                        ...race,
+                        originalDate: race.date, // backup list page date
+                        date,
+                        raceNumber,
+                        place
+                    },
                     horses
                 });
 

@@ -42,6 +42,13 @@ export default function PredictionForm({
 
     const totalPoints = bets.reduce((sum, bet) => sum + (bet.points || 0), 0);
 
+    const allowedNumbers = Object.keys(prediction)
+        .map(name => {
+            const horse = race.horses.find(h => h.name === name);
+            return horse?.number ? Number(horse.number) : null;
+        })
+        .filter((n): n is number => n !== null && !isNaN(n));
+
     const handleSubmit = async () => {
         if (!user) {
             await loginAnonymous();
@@ -90,6 +97,8 @@ export default function PredictionForm({
         setBets([]);
         setComment("");
     };
+
+
 
     if (isSuccess) {
         return (
@@ -141,6 +150,7 @@ export default function PredictionForm({
                                 horses={race.horses}
                                 bets={bets}
                                 onChange={setBets}
+                                allowedNumbers={allowedNumbers}   // ← これを追加
                             />
                             <div className="mt-2 text-right font-bold text-gray-700">
                                 合計: {totalPoints} 点

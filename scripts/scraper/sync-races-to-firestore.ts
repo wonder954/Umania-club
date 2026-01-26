@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { fetchWeeklyRacesYahoo, fetchRaceDetailYahoo } from "./scraper/yahoo-scraper.js";
-import { convertToRacesObject } from "./utils/data-converter.js";
+import { fetchWeeklyRacesYahoo, fetchRaceDetailYahoo } from "./yahoo-scraper.js";
+import { convertToRacesObject } from "./data-converter.js";
 import { firebaseConfig } from "../../lib/firebase.js";
 
 const app = initializeApp(firebaseConfig);
@@ -13,11 +13,23 @@ async function syncRacesToFirestore() {
     const weeklyRaces = await fetchWeeklyRacesYahoo();
     const racesWithHorses = [];
 
+    // @ts-ignore
     for (const race of weeklyRaces) {
         try {
-            const horses = await fetchRaceDetailYahoo(race.detailUrl);
-            racesWithHorses.push({ yahooRace: race, horses });
-        } catch (err) {
+            // @ts-ignore
+            const { date, raceNumber, place, horses } = await fetchRaceDetailYahoo(race.detailUrl);
+            racesWithHorses.push({
+                yahooRace: {
+                    ...race,
+                    originalDate: race.date,
+                    date,
+                    raceNumber,
+                    place
+                },
+                horses
+            });
+        } catch (err: any) {
+            // @ts-ignore
             console.warn(`❌ ${race.title} の取得に失敗: ${err.message}`);
         }
     }

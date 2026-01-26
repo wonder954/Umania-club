@@ -16,12 +16,21 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                 }`}
         >
             <div className="flex justify-between items-start mb-2">
-                <span
-                    className={`text-xs font-semibold px-2.5 py-0.5 rounded ${isPast ? "bg-gray-300 text-gray-700" : "bg-blue-100 text-blue-800"
-                        }`}
-                >
-                    {race.grade}
-                </span>
+                <div className="flex items-center gap-2">
+                    <span
+                        className={`text-xs font-semibold px-2.5 py-0.5 rounded ${isPast ? "bg-gray-300 text-gray-700" : "bg-blue-100 text-blue-800"
+                            }`}
+                    >
+                        {race.grade}
+                    </span>
+
+                    {/* ★ grade のすぐ右に配置 */}
+                    <p className="text-gray-600 text-sm">
+                        {race.place} / {race.raceNumber}
+                    </p>
+                </div>
+
+                {/* 日付は右端に */}
                 <span className="text-gray-500 text-sm">{race.date}</span>
             </div>
             <h2 className="text-2xl font-bold mb-1 text-gray-800">{race.name}</h2>

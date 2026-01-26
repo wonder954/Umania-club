@@ -226,14 +226,18 @@ export default function PostList({ raceId, race }: Props) {
                                                 </span>
                                                 {showHorseName && race ? (
                                                     <span className="font-medium text-gray-800">
-                                                        {bet.numbers.map((num: number) => {
-                                                            const horse = race.horses.find((h: any) => h.number === num);
-                                                            return horse ? `${num}.${horse.name}` : num;
-                                                        }).join(', ')}
+                                                        {Array.isArray(bet.numbers)
+                                                            ? bet.numbers.map((num: number) => {
+                                                                const horse = race.horses.find((h: any) => h.number === num);
+                                                                return horse ? `${num}.${horse.name}` : num;
+                                                            }).join(', ')
+                                                            : "—"}
                                                     </span>
                                                 ) : (
                                                     <span className="font-mono text-gray-700">
-                                                        {bet.numbers.join('-')}
+                                                        {Array.isArray(bet.numbers)
+                                                            ? bet.numbers.join('-')
+                                                            : "—"}
                                                     </span>
                                                 )}
                                                 <span className="text-gray-500 text-xs ml-auto">
