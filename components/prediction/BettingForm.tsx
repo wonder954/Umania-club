@@ -7,58 +7,20 @@ import UmatanSelector from "./selectors/UmatanSelector";
 import UmarenSelector from "./selectors/UmarenSelector";
 import SanrenpukuSelector from "./selectors/SanrenpukuSelector";
 import { expandNagashi } from "@/utils/expandNagashi";
-import { NagashiSelectorValue } from "./selectors/types";
-import { BetType } from "@/types/bet";
+import { BetType, Bet, InputMode, TrifectaPattern, NagashiSelectorValue } from "@/types/bet";
 import { Horse } from "@/types/horse";
 import { expandFormation } from "@/utils/expandFormation";
-
-type InputMode = "box" | "formation" | "nagashi";
-type TrifectaPattern = "1" | "2" | "3" | "12" | "13" | "23";
 
 const BET_TYPES: BetType[] = ["単勝", "複勝", "馬連", "馬単", "ワイド", "3連複", "3連単"];
 
 const AVAILABLE_MODES: Record<BetType, InputMode[]> = {
-    "単勝": ["box"],
-    "複勝": ["box"],
+    "単勝": ["normal"],
+    "複勝": ["normal"],
     "馬連": ["box", "nagashi", "formation"],
     "馬単": ["box", "nagashi", "formation"],
     "ワイド": ["box", "nagashi", "formation"],
     "3連複": ["box", "nagashi", "formation"],
     "3連単": ["box", "nagashi", "formation"],
-};
-
-
-export type Bet = {
-    id: string;
-    type: BetType;
-    mode: InputMode;
-    isMulti?: boolean;
-    numbers: number[]; // ← 必須にする
-
-    // ボックス
-    box?: number[];
-
-    // 流し（通常）
-    axis?: number[];
-    wings?: number[];
-
-    // 3連単流し（特殊）
-    trifectaNagashi?: {
-        pattern: TrifectaPattern;
-        first: number | null;
-        second: number | null;
-        third: number | null;
-        wings: number[];
-    };
-
-    // フォーメーション
-    formation?: {
-        first: number[];
-        second: number[];
-        third: number[];
-    };
-
-    points: number;
 };
 
 type Props = {
@@ -156,8 +118,8 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
     });
 
     const calculatedPoints = useMemo(() => {
-        // ▼ BOX
-        if (inputMode === "box") {
+        // ▼ BOX / NORMAL
+        if (inputMode === "box" || inputMode === "normal") {
             const n = boxSelected.length;
 
             if (selectedType === "単勝" || selectedType === "複勝") return n;
@@ -231,7 +193,7 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
         };
 
         // ▼ 入力内容を newBet に詰める
-        if (inputMode === "box") {
+        if (inputMode === "box" || inputMode === "normal") {
             newBet.box = [...boxSelected];
             newBet.numbers = [...boxSelected]; // ← 追加
         }
@@ -259,27 +221,29 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
             ];
         }
 
-        // ▼ 単勝・複勝
-        if (selectedType === "単勝" || selectedType === "複勝") {
-            if (singleSelected !== null) {
-                newBet.numbers = [singleSelected];
-            }
-        }
+
+
 
 
         let expanded: number[][] = [];
 
+        // ▼ box / normal の場合 → 点数は選択頭数そのまま
+        if (inputMode === "box" || inputMode === "normal") {
+            newBet.points = boxSelected.length;
+            newBet.numbers = [...boxSelected];
+        }
         // ▼ フォーメーションの場合
-        if (inputMode === "formation") {
-            expanded = expandFormation(newBet);   // ← フォーメーション専用ロジック
+        else if (inputMode === "formation") {
+            expanded = expandFormation(newBet);
+            newBet.points = expanded.length;
+            newBet.numbers = expanded[0] ?? [];
         }
         // ▼ 流し（nagashi / 3連単流し）の場合
         else {
-            expanded = expandNagashi(newBet);     // ← 流し専用ロジック
+            expanded = expandNagashi(newBet);
+            newBet.points = expanded.length;
+            newBet.numbers = expanded[0] ?? [];
         }
-
-        newBet.points = expanded.length;
-        newBet.numbers = expanded[0] ?? [];
 
         onChange([...bets, newBet]);
 
@@ -353,24 +317,26 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                     ))}
                 </div>
 
-                {/* 買い方 */}
-                <div className="flex gap-2 mb-4">
-                    {AVAILABLE_MODES[selectedType].map((mode) => (
-                        <button
-                            key={mode}
-                            onClick={() => {
-                                setInputMode(mode);
-                                setIsMulti(false);
-                            }}
-                            className={`px-3 py-1 rounded-full text-sm ${inputMode === mode ? "bg-green-600 text-white" : "bg-white border"
-                                }`}
-                        >
-                            {mode === "box" && "ボックス"}
-                            {mode === "formation" && "フォーメーション"}
-                            {mode === "nagashi" && "流し"}
-                        </button>
-                    ))}
-                </div>
+                {/* 買い方（単勝・複勝以外で表示） */}
+                {selectedType !== "単勝" && selectedType !== "複勝" && (
+                    <div className="flex gap-2 mb-4">
+                        {AVAILABLE_MODES[selectedType].map((mode) => (
+                            <button
+                                key={mode}
+                                onClick={() => {
+                                    setInputMode(mode);
+                                    setIsMulti(false);
+                                }}
+                                className={`px-3 py-1 rounded-full text-sm ${inputMode === mode ? "bg-green-600 text-white" : "bg-white border"
+                                    }`}
+                            >
+                                {mode === "box" && "ボックス"}
+                                {mode === "formation" && "フォーメーション"}
+                                {mode === "nagashi" && "流し"}
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 {/* マルチ（3連単はフォーメーションのみ、馬単はフォーメーション・流し） */}
                 {(
@@ -388,7 +354,7 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                     )}
 
                 {/* 入力 UI */}
-                {inputMode === "box" && (
+                {(inputMode === "box" || inputMode === "normal") && (
                     <BoxSelector
                         horses={horses}
                         selected={boxSelected}
@@ -434,7 +400,13 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                         // ▼ nagashi では使わない買い方は null
                         "単勝": null,
                         "複勝": null,
-                        "ワイド": null,
+                        "ワイド": (
+                            <UmarenSelector
+                                horses={normalizedHorses}
+                                allowedNumbers={allowedNumbers ?? []}
+                                onChange={handleNagashiChange}
+                            />
+                        ),
                     };
 
                     return selectorMap[selectedType];
@@ -509,6 +481,13 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
 
                                 {/* 3連複（新ロジック） */}
                                 {bet.type === "3連複" && bet.axis && bet.wings && (
+                                    <span className="text-sm font-mono">
+                                        軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
+                                    </span>
+                                )}
+
+                                {/* ワイド（新ロジック） */}
+                                {bet.type === "ワイド" && bet.axis && bet.wings && (
                                     <span className="text-sm font-mono">
                                         軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
                                     </span>

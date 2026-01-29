@@ -4,6 +4,9 @@ import { db } from "@/lib/firebase";
 import { collection, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore";
 import { deletePost, addComment, getPostComments } from "@/lib/db";
 import { useAuth } from "@/hooks/useAuth";
+import type { Bet } from "@/types/bet";
+import type { Race } from "@/lib/races";
+
 
 type Post = {
     id: string;
@@ -116,6 +119,51 @@ export default function PostList({ raceId, race }: Props) {
         }
     };
 
+    const renderNumbers = (bet: Bet, race?: Race): string => {
+        const { type, mode, numbers, formation } = bet;
+
+        // 単勝・複勝 → 馬名付きで表示（race があれば）
+        if ((type === "単勝" || type === "複勝") && race) {
+            return numbers
+                .map((num) => {
+                    const horse = race.horses.find((h) => h.number === num);
+                    return horse ? `${num}.${horse.name}` : `${num}`;
+                })
+                .join(", ");
+        }
+
+        // BOX
+        if (mode === "box") {
+            return `BOX: ${numbers.join(", ")}`;
+        }
+
+        // Normal (単勝・複勝など)
+        if (mode === "normal") {
+            return numbers.join(", ");
+        }
+
+        // 流し
+        if (mode === "nagashi") {
+            const axis = numbers.slice(0, 1);
+            const wings = numbers.slice(1);
+            return `流し: 軸[${axis.join(", ")}] → 相手[${wings.join(", ")}]`;
+        }
+
+        // フォーメーション
+        if (mode === "formation" && formation) {
+            const { first, second, third } = formation;
+
+            if (type === "3連単" || type === "3連複") {
+                return `フォーメーション: 1着[${first.join(", ")}] → 2着[${second.join(", ")}] → 3着[${third?.join(", ") ?? "-"}]`;
+            }
+
+            return `フォーメーション: 1頭目[${first.join(", ")}] → 2頭目[${second.join(", ")}]`;
+        }
+
+        // その他（馬連・馬単・ワイドなど）
+        return numbers.join(", ");
+    };
+
     if (loading) {
         return <p className="text-center text-gray-500 py-10">読み込み中...</p>;
     }
@@ -215,7 +263,7 @@ export default function PostList({ raceId, race }: Props) {
 
                             {expandedBets.has(post.id) && (
                                 <div className="mt-3 space-y-2 bg-blue-50 p-3 rounded-lg">
-                                    {post.bets.map((bet: any, index: number) => {
+                                    {post.bets.map((bet: Bet, index: number) => {
                                         // For win/place bets, show horse names
                                         const showHorseName = bet.type === "単勝" || bet.type === "複勝";
 
@@ -235,9 +283,7 @@ export default function PostList({ raceId, race }: Props) {
                                                     </span>
                                                 ) : (
                                                     <span className="font-mono text-gray-700">
-                                                        {Array.isArray(bet.numbers)
-                                                            ? bet.numbers.join('-')
-                                                            : "—"}
+                                                        {renderNumbers(bet, race)}
                                                     </span>
                                                 )}
                                                 <span className="text-gray-500 text-xs ml-auto">

@@ -34,6 +34,12 @@ export function expandNagashi(bet: NagashiBet): number[][] {
         return wings.map((w) => [axis[0], w].sort((a, b) => a - b));
     }
 
+    // ワイド（軸1 × 相手）※馬連と同じロジック
+    if (type === "ワイド") {
+        if (axis.length !== 1) return [];
+        return wings.map((w) => [axis[0], w].sort((a, b) => a - b));
+    }
+
     // 馬単（軸1 → 相手）
     if (type === "馬単") {
         if (axis.length !== 1) return [];

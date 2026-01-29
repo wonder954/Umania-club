@@ -7,7 +7,7 @@ import Link from "next/link";
 import PredictionForm from "@/components/prediction/PredictionForm";
 import PostList from "@/components/community/PostList";
 import Image from "next/image";
-import { Bet } from "@/components/prediction/BettingForm";
+import { Bet } from "@/types/bet";
 
 export default function RacePage({ params }: { params: { raceId: string } }) {
     const [race, setRace] = useState<any>(null);

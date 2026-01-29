@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import MarkSelector from "./MarkSelector";
-import BettingForm, { Bet } from "./BettingForm";
+import BettingForm from "./BettingForm";
+import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
 import { Race } from "@/lib/races";
 import { useAuth } from "@/hooks/useAuth";
