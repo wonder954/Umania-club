@@ -30,6 +30,7 @@ export interface RaceDetail {
     turn: string;
     hasNumbers: boolean;
     horses: Horse[];
+    updatedAt?: Date;
 }
 
 // Legacy Race type (keep for compatibility with existing code)

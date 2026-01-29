@@ -1,31 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllRacesFromFirestore } from "@/lib/races-firestore";
+import { getAllRaces } from "@/lib/races";
 import RaceCard from "@/components/race/RaceCard";
 
 export default async function Home() {
-    const races = await getAllRacesFromFirestore();
+    const races = await getAllRaces();
 
-    // 仮の先週のレース結果（UI確認用）
-    const pastRaces = [
-        {
-            id: "20260118tokyo11",
-            name: "日経新春杯",
-            date: "2026-01-18",
-            grade: "G2",
-            course: {
-                surface: "芝",
-                distance: 2400,
-                direction: "右",
-                courseDetail: null
-            },
-            place: "京都",
-            weightType: "ハンデ",
-            round: 11,
-            horses: [],
-            result: null
-        }
-    ];
+    // 現在の日付を取得（JST）
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const today = `${yyyy}-${mm}-${dd}`;
+
+    // 日付で振り分け
+    const upcomingRaces = races
+        .filter(r => r.date >= today)
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+    const pastRaces = races
+        .filter(r => r.date < today)
+        .sort((a, b) => b.date.localeCompare(a.date));
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-gray-50">
@@ -50,8 +45,8 @@ export default async function Home() {
                 <div className="mb-12">
                     <h2 className="text-xl font-bold mb-4">今週のレース</h2>
                     <div className="grid gap-6">
-                        {races.length > 0 ? (
-                            races.map((race) => (
+                        {upcomingRaces.length > 0 ? (
+                            upcomingRaces.map((race) => (
                                 <Link key={race.id} href={`/races/${race.id}`}>
                                     <RaceCard race={race} variant="upcoming" />
                                 </Link>
@@ -64,13 +59,21 @@ export default async function Home() {
                     </div>
                 </div>
 
-                {/* 先週の結果（仮） */}
+                {/* 先週の結果 */}
                 <div>
                     <h2 className="text-xl font-bold mb-4">先週の結果</h2>
                     <div className="grid gap-6">
-                        {pastRaces.map((race) => (
-                            <RaceCard key={race.id} race={race} variant="past" />
-                        ))}
+                        {pastRaces.length > 0 ? (
+                            pastRaces.map((race) => (
+                                <Link key={race.id} href={`/races/${race.id}`}>
+                                    <RaceCard race={race} variant="past" />
+                                </Link>
+                            ))
+                        ) : (
+                            <div className="text-center p-10 bg-gray-100 rounded-lg">
+                                <p className="text-gray-400">過去のレース履歴はありません</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

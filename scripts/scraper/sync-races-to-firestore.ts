@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { fetchWeeklyRacesYahoo, fetchRaceDetailYahoo } from "./yahoo-scraper.js";
+import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper";
 import { convertToRacesObject } from "./data-converter.js";
 import { firebaseConfig } from "../../lib/firebase.js";
 
@@ -13,23 +13,28 @@ async function syncRacesToFirestore() {
     const weeklyRaces = await fetchWeeklyRacesYahoo();
     const racesWithHorses = [];
 
-    // @ts-ignore
     for (const race of weeklyRaces) {
         try {
-            // @ts-ignore
-            const { date, raceNumber, place, horses } = await fetchRaceDetailYahoo(race.detailUrl);
+            const { info, entries } = await fetchRaceEntriesDenma(race.detailUrl);
             racesWithHorses.push({
                 yahooRace: {
                     ...race,
                     originalDate: race.date,
-                    date,
-                    raceNumber,
-                    place
+                    date: info.date,
+                    raceNumber: info.raceNumber,
+                    place: info.place
                 },
-                horses
+                horses: entries.map(e => ({
+                    frame: e.frame,
+                    number: e.number,
+                    name: e.name,
+                    sex: e.sex,
+                    age: e.age,
+                    jockey: e.jockey,
+                    weight: e.weight,
+                }))
             });
         } catch (err: any) {
-            // @ts-ignore
             console.warn(`❌ ${race.title} の取得に失敗: ${err.message}`);
         }
     }
@@ -37,8 +42,8 @@ async function syncRacesToFirestore() {
     const racesObject = convertToRacesObject(racesWithHorses);
 
     for (const [id, race] of Object.entries(racesObject)) {
-        await setDoc(doc(db, "races", id), race);
-        console.log(`✅ Firestore に保存: ${id} - ${race.name}`);
+        await setDoc(doc(db, "races", id), race as any);
+        console.log(`✅ Firestore に保存: ${id} - ${(race as any).name}`);
     }
 
     console.log("\n🎉 Firestore への保存が完了しました！");

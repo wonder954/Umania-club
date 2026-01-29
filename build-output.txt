@@ -1,0 +1,81 @@
+﻿
+> umania-club@0.1.0 build
+> next build
+
+   笆ｲ Next.js 14.1.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ 笨・Compiled successfully
+   Linting and checking validity of types ...
+node.exe : Failed to 
+compile.
+発生場所 行:1 文字:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\wonde\AppData\
+Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Failed    
+ to compile.:Stri    
+ng) [], RemoteEx    c
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+./lib/raceRepository.
+ts:37:16
+Type error: Conversio
+n of type '{ updatedA
+t: any; id: string; }
+' to type 'RaceDetail
+' may be a mistake be
+cause neither type su
+fficiently overlaps w
+ith the other. If thi
+s was intentional, co
+nvert the expression 
+to 'unknown' first.
+  Type '{ updatedAt: 
+any; id: string; }' i
+s missing the followi
+ng properties from ty
+pe 'RaceDetail': name
+, grade, date, course
+, and 5 more.
+
+[0m [90m 35 |[39m
+[0m
+[0m [90m 36 |[39m 
+        [36mconst[3
+9m data [33m=[39m s
+nap[33m.[39mdata()
+[33m;[39m[0m
+[0m[31m[1m>[22m[
+39m[90m 37 |[39m   
+      [36mreturn[39
+m {[0m
+[0m [90m    |[39m 
+               [31m
+[1m^[22m[39m[0m
+[0m [90m 38 |[39m 
+            id[33m:
+[39m snap[33m.[39mi
+d[33m,[39m[0m
+[0m [90m 39 |[39m 
+            [33m...
+[39mdata[33m,[39m[
+0m
+[0m [90m 40 |[39m 
+            updatedAt
+[33m:[39m data[33m
+.[39mupdatedAt[33m?
+[39m[33m.[39mtoDat
+e()[33m,[39m[0m
