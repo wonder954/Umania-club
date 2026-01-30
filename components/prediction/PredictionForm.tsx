@@ -111,7 +111,7 @@ export default function PredictionForm({
                 <div className="flex flex-col items-center">
                     <ShareImageGenerator
                         raceName={race.name}
-                        courseText={`${race.course.surface} ${race.course.distance}m（${race.course.direction}${race.course.courseDetail}）`}
+                        courseText={`${race.course.surface} ${race.course.distance}（${race.course.direction}${race.course.courseDetail}）`}
                         grade={race.grade || ""}
                         date={race.date || ""}
                         prediction={prediction}

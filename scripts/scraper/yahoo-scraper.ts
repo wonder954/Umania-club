@@ -35,7 +35,7 @@ async function extractRaceInfo(page: Page): Promise<Partial<RaceInfo>> {
             document.querySelectorAll('.hr-predictRaceInfo__date .hr-predictRaceInfo__text')
         ).map(el => (el as HTMLElement).textContent?.trim() || '');
 
-        const dateRaw = dateTexts[0] || null; // "2026年1月24日（土）"
+        const dateRaw = dateTexts[0] || null; // "2026年1月24日(土)"
         const placeRaw = dateTexts[1] || null; // "1回小倉1日"
 
         // 日付を YYYY-MM-DD に変換
@@ -99,7 +99,7 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 surface: string | null;
                 direction: string | null;
                 courseDetail: string | null;
-                distance: number | null;
+                distance: string | undefined;
                 weightType: string | null;
             }> = [];
 
@@ -126,7 +126,9 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 const surface = courseMatch?.[1] || null;
                 const direction = courseMatch?.[2] || null;
                 const courseDetail = courseMatch?.[3] || null;
-                const distance = courseMatch ? parseInt(courseMatch[4], 10) : null;
+
+                // 距離を "2200m" の形式で抽出
+                const distance = courseMatch ? `${courseMatch[4]}m` : undefined;
 
                 // 斤量タイプ
                 const weightMatch = status.match(/(定量|別定|ハンデ|馬齢)/);
@@ -157,7 +159,7 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
 }
 
 /**
- * 特別登録ページから出馬表を取得（馬番なし）
+ * 特別登録ページから出馬表を取得(馬番なし)
  * URL例: https://sports.yahoo.co.jp/keiba/race/regist/2606010811
  */
 export async function fetchRaceEntriesRegist(url: string): Promise<{ info: Partial<RaceInfo>; entries: Entry[] }> {
@@ -208,7 +210,7 @@ export async function fetchRaceEntriesRegist(url: string): Promise<{ info: Parti
 }
 
 /**
- * 出馬表ページから出馬表を取得（馬番あり）
+ * 出馬表ページから出馬表を取得(馬番あり)
  * URL例: https://sports.yahoo.co.jp/keiba/race/denma/2606010811
  */
 export async function fetchRaceEntriesDenma(url: string): Promise<{ info: Partial<RaceInfo>; entries: Entry[] }> {
@@ -254,7 +256,7 @@ export async function fetchRaceEntriesDenma(url: string): Promise<{ info: Partia
                 const weightText = jockeyCell?.querySelector('p')?.textContent?.trim() || '';
                 const weight = weightText ? parseFloat(weightText) : undefined;
 
-                // オッズ・人気（あれば）
+                // オッズ・人気(あれば)
                 const oddsCell = row.querySelector('.hr-table__data--odds');
                 let odds: number | undefined;
                 let popular: number | undefined;
@@ -307,7 +309,34 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
             timeout: 30000,
         });
 
+        // 基本情報を取得
         const info = await extractRaceInfo(page);
+
+        // 距離とコース情報を取得（.hr-predictRaceInfo__status 内から）
+        const courseInfo = await page.evaluate(() => {
+            const statusTexts = Array.from(
+                document.querySelectorAll('.hr-predictRaceInfo__status .hr-predictRaceInfo__text')
+            ).map(el => el.textContent?.trim() || '');
+
+            let distance: string | undefined;
+            let surface: string | undefined;
+            let direction: string | undefined;
+
+            // "芝・右 2000m" のようなテキストを探す
+            for (const text of statusTexts) {
+                const match = text.match(/(芝|ダート)[・･]?(右|左|外|内|直線)?[・･]?(外|内)?\s*(\d{3,4})m/);
+                if (match) {
+                    surface = match[1];
+                    direction = match[2] || undefined;
+                    distance = `${match[4]}m`;
+                    break;
+                }
+            }
+
+            return { distance, surface, direction };
+        });
+
+        console.log(`Extracted course info:`, courseInfo); // デバッグ用ログ
 
         // 着順データを取得
         const order = await page.evaluate(() => {
@@ -433,8 +462,18 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
 
         console.log(`Found ${order.length} order entries, payout types: ${Object.keys(payout).length}`);
 
+        // info にコース情報を確実にマージ
+        const mergedInfo: Partial<RaceInfo> = {
+            ...info,
+            distance: courseInfo.distance,
+            surface: courseInfo.surface,
+            direction: courseInfo.direction,
+        };
+
+        console.log(`Final info:`, mergedInfo); // デバッグ用ログ
+
         return {
-            info,
+            info: mergedInfo,
             result: { order, payout },
         };
 
@@ -529,4 +568,3 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
 
 // 後方互換性のためのエクスポート
 export { extractRaceId };
-

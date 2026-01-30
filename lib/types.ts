@@ -25,7 +25,7 @@ export interface RaceDetail {
     grade: string;
     date: string;
     course: string;
-    distance: number | null;
+    distance: string;
     surface: string;
     turn: string;
     hasNumbers: boolean;
@@ -42,7 +42,7 @@ export type Race = {
     raceNumber?: string;
     place?: string;
     grade?: string;
-    distance?: number;
+    distance?: string;
     track?: string;
     weightType?: string;
     horses: Array<{ number?: number; name: string; jockey?: string }>;

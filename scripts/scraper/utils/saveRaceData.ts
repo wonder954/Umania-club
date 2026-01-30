@@ -173,12 +173,19 @@ export function saveRaceData(
         raceId,
     };
 
-    // info はマージ
+    // info はマージ（全てのフィールドを確実に含める）
     if (partialData.info) {
         newData.info = {
-            ...existingData.info,
-            ...partialData.info,
+            ...existingData.info,  // 既存のデータ
+            ...partialData.info,   // 新しいデータで上書き
         };
+
+        // デバッグ: どのフィールドが含まれているか確認
+        console.log(`Merging info for ${raceId}:`, {
+            existing: existingData.info,
+            new: partialData.info,
+            merged: newData.info,
+        });
     }
 
     // entries の処理
@@ -198,6 +205,9 @@ export function saveRaceData(
             newData.result = partialData.result;
         }
     }
+
+    // 保存前の最終確認
+    console.log(`Final data to save for ${raceId}:`, JSON.stringify(newData.info, null, 2));
 
     // 保存
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2), 'utf-8');

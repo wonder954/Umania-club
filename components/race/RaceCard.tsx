@@ -1,4 +1,6 @@
 import { Race } from "@/lib/races";
+import { formatDateWithWeekday } from "@/lib/date";
+
 
 type Props = {
     race: Race;
@@ -31,11 +33,14 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                 </div>
 
                 {/* 日付は右端に */}
-                <span className="text-gray-500 text-sm">{race.date}</span>
+                <span className="text-gray-500 text-sm">
+                    {formatDateWithWeekday(race.date)}
+                </span>
+
             </div>
             <h2 className="text-2xl font-bold mb-1 text-gray-800">{race.name}</h2>
             <p className="text-gray-600 text-sm">
-                {race.course.surface && race.course.distance ? `${race.course.surface} ${race.course.distance}m` : "距離情報なし"}
+                {race.course.surface && race.course.distance ? `${race.course.surface} ${race.course.distance}` : "距離情報なし"}
                 {race.weightType ? ` / ${race.weightType}` : ""}
                 {race.course.courseDetail ? ` / ${race.course.courseDetail}` : ""}
                 {/* placeプロパティはRace型に定義されているか確認が必要だが、以前は couseプロパティをplace的に使っていた可能性がある。Race型にはplaceがある。 */}

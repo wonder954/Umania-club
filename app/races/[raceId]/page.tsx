@@ -1,4 +1,5 @@
 import { getRace } from "@/lib/races";
+import { formatDateWithWeekday } from "@/lib/date";
 import Link from "next/link";
 import Image from "next/image";
 import PredictionSection from "@/components/race/PredictionSection";
@@ -69,7 +70,10 @@ export default async function RacePage({ params }: Props) {
                             }`}>
                             {race.grade}
                         </span>
-                        <span className="text-gray-500 text-sm">{race.date}</span>
+                        <span className="text-gray-500 text-sm">
+                            {formatDateWithWeekday(race.date)}
+                        </span>
+
                     </div>
 
                     {/* 中段：場所 / レース番号 */}
@@ -95,7 +99,7 @@ export default async function RacePage({ params }: Props) {
 
                     {/* コース情報 */}
                     <p className="text-gray-600 font-medium ml-1">
-                        {race.course.surface} {race.course.distance}m
+                        {race.course.surface} {race.course.distance}
                         {race.course.direction && `（${race.course.direction}${race.course.courseDetail || ""}）`}
                     </p>
                 </div>

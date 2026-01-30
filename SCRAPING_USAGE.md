@@ -106,7 +106,7 @@ Headers: `Authorization: Bearer {ADMIN_TOKEN}` (本番のみ)
   name: string;
   date: string;
   course: string;
-  distance: number;
+  distance: string;
   grade: string;
   hasNumbers: boolean;
   horses: Horse[];

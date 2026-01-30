@@ -160,6 +160,11 @@ async function main() {
                         grade: race.grade,
                         raceNumber: info.raceNumber,
                         placeDetail: info.placeDetail,
+                        distance: info.distance,        // ✅ 追加
+                        surface: info.surface,          // ✅ 追加
+                        direction: info.direction,      // ✅ 追加
+                        courseDetail: info.courseDetail, // ✅ 追加（念のため）
+                        weightType: info.weightType,    // ✅ 追加（念のため）
                     },
                     result,
                 }, targetFolder);

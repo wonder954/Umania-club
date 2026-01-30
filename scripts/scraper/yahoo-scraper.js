@@ -45,7 +45,9 @@ export async function fetchWeeklyRacesYahoo() {
                 const surface = courseMatch?.[1] || null;
                 const direction = courseMatch?.[2] || null;
                 const courseDetail = courseMatch?.[3] || null;
-                const distance = courseMatch ? parseInt(courseMatch[4], 10) : null;
+                const distance = courseMatch
+                    ? `${surface}${direction ? '・' + direction : ''}${courseDetail ? '・' + courseDetail : ''} ${courseMatch[4]}m`
+                    : null;
 
                 // 別定・定量・ハンデ
                 const weightMatch = status.match(/(定量|別定|ハンデ|馬齢)/);

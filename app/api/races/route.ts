@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAllRacesFromFirestore } from '@/lib/raceRepository';
+import { loadAllRaces } from './utils';
 
 /**
  * レース一覧取得API
@@ -7,7 +7,8 @@ import { getAllRacesFromFirestore } from '@/lib/raceRepository';
  */
 export async function GET() {
     try {
-        const races = await getAllRacesFromFirestore();
+        const races = loadAllRaces();
+
 
         return NextResponse.json(races);
     } catch (error) {

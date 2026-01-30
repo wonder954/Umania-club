@@ -1,0 +1,179 @@
+{
+  "raceId": "2608020211",
+  "info": {
+    "date": "2026-02-01",
+    "place": "京都",
+    "title": "シルクロードステークス",
+    "grade": "GIII",
+    "surface": "芝",
+    "distance": "1200m",
+    "direction": "右",
+    "weightType": "ハンデ",
+    "placeDetail": "2回京都2日",
+    "raceNumber": "11R"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "アブキールベイ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "吉村 誠之助",
+      "weight": 55.5
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "ダノンマッキンリー",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "高杉 吏麒",
+      "weight": 58
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "アルテヴェローチェ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "国分 優作",
+      "weight": 57
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "カルプスペルシュ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "横山 武史",
+      "weight": 54
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ウインアイオライト",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "高倉 稜",
+      "weight": 52
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ヤマニンアルリフラ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "団野 大成",
+      "weight": 57.5
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "オタルエバー",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "幸 英明",
+      "weight": 57
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "イコサン",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "斎藤 新",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "ビッグシーザー",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "北村 友一",
+      "weight": 58.5
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "ナムラアトム",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "菱田 裕二",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "ヤブサメ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "武 豊",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "エーティーマクフィ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "富田 暁",
+      "weight": 58.5
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "エイシンフェンサー",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "川又 賢治",
+      "weight": 56.5
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "フィオライア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "太宰 啓介",
+      "weight": 54
+    },
+    {
+      "frame": 7,
+      "number": 15,
+      "name": "カリボール",
+      "sex": "牡",
+      "age": 10,
+      "jockey": "酒井 学",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "ロードフォアエース",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "岩田 望来",
+      "weight": 57.5
+    },
+    {
+      "frame": 8,
+      "number": 17,
+      "name": "レイピア",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "佐々木 大輔",
+      "weight": 57
+    },
+    {
+      "frame": 8,
+      "number": 18,
+      "name": "エコロレジーナ",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "池添 謙一",
+      "weight": 54
+    }
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "raceId": "2606010911",
+  "info": {
+    "date": "2026-01-25",
+    "place": "中山",
+    "title": "アメリカジョッキークラブカップ\n                  GII",
+    "grade": "GII",
+    "raceNumber": "11R",
+    "placeDetail": "1回中山9日",
+    "distance": "2200m",
+    "surface": "芝",
+    "direction": "右"
+  },
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 5,
+        "number": 9,
+        "name": "ショウヘイ",
+        "time": "2:10.8",
+        "margin": "-",
+        "jockey": "川田 将雅",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 5
+      },
+      {
+        "rank": 2,
+        "frame": 7,
+        "number": 14,
+        "name": "ドゥラドーレス",
+        "time": "2:11.1",
+        "margin": "1 1/2馬身",
+        "jockey": "C.ルメール",
+        "weight": "57.0",
+        "popular": 1,
+        "odds": 3
+      },
+      {
+        "rank": 3,
+        "frame": 8,
+        "number": 16,
+        "name": "エヒト",
+        "time": "2:11.2",
+        "margin": "1馬身",
+        "jockey": "菅原 明良",
+        "weight": "57.0",
+        "popular": 14,
+        "odds": 267.9
+      },
+      {
+        "rank": 4,
+        "frame": 3,
+        "number": 5,
+        "name": "マテンロウレオ",
+        "time": "2:11.3",
+        "margin": "1/2馬身",
+        "jockey": "横山 典弘",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 11.5
+      },
+      {
+        "rank": 5,
+        "frame": 3,
+        "number": 6,
+        "name": "サンストックトン",
+        "time": "2:11.3",
+        "margin": "アタマ",
+        "jockey": "松岡 正海",
+        "weight": "57.0",
+        "popular": 16,
+        "odds": 400.8
+      },
+      {
+        "rank": 6,
+        "frame": 6,
+        "number": 12,
+        "name": "ディマイザキッド",
+        "time": "2:11.4",
+        "margin": "1/2馬身",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 4,
+        "odds": 8.5
+      },
+      {
+        "rank": 7,
+        "frame": 2,
+        "number": 4,
+        "name": "ジョバンニ",
+        "time": "2:11.5",
+        "margin": "クビ",
+        "jockey": "松山 弘平",
+        "weight": "56.0",
+        "popular": 2,
+        "odds": 4.4
+      },
+      {
+        "rank": 8,
+        "frame": 5,
+        "number": 10,
+        "name": "ノースブリッジ",
+        "time": "2:11.6",
+        "margin": "1/2馬身",
+        "jockey": "岩田 康誠",
+        "weight": "57.0",
+        "popular": 9,
+        "odds": 36.5
+      },
+      {
+        "rank": 9,
+        "frame": 6,
+        "number": 11,
+        "name": "ニシノレヴナント",
+        "time": "2:11.6",
+        "margin": "クビ",
+        "jockey": "野中 悠太郎",
+        "weight": "57.0",
+        "popular": 10,
+        "odds": 64.7
+      },
+      {
+        "rank": 10,
+        "frame": 7,
+        "number": 13,
+        "name": "アルビージャ",
+        "time": "2:11.9",
+        "margin": "1 1/2馬身",
+        "jockey": "津村 明秀",
+        "weight": "57.0",
+        "popular": 12,
+        "odds": 152.2
+      },
+      {
+        "rank": 11,
+        "frame": 2,
+        "number": 3,
+        "name": "マイネルエンペラー",
+        "time": "2:12.1",
+        "margin": "1 1/2馬身",
+        "jockey": "戸崎 圭太",
+        "weight": "58.0",
+        "popular": 5,
+        "odds": 9.1
+      },
+      {
+        "rank": 12,
+        "frame": 8,
+        "number": 15,
+        "name": "ファウストラーゼン",
+        "time": "2:12.2",
+        "margin": "クビ",
+        "jockey": "横山 武史",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 12.9
+      },
+      {
+        "rank": 13,
+        "frame": 1,
+        "number": 1,
+        "name": "チャックネイト",
+        "time": "2:12.2",
+        "margin": "アタマ",
+        "jockey": "R.キング",
+        "weight": "57.0",
+        "popular": 8,
+        "odds": 26
+      },
+      {
+        "rank": 14,
+        "frame": 1,
+        "number": 2,
+        "name": "ホウオウノーサイド",
+        "time": "2:12.3",
+        "margin": "1/2馬身",
+        "jockey": "杉原 誠人",
+        "weight": "57.0",
+        "popular": 15,
+        "odds": 315.3
+      },
+      {
+        "rank": 15,
+        "frame": 4,
+        "number": 7,
+        "name": "マイネルメモリー",
+        "time": "2:12.3",
+        "margin": "アタマ",
+        "jockey": "佐々木 大輔",
+        "weight": "57.0",
+        "popular": 13,
+        "odds": 258.1
+      },
+      {
+        "rank": 16,
+        "frame": 4,
+        "number": 8,
+        "name": "アウスヴァール",
+        "time": "2:12.9",
+        "margin": "3 1/2馬身",
+        "jockey": "古川 吉洋",
+        "weight": "57.0",
+        "popular": 11,
+        "odds": 148.4
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 500,
+          "popular": 3
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 180,
+          "popular": 3
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            9,
+            14
+          ],
+          "amount": 850,
+          "popular": 2
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            9,
+            14
+          ],
+          "amount": 380,
+          "popular": 2
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            9,
+            14
+          ],
+          "amount": 1720,
+          "popular": 4
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            9,
+            14,
+            16
+          ],
+          "amount": 69470,
+          "popular": 117
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            9,
+            14,
+            16
+          ],
+          "amount": 219610,
+          "popular": 486
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            5,
+            7
+          ],
+          "amount": 640,
+          "popular": 2
+        }
+      ]
+    }
+  }
+}

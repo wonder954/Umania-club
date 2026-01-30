@@ -93,7 +93,7 @@ async function syncRaces() {
             console.log(`  ${index + 1}. [${race.grade}] ${race.name} (${race.date})`);
             const c = race.course;
             console.log(
-                `     ${c.surface ?? ''}${c.direction ?? ''}${c.courseDetail ?? ''} ${c.distance ?? ''}m - ${race.horses.length}頭`
+                `     ${c.surface ?? ''}${c.direction ?? ''}${c.courseDetail ?? ''} ${c.distance ?? ''} - ${race.horses.length}頭`
             );
         });
 

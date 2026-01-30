@@ -1,0 +1,316 @@
+{
+  "raceId": "2610010111",
+  "info": {
+    "date": "2026-01-24",
+    "place": "小倉",
+    "title": "小倉牝馬ステークス\n                  GIII",
+    "grade": "GIII",
+    "raceNumber": "11R",
+    "placeDetail": "1回小倉1日",
+    "distance": "2000m",
+    "surface": "芝",
+    "direction": "右"
+  },
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 17,
+        "name": "ジョスラン",
+        "time": "1:58.1",
+        "margin": "-",
+        "jockey": "C.ルメール",
+        "weight": "54.0",
+        "popular": 1,
+        "odds": 3.6
+      },
+      {
+        "rank": 2,
+        "frame": 8,
+        "number": 16,
+        "name": "ボンドガール",
+        "time": "1:58.1",
+        "margin": "アタマ",
+        "jockey": "丹内 祐次",
+        "weight": "55.5",
+        "popular": 8,
+        "odds": 17.7
+      },
+      {
+        "rank": 3,
+        "frame": 4,
+        "number": 8,
+        "name": "ココナッツブラウン",
+        "time": "1:58.2",
+        "margin": "1馬身",
+        "jockey": "北村 友一",
+        "weight": "55.5",
+        "popular": 2,
+        "odds": 3.7
+      },
+      {
+        "rank": 4,
+        "frame": 1,
+        "number": 1,
+        "name": "テレサ",
+        "time": "1:58.3",
+        "margin": "1/2馬身",
+        "jockey": "松山 弘平",
+        "weight": "54.0",
+        "popular": 3,
+        "odds": 8.4
+      },
+      {
+        "rank": 5,
+        "frame": 2,
+        "number": 3,
+        "name": "フレミングフープ",
+        "time": "1:58.3",
+        "margin": "ハナ",
+        "jockey": "杉原 誠人",
+        "weight": "54.0",
+        "popular": 6,
+        "odds": 10.3
+      },
+      {
+        "rank": 6,
+        "frame": 4,
+        "number": 7,
+        "name": "インヴォーグ",
+        "time": "1:58.3",
+        "margin": "ハナ",
+        "jockey": "松若 風馬",
+        "weight": "51.0",
+        "popular": 7,
+        "odds": 13.9
+      },
+      {
+        "rank": 7,
+        "frame": 5,
+        "number": 9,
+        "name": "パレハ",
+        "time": "1:58.4",
+        "margin": "クビ",
+        "jockey": "鮫島 克駿",
+        "weight": "54.0",
+        "popular": 4,
+        "odds": 9.7
+      },
+      {
+        "rank": 8,
+        "frame": 3,
+        "number": 5,
+        "name": "アレナリア",
+        "time": "1:58.4",
+        "margin": "クビ",
+        "jockey": "松本 大輝",
+        "weight": "51.0",
+        "popular": 12,
+        "odds": 83.5
+      },
+      {
+        "rank": 9,
+        "frame": 2,
+        "number": 4,
+        "name": "クリノメイ",
+        "time": "1:58.5",
+        "margin": "クビ",
+        "jockey": "酒井 学",
+        "weight": "54.0",
+        "popular": 10,
+        "odds": 23.2
+      },
+      {
+        "rank": 10,
+        "frame": 3,
+        "number": 6,
+        "name": "フィールシンパシー",
+        "time": "1:58.6",
+        "margin": "1馬身",
+        "jockey": "横山 琉人",
+        "weight": "53.0",
+        "popular": 11,
+        "odds": 60.2
+      },
+      {
+        "rank": 11,
+        "frame": 7,
+        "number": 13,
+        "name": "ウインエーデル",
+        "time": "1:58.6",
+        "margin": "ハナ",
+        "jockey": "西塚 洸二",
+        "weight": "52.0",
+        "popular": 17,
+        "odds": 157.7
+      },
+      {
+        "rank": 12,
+        "frame": 6,
+        "number": 12,
+        "name": "アンリーロード",
+        "time": "1:58.6",
+        "margin": "ハナ",
+        "jockey": "富田 暁",
+        "weight": "52.0",
+        "popular": 16,
+        "odds": 147.1
+      },
+      {
+        "rank": 13,
+        "frame": 1,
+        "number": 2,
+        "name": "ブラウンラチェット",
+        "time": "1:58.6",
+        "margin": "ハナ",
+        "jockey": "武藤 雅",
+        "weight": "54.0",
+        "popular": 13,
+        "odds": 83.9
+      },
+      {
+        "rank": 14,
+        "frame": 6,
+        "number": 11,
+        "name": "エリカヴィータ",
+        "time": "1:58.6",
+        "margin": "ハナ",
+        "jockey": "小沢 大仁",
+        "weight": "52.0",
+        "popular": 15,
+        "odds": 138.9
+      },
+      {
+        "rank": 15,
+        "frame": 7,
+        "number": 15,
+        "name": "レディーヴァリュー",
+        "time": "1:59.7",
+        "margin": "7馬身",
+        "jockey": "団野 大成",
+        "weight": "54.0",
+        "popular": 5,
+        "odds": 10.3
+      },
+      {
+        "rank": 16,
+        "frame": 7,
+        "number": 14,
+        "name": "クリスマスパレード",
+        "time": "1:59.8",
+        "margin": "1/2馬身",
+        "jockey": "石川 裕紀人",
+        "weight": "56.0",
+        "popular": 9,
+        "odds": 20.1
+      },
+      {
+        "rank": 17,
+        "frame": 8,
+        "number": 18,
+        "name": "パルクリチュード",
+        "time": "2:00.0",
+        "margin": "1馬身",
+        "jockey": "田山 旺佑",
+        "weight": "51.0",
+        "popular": 14,
+        "odds": 96.1
+      },
+      {
+        "rank": 18,
+        "frame": 5,
+        "number": 10,
+        "name": "タクシンイメル",
+        "time": "2:02.5",
+        "margin": "大差",
+        "jockey": "高倉 稜",
+        "weight": "52.0",
+        "popular": 18,
+        "odds": 325
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            17
+          ],
+          "amount": 360,
+          "popular": 1
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            17
+          ],
+          "amount": 150,
+          "popular": 1
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            16,
+            17
+          ],
+          "amount": 4470,
+          "popular": 21
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            8,
+            17
+          ],
+          "amount": 420,
+          "popular": 1
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            17,
+            16
+          ],
+          "amount": 6480,
+          "popular": 24
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            8,
+            16,
+            17
+          ],
+          "amount": 7330,
+          "popular": 21
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            17,
+            16,
+            8
+          ],
+          "amount": 36960,
+          "popular": 102
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            8,
+            8
+          ],
+          "amount": 2720,
+          "popular": 14
+        }
+      ]
+    }
+  }
+}
