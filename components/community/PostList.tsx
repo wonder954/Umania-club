@@ -122,7 +122,7 @@ export default function PostList({ raceId, race }: Props) {
     const renderNumbers = (bet: Bet, race?: Race): string => {
         const { type, mode, numbers, formation } = bet;
 
-        // 単勝・複勝 → 馬名付きで表示（race があれば）
+        // 単勝・複勝 → 馬名付きで表示
         if ((type === "単勝" || type === "複勝") && race) {
             return numbers
                 .map((num) => {
@@ -137,7 +137,7 @@ export default function PostList({ raceId, race }: Props) {
             return `BOX: ${numbers.join(", ")}`;
         }
 
-        // Normal (単勝・複勝など)
+        // 通常
         if (mode === "normal") {
             return numbers.join(", ");
         }
@@ -153,14 +153,26 @@ export default function PostList({ raceId, race }: Props) {
         if (mode === "formation" && formation) {
             const { first, second, third } = formation;
 
-            if (type === "3連単" || type === "3連複") {
+            // ★ 三連単 → 3段階（順位あり）
+            if (type === "3連単") {
                 return `フォーメーション: 1着[${first.join(", ")}] → 2着[${second.join(", ")}] → 3着[${third?.join(", ") ?? "-"}]`;
             }
 
+            // ★ 三連複 → 3段階（順位なし）
+            if (type === "3連複") {
+                return `フォーメーション: 1頭目[${first.join(", ")}] → 2頭目[${second.join(", ")}] → 3頭目[${third?.join(", ") ?? "-"}]`;
+            }
+
+            // ★ 馬単・馬連・ワイド → 2段階
+            if (["馬単", "馬連", "ワイド"].includes(type)) {
+                return `フォーメーション: 1頭目[${first.join(", ")}] → 2頭目[${second.join(", ")}]`;
+            }
+
+            // その他（枠連など）
             return `フォーメーション: 1頭目[${first.join(", ")}] → 2頭目[${second.join(", ")}]`;
         }
 
-        // その他（馬連・馬単・ワイドなど）
+        // fallback
         return numbers.join(", ");
     };
 

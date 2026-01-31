@@ -117,8 +117,10 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
         wings: [],
     });
 
+    // BettingForm.tsx の calculatedPoints を修正
+
     const calculatedPoints = useMemo(() => {
-        // ▼ BOX / NORMAL
+        // BOX / NORMAL
         if (inputMode === "box" || inputMode === "normal") {
             const n = boxSelected.length;
 
@@ -133,52 +135,33 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                 return n >= 3 ? n * (n - 1) * (n - 2) : 0;
         }
 
-        // ▼ 流し
-        if (inputMode === "nagashi") {
-            // 3連単流し（特殊）
-            if (selectedType === "3連単") {
-                const base = calcTrifectaNagashiPoints(trifectaNagashi);
-                return isMulti ? base * 6 : base;
-            }
+        // ★ フォーメーション・流しは必ず展開して数える
+        const tempBet: Bet = {
+            id: 'temp',
+            type: selectedType,
+            mode: inputMode,
+            isMulti,
+            points: 0,
+            numbers: [],
+        };
 
-            // 通常の流し
-            if (axis.length === 0 || wings.length === 0) return 0;
-
-            if (selectedType === "馬連" || selectedType === "ワイド")
-                return wings.length;
-
-            if (selectedType === "馬単") {
-                const base = wings.length;
-                return isMulti ? base * 2 : base;
-            }
-
-            if (selectedType === "3連複") {
-                return axis.length * ((wings.length * (wings.length - 1)) / 2);
-            }
+        if (inputMode === "formation") {
+            tempBet.formation = formation;
+            return expandFormation(tempBet).length;
         }
 
-        // ▼ フォーメーション（ここが重要）
-        if (inputMode === "formation") {
-            const expanded = expandFormation({
-                type: selectedType,
-                mode: inputMode,
-                formation,
-            });
-
-            return expanded.length;
+        if (inputMode === "nagashi") {
+            if (selectedType === "3連単") {
+                tempBet.trifectaNagashi = trifectaNagashi;
+            } else {
+                tempBet.axis = axis;
+                tempBet.wings = wings;
+            }
+            return expandNagashi(tempBet).length;
         }
 
         return 0;
-    }, [
-        selectedType,
-        inputMode,
-        boxSelected,
-        axis,
-        wings,
-        formation,
-        isMulti,
-        trifectaNagashi,
-    ]);
+    }, [selectedType, inputMode, boxSelected, formation, axis, wings, isMulti, trifectaNagashi]);
 
     const addBet = () => {
         if (calculatedPoints === 0) return;
@@ -501,11 +484,11 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                                                 setOpenBetId(openBetId === bet.id ? null : bet.id)
                                             }
                                             className="
-        flex items-center gap-1 
-        text-xs font-semibold
-        text-blue-600 hover:text-blue-800 
-        transition-colors
-      "
+                                                flex items-center gap-1 
+                                                text-xs font-semibold
+                                                text-blue-600 hover:text-blue-800 
+                                                transition-colors
+                                            "
                                         >
                                             <span className="text-sm">
                                                 {openBetId === bet.id ? "▼" : "▶"}
@@ -518,14 +501,14 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
                                         {openBetId === bet.id && (
                                             <div
                                                 className="
-          mt-2 p-3 
-          bg-gray-50 
-          border border-gray-200 
-          rounded-lg 
-          shadow-sm
-          space-y-1 
-          text-xs font-mono text-gray-700
-        "
+                                                    mt-2 p-3 
+                                                    bg-gray-50 
+                                                    border border-gray-200 
+                                                    rounded-lg 
+                                                    shadow-sm
+                                                    space-y-1 
+                                                    text-xs font-mono text-gray-700
+                                                "
                                             >
                                                 {(() => {
                                                     const expanded = expandNagashi(bet);
@@ -553,11 +536,24 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
 
                                 {/* フォーメーション */}
                                 {bet.formation && (
-                                    <span className="text-sm font-mono">
-                                        [{bet.formation.first.join(",")}] →
-                                        [{bet.formation.second.join(",")}] →
-                                        [{bet.formation.third.join(",")}]
-                                    </span>
+                                    <>
+                                        {/* 三連単・三連複 → 3段階 */}
+                                        {(bet.type === "3連単" || bet.type === "3連複") && (
+                                            <span className="text-sm font-mono">
+                                                [{bet.formation.first.join(",")}] →
+                                                [{bet.formation.second.join(",")}] →
+                                                [{bet.formation.third.join(",")}]
+                                            </span>
+                                        )}
+
+                                        {/* 馬単・馬連・ワイド → 2段階 */}
+                                        {["馬単", "馬連", "ワイド"].includes(bet.type) && (
+                                            <span className="text-sm font-mono">
+                                                [{bet.formation.first.join(",")}] →
+                                                [{bet.formation.second.join(",")}]
+                                            </span>
+                                        )}
+                                    </>
                                 )}
                             </div>
 

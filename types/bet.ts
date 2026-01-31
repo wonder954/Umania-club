@@ -48,3 +48,6 @@ export type NagashiSelectorValue = {
     axis: number | number[] | null;
     opponents: number[];
 };
+
+export type Ticket2 = [number, number];        // 馬連・馬単・ワイド
+export type Ticket3 = [number, number, number]; // 三連複・三連単

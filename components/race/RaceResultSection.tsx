@@ -124,19 +124,26 @@ export default function RaceResultSection({ result }: Props) {
                                     <div className="bg-gray-100 px-3 py-2 font-bold text-sm">
                                         {payoutLabels[key]}
                                     </div>
-                                    <table className="w-full text-sm">
+                                    <table className="w-full text-sm table-fixed">
                                         <tbody>
                                             {items.map((item, idx) => (
                                                 <tr key={idx} className="border-t">
-                                                    <td className="px-3 py-2 font-mono">
+
+                                                    {/* 組番（中央揃え） */}
+                                                    <td className="px-3 py-2 font-mono text-center">
                                                         {item.numbers.join(" - ")}
                                                     </td>
-                                                    <td className="px-3 py-2 text-right font-bold text-blue-600">
+
+                                                    {/* 払戻金（右揃え・等幅数字） */}
+                                                    <td className="px-3 py-2 text-right font-bold text-blue-600 tabular-nums">
                                                         ¥{item.amount.toLocaleString()}
                                                     </td>
-                                                    <td className="px-3 py-2 text-right text-gray-500 text-xs">
+
+                                                    {/* 人気（右揃え・等幅数字） */}
+                                                    <td className="px-3 py-2 text-right text-gray-500 text-xs tabular-nums">
                                                         {item.popular}人気
                                                     </td>
+
                                                 </tr>
                                             ))}
                                         </tbody>

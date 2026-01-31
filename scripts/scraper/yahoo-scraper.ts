@@ -403,7 +403,6 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
                 trifecta: [],
             };
 
-            // 券種名から英語キーへのマッピング
             const typeMap: Record<string, keyof Payout> = {
                 '単勝': 'win',
                 '複勝': 'place',
@@ -418,37 +417,40 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
             const sections = document.querySelectorAll('.hr-splits__item');
 
             sections.forEach(section => {
-                const rows = section.querySelectorAll('tr');
+                const rows = section.querySelectorAll('tbody tr');
+
+                let currentKey: keyof Payout | null = null;
 
                 rows.forEach(row => {
-                    const typeCell = row.querySelector('th');
-                    const typeName = typeCell?.textContent?.trim() || '';
-                    const key = typeMap[typeName];
-                    if (!key) return;
+                    const th = row.querySelector('th');
+                    const typeName = th?.textContent?.trim() || '';
+
+                    // th がある行 → 新しい券種
+                    if (typeName && typeMap[typeName]) {
+                        currentKey = typeMap[typeName];
+                    }
+
+                    // th が無い行 → 前の券種を継続
+                    if (!currentKey) return;
 
                     const cells = row.querySelectorAll('td');
-                    if (cells.length < 3) return;
+                    if (cells.length < 2) return;
 
-                    // 組番号を解析
-                    const numbersText = cells[0]?.textContent?.trim() || '';
+                    const numbersText = cells[0].textContent?.trim() || '';
                     const numbers = numbersText
                         .split(/[-→]/)
                         .map(n => parseInt(n.trim()))
                         .filter(n => !isNaN(n));
 
-                    // 払戻金
-                    const amountText = cells[1]?.textContent?.trim().replace(/[,円]/g, '') || '0';
+                    const amountText = cells[1].textContent?.trim().replace(/[,円]/g, '') || '0';
                     const amount = parseInt(amountText) || 0;
 
-                    // 人気
                     const popularText = cells[2]?.textContent?.trim().replace(/人気/g, '') || '0';
                     const popular = parseInt(popularText) || 0;
 
                     if (numbers.length > 0 && amount > 0) {
-                        if (!result[key]) {
-                            (result as any)[key] = [];
-                        }
-                        (result[key] as PayoutItem[]).push({
+                        // ★ TypeScript に「絶対に存在する」と保証
+                        result[currentKey]!.push({
                             numbers,
                             amount,
                             popular,
