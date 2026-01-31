@@ -25,6 +25,7 @@ export default async function Home() {
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-gray-50">
             <div className="w-full max-w-3xl">
+
                 {/* Hero Banner */}
                 <div className="mb-10 w-full overflow-hidden rounded-2xl shadow-xl">
                     <Image
@@ -60,11 +61,11 @@ export default async function Home() {
                 </div>
 
                 {/* 先週の結果 */}
-                <div>
+                <div className="mb-12">
                     <h2 className="text-xl font-bold mb-4">先週の結果</h2>
                     <div className="grid gap-6">
                         {pastRaces.length > 0 ? (
-                            pastRaces.map((race) => (
+                            pastRaces.slice(0, 3).map((race) => (
                                 <Link key={race.id} href={`/races/${race.id}`}>
                                     <RaceCard race={race} variant="past" />
                                 </Link>
@@ -76,6 +77,19 @@ export default async function Home() {
                         )}
                     </div>
                 </div>
+
+                {/* ★ 過去のレース一覧（全件） */}
+                <div className="mb-12">
+                    <h2 className="text-xl font-bold mb-4">過去のレース一覧</h2>
+                    <div className="grid gap-6">
+                        {pastRaces.map((race) => (
+                            <Link key={race.id} href={`/races/${race.id}`}>
+                                <RaceCard race={race} variant="past" />
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+
             </div>
         </main>
     );

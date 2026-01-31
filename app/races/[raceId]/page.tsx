@@ -1,5 +1,6 @@
 import { getRace } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
+import PostList from "@/components/community/PostList";
 import Link from "next/link";
 import Image from "next/image";
 import PredictionSection from "@/components/race/PredictionSection";
@@ -116,7 +117,7 @@ export default async function RacePage({ params }: Props) {
                     </div>
                 )}
 
-                {/* レース結果セクション（サーバーコンポーネント） */}
+                {/* レース結果セクション */}
                 {race.result && (
                     <section>
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
@@ -124,6 +125,19 @@ export default async function RacePage({ params }: Props) {
                             レース結果
                         </h2>
                         <RaceResultSection result={race.result} />
+                    </section>
+                )}
+
+                {/* ★ ここに「みんなの予想と結果」セクションを追加する */}
+                {race.result && (
+                    <section className="mt-10">
+                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span className="w-1 h-6 bg-green-600 rounded-full"></span>
+                            みんなの予想と結果
+                        </h2>
+
+                        {/* PostList に raceId と race を渡す */}
+                        <PostList raceId={race.id} race={race} />
                     </section>
                 )}
             </main>

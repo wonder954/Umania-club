@@ -6,7 +6,8 @@ import { deletePost, addComment, getPostComments } from "@/lib/db";
 import { useAuth } from "@/hooks/useAuth";
 import type { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
-
+import { judgeHit } from "@/utils/race/judge";
+import { expandTickets } from "@/utils/race/expand";
 
 type Post = {
     id: string;
@@ -276,28 +277,57 @@ export default function PostList({ raceId, race }: Props) {
                             {expandedBets.has(post.id) && (
                                 <div className="mt-3 space-y-2 bg-blue-50 p-3 rounded-lg">
                                     {post.bets.map((bet: Bet, index: number) => {
-                                        // For win/place bets, show horse names
                                         const showHorseName = bet.type === "単勝" || bet.type === "複勝";
+                                        console.log("=== DEBUG ===");
+                                        console.log("bet.type:", bet.type);
+                                        console.log("bet.numbers:", bet.numbers);
+                                        console.log("expanded:", expandTickets(bet));
+                                        console.log("order:", race.result.order.map((o: { number: number }) => o.number));
+                                        console.log("judgeHit:", judgeHit(bet, race.result));
+
+                                        // ★ race.result があるときだけ的中判定
+                                        let hitInfo = null;
+                                        if (race?.result) {
+                                            hitInfo = judgeHit(bet, race.result);
+                                        }
 
                                         return (
                                             <div key={index} className="flex items-center gap-2 text-sm">
                                                 <span className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs font-bold">
                                                     {bet.type}
                                                 </span>
+
                                                 {showHorseName && race ? (
                                                     <span className="font-medium text-gray-800">
-                                                        {Array.isArray(bet.numbers)
-                                                            ? bet.numbers.map((num: number) => {
-                                                                const horse = race.horses.find((h: any) => h.number === num);
+                                                        {bet.numbers
+                                                            .map((num: number) => {
+                                                                const horse = race.horses.find(
+                                                                    (h: any) => h.number === num
+                                                                );
                                                                 return horse ? `${num}.${horse.name}` : num;
-                                                            }).join(', ')
-                                                            : "—"}
+                                                            })
+                                                            .join(", ")}
                                                     </span>
                                                 ) : (
                                                     <span className="font-mono text-gray-700">
                                                         {renderNumbers(bet, race)}
                                                     </span>
                                                 )}
+
+                                                {/* ★ 的中 / 不的中 */}
+                                                {hitInfo && (
+                                                    <span
+                                                        className={`text-xs font-bold px-2 py-1 rounded ${hitInfo.isHit
+                                                            ? "bg-red-100 text-red-700"
+                                                            : "bg-gray-200 text-gray-600"
+                                                            }`}
+                                                    >
+                                                        {hitInfo.isHit
+                                                            ? `🎯 的中！ 払戻 ${hitInfo.payout.toLocaleString()}円`
+                                                            : "❌ 不的中"}
+                                                    </span>
+                                                )}
+
                                                 <span className="text-gray-500 text-xs ml-auto">
                                                     {bet.points}点
                                                 </span>

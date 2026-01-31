@@ -91,3 +91,10 @@ export type RaceListItem = {
     weightType?: string;
     date?: string;
 };
+
+export type Race = {
+    id: string;
+    name: string;
+    grade: "G1" | "G2" | "G3" | "OP" | "None";
+    date: string; // "2025-01-25"
+};
