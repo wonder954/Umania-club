@@ -92,9 +92,9 @@ export type RaceListItem = {
     date?: string;
 };
 
-export type Race = {
+export type CalendarRace = {
     id: string;
     name: string;
-    grade: "G1" | "G2" | "G3" | "OP" | "None";
+    grade: "G1" | "G2" | "G3" | "JG1" | "JG2" | "JG3" | "OP" | "None";
     date: string; // "2025-01-25"
 };

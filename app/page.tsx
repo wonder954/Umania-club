@@ -2,8 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { getAllRaces } from "@/lib/races";
 import RaceCard from "@/components/race/RaceCard";
+import { toCalendarRaceFromHome } from "@/lib/race/toCalendarRaceFromHome";
+import { groupByDate } from "@/lib/race/groupByDate";
+import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
+
+import { fetchHolidays } from "@/lib/holidays";
 
 export default async function Home() {
+    const holidays = await fetchHolidays();
     const races = await getAllRaces();
 
     // 現在の日付を取得（JST）
@@ -21,6 +27,9 @@ export default async function Home() {
     const pastRaces = races
         .filter(r => r.date < today)
         .sort((a, b) => b.date.localeCompare(a.date));
+
+    // ★ pastRaces を使うのはここから
+    const calendarRaces = toCalendarRaceFromHome(pastRaces);
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-gray-50">
@@ -78,17 +87,15 @@ export default async function Home() {
                     </div>
                 </div>
 
-                {/* ★ 過去のレース一覧（全件） */}
+                {/* ★ 過去のレースカレンダー */}
                 <div className="mb-12">
-                    <h2 className="text-xl font-bold mb-4">過去のレース一覧</h2>
-                    <div className="grid gap-6">
-                        {pastRaces.map((race) => (
-                            <Link key={race.id} href={`/races/${race.id}`}>
-                                <RaceCard race={race} variant="past" />
-                            </Link>
-                        ))}
-                    </div>
+                    <h2 className="text-xl font-bold mb-4">過去のレースカレンダー</h2>
+                    <RaceCalendarSection
+                        races={calendarRaces}
+                        holidays={holidays}
+                    />
                 </div>
+
 
             </div>
         </main>

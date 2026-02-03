@@ -12,10 +12,13 @@
     "scrape:friday": "node scripts/scrape-race-friday.js"
   },
   "dependencies": {
+    "axios": "^1.13.4",
+    "cheerio": "^1.2.0",
     "dotenv": "^17.2.3",
     "firebase": "^10.7.1",
     "firebase-admin": "^13.6.0",
     "html-to-image": "^1.11.11",
+    "iconv-lite": "^0.7.2",
     "jsdom": "^23.0.0",
     "next": "14.1.0",
     "puppeteer": "^24.35.0",
@@ -24,7 +27,7 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
-    "@types/node": "^20",
+    "@types/node": "^20.19.30",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
