@@ -391,7 +391,7 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
             return results;
         });
 
-        // 払戻金データを取得
+        // 払戻金データを取得（壊れない安全版）
         const payout = await page.evaluate(() => {
             const result: Payout = {
                 win: [],
@@ -406,7 +406,7 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
             const typeMap: Record<string, keyof Payout> = {
                 '単勝': 'win',
                 '複勝': 'place',
-                '枠連': 'bracket',
+                '枠連': 'bracket',   // bracket は result に無いので後で無視される
                 '馬連': 'quinella',
                 'ワイド': 'wide',
                 '馬単': 'exacta',
@@ -414,24 +414,33 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
                 '3連単': 'trifecta',
             };
 
-            const sections = document.querySelectorAll('.hr-splits__item');
+            // ★ Yahoo! DOM が変わっても落ちないように保険
+            const sections =
+                document.querySelectorAll('.hr-splits__item') ||
+                document.querySelectorAll('.payoutTable__item') ||
+                [];
+
+            if (sections.length === 0) {
+                console.log("⚠️ payout sections が 0 件。Yahoo! DOM が変わった可能性");
+                return result;
+            }
 
             sections.forEach(section => {
                 const rows = section.querySelectorAll('tbody tr');
-
                 let currentKey: keyof Payout | null = null;
 
                 rows.forEach(row => {
                     const th = row.querySelector('th');
                     const typeName = th?.textContent?.trim() || '';
 
-                    // th がある行 → 新しい券種
+                    // ★ 券種名がある行 → currentKey を更新
                     if (typeName && typeMap[typeName]) {
                         currentKey = typeMap[typeName];
                     }
 
-                    // th が無い行 → 前の券種を継続
+                    // ★ 券種名が無い行 → 前の券種を継続
                     if (!currentKey) return;
+                    const key = currentKey as keyof Payout;
 
                     const cells = row.querySelectorAll('td');
                     if (cells.length < 2) return;
@@ -448,14 +457,18 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
                     const popularText = cells[2]?.textContent?.trim().replace(/人気/g, '') || '0';
                     const popular = parseInt(popularText) || 0;
 
-                    if (numbers.length > 0 && amount > 0) {
-                        // ★ TypeScript に「絶対に存在する」と保証
-                        result[currentKey]!.push({
-                            numbers,
-                            amount,
-                            popular,
-                        });
+                    if (numbers.length === 0 || amount === 0) return;
+
+                    // ★★★ ここが重要：初期化してから push
+                    if (!result[key]) {
+                        result[key] = [];
                     }
+
+                    result[key].push({
+                        numbers,
+                        amount,
+                        popular,
+                    });
                 });
             });
 

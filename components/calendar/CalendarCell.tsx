@@ -1,17 +1,58 @@
+// components/calendar/CalendarCell.tsx
+
 import { shortenRaceName } from "./raceAbbr";
-import type { CalendarRace } from "@/types/race";
-import { gradeRaces2026 } from "@/lib/grades2026"; // ★ 追加
+import type { Race } from "@/lib/races";
+import { gradeRaces2026 } from "@/lib/grades2026";
+import Link from "next/link";
 
 type Props = {
     day: number | null;
     dateStr: string | null;
-    races: CalendarRace[];
+    races: Race[];
     weekday: number;
     isToday: boolean;
     isHoliday: boolean;
     holidayName?: string | null;
     onClick?: () => void;
 };
+
+/**
+ * グレードに応じた背景色クラスを取得
+ */
+function getGradeClass(grade?: string): string {
+    if (!grade) return "bg-gray-200 text-gray-800";
+
+    const normalized = grade
+        .replace(/[ⅠⅡⅢ]/g, (m) => {
+            if (m === "Ⅰ") return "I";
+            if (m === "Ⅱ") return "II";
+            if (m === "Ⅲ") return "III";
+            return m;
+        })
+        .toUpperCase();
+
+    if (normalized.includes("I") && !normalized.includes("II") && !normalized.includes("III")) {
+        return "bg-red-500 text-white";  // GI
+    }
+    if (normalized.includes("II") && !normalized.includes("III")) {
+        return "bg-blue-500 text-white";  // GII
+    }
+    if (normalized.includes("III")) {
+        return "bg-green-500 text-white";  // GIII
+    }
+
+    return "bg-gray-200 text-gray-800";  // その他
+}
+
+/**
+ * レース名の正規化（比較用）
+ */
+function normalizeRaceName(name: string): string {
+    return name
+        .replace(/\s+/g, "")
+        .replace(/ステークス|S$/g, "")
+        .trim();
+}
 
 export function CalendarCell({
     day,
@@ -23,40 +64,45 @@ export function CalendarCell({
     holidayName,
     onClick
 }: Props) {
+    // ★ JRA重賞データから該当日のレースを取得
+    const jraRaces: Race[] = dateStr
+        ? gradeRaces2026
+            .filter(r => r.date === dateStr)
+            .map(r => ({
+                id: r.id,
+                name: r.name,
+                date: r.date,
+                grade: r.grade,
+                course: {
+                    surface: "",
+                    distance: "",
+                    direction: "",
+                },
+                horses: [],
+                result: null,
+            }))
+        : [];
 
-    // ★ 2026 重賞をこの日の races に追加
-    const gradeRaces =
-        dateStr
-            ? gradeRaces2026
-                .filter(r => r.date === dateStr)
-                .map(r => ({
-                    id: r.id,
-                    name: r.name,
-                    grade: r.grade
-                        .replace("・", "")
-                        .replace("Ⅰ", "1")
-                        .replace("Ⅱ", "2")
-                        .replace("Ⅲ", "3") as "G1" | "G2" | "G3" | "JG1" | "JG2" | "JG3" | "OP" | "None", // ★ ここ
-                    date: r.date,
-                }))
-            : [];
+    // ★ Yahoo!スクレイピングデータとJRAデータを合成（重複除去）
+    const allRaces: Race[] = [...races];
 
-    function isSameRace(a: CalendarRace, b: CalendarRace) {
-        if (!a || !b) return false;
-        return (
-            a.date === b.date &&
-            a.grade === b.grade &&
-            a.name.slice(0, 2) === b.name.slice(0, 2)
-        );
+    for (const jraRace of jraRaces) {
+        // 同じレースが既に存在するかチェック
+        const exists = allRaces.some(r => {
+            const name1 = normalizeRaceName(r.name);
+            const name2 = normalizeRaceName(jraRace.name);
+
+            // 日付・グレード・レース名で判定
+            return (
+                r.date === jraRace.date &&
+                (name1 === name2 || name1.includes(name2) || name2.includes(name1))
+            );
+        });
+
+        if (!exists) {
+            allRaces.push(jraRace);
+        }
     }
-
-    const filteredRaces = races.filter(r =>
-        !gradeRaces.some(g => isSameRace(g, r))
-    );
-
-    // ★ 既存の races と重賞を合体
-    const allRaces = [...filteredRaces, ...gradeRaces];
-
 
     const bg =
         isHoliday ? "bg-red-50" :
@@ -84,23 +130,30 @@ export function CalendarCell({
             )}
 
             <div className="flex flex-wrap gap-1 mt-1">
-                {allRaces.map((race) => (
-                    <span
-                        key={race.id}
-                        className={`
-              px-1 py-0.5 rounded text-[10px] font-bold
-              ${race.grade === "G1" ? "bg-red-100 text-red-700" : ""}
-              ${race.grade === "G2" ? "bg-blue-100 text-blue-700" : ""}
-              ${race.grade === "G3" ? "bg-green-100 text-green-700" : ""}
-              ${race.grade === "JG1" ? "bg-orange-100 text-orange-700" : ""}
-              ${race.grade === "JG2" ? "bg-orange-100 text-orange-700" : ""}
-              ${race.grade === "JG3" ? "bg-orange-100 text-orange-700" : ""}
-              ${race.grade === "OP" ? "bg-gray-200 text-gray-700" : ""}
-            `}
-                    >
-                        {shortenRaceName(race.name)}
-                    </span>
-                ))}
+                {allRaces.map((race) => {
+                    // raceId が10桁の数字 → スクレイピング済み → リンクあり
+                    const isRaceId = /^\d{10}$/.test(race.id);
+
+                    const gradeClass = getGradeClass(race.grade);
+
+                    const badge = (
+                        <span className={`px-1 py-0.5 rounded text-[10px] font-bold ${gradeClass} ${!isRaceId ? "opacity-50" : ""}`}>
+                            {shortenRaceName(race.name)}
+                        </span>
+                    );
+
+                    return isRaceId ? (
+                        <Link
+                            key={race.id}
+                            href={`/races/${race.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {badge}
+                        </Link>
+                    ) : (
+                        <div key={race.id}>{badge}</div>
+                    );
+                })}
             </div>
         </div>
     );

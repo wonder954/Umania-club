@@ -2,17 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { getAllRaces } from "@/lib/races";
 import RaceCard from "@/components/race/RaceCard";
-import { toCalendarRaceFromHome } from "@/lib/race/toCalendarRaceFromHome";
-import { groupByDate } from "@/lib/race/groupByDate";
 import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
-
 import { fetchHolidays } from "@/lib/holidays";
 
 export default async function Home() {
     const holidays = await fetchHolidays();
     const races = await getAllRaces();
 
-    // 現在の日付を取得（JST）
+    console.log("HomeRace sample:", races[0]);
+
+    // 現在の日付（JST）
     const now = new Date();
     const yyyy = now.getFullYear();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -28,8 +27,8 @@ export default async function Home() {
         .filter(r => r.date < today)
         .sort((a, b) => b.date.localeCompare(a.date));
 
-    // ★ pastRaces を使うのはここから
-    const calendarRaces = toCalendarRaceFromHome(pastRaces);
+    // ★ カレンダーには Race[] をそのまま渡す
+    const calendarRaces = pastRaces;
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-gray-50">
@@ -95,7 +94,6 @@ export default async function Home() {
                         holidays={holidays}
                     />
                 </div>
-
 
             </div>
         </main>

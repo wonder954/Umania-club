@@ -29,6 +29,7 @@ import {
     getLatestFolderByType
 } from './utils/saveRaceData';
 import type { RaceInfo } from '../../types/race';
+import { mergeRaceId } from './mergeRaceId';
 
 // 投稿データの型（仮定義）
 interface Prediction {
@@ -253,6 +254,14 @@ async function main() {
     console.log(`  成功: ${lastWeekSuccess} 件`);
     console.log(`  エラー: ${lastWeekError} 件`);
     console.log('='.repeat(60));
+
+    // ==================================================
+    // 【raceId マージ処理】
+    // ==================================================
+
+    console.log('');
+    console.log('[6/6] JRA 重賞一覧に raceId をマージ中...');
+    await mergeRaceId();
 }
 
 main().catch(console.error);

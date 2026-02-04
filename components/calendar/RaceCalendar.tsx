@@ -4,10 +4,10 @@ import { useState } from "react";
 import { getCalendarMatrix } from "./calendarMatrix";
 import { CalendarHeader } from "./CalendarHeader";
 import { CalendarCell } from "./CalendarCell";
-import type { CalendarRace } from "@/types/race";
+import type { Race } from "@/lib/races";
 
 export type RacesByDate = {
-    [date: string]: CalendarRace[];
+    [date: string]: Race[];
 };
 
 type RaceCalendarProps = {
@@ -26,9 +26,9 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
             d === today.getDate()
         );
     };
+
     const [year, setYear] = useState(today.getFullYear());
     const [month, setMonth] = useState(today.getMonth());
-
 
     const matrix = getCalendarMatrix(year, month);
 
@@ -56,7 +56,7 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 ? `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                                 : null;
 
-                        const races = dateKey ? racesByDate[dateKey] ?? [] : [];
+                        const races = dateKey ? racesByDate[dateKey] ?? [] : [];  // ★ Race[] になる
                         const isHoliday = dateKey ? holidays[dateKey] !== undefined : false;
                         const holidayName = dateKey ? holidays[dateKey] ?? null : null;
 
@@ -65,17 +65,16 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 key={`${wi}-${di}`}
                                 day={day}
                                 dateStr={dateKey}
-                                races={races}
+                                races={races}          // ★ Race[] を渡す
                                 weekday={di}
                                 isToday={isToday(day)}
                                 isHoliday={isHoliday}
                                 holidayName={holidayName}
                                 onClick={() => {
-                                    if (!day || !dateKey) return;   // ← null を排除
+                                    if (!day || !dateKey) return;
                                     onSelectDate?.(dateKey);
                                 }}
                             />
-
                         );
                     })
                 )}

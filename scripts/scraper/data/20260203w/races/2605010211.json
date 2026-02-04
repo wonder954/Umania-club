@@ -1,0 +1,322 @@
+{
+  "raceId": "2605010211",
+  "info": {
+    "date": "2026-02-01",
+    "place": "東京",
+    "title": "根岸ステークス\n                  GIII",
+    "grade": "GIII",
+    "raceNumber": "11R",
+    "placeDetail": "1回東京2日",
+    "distance": "1400m",
+    "surface": "ダート",
+    "direction": "左"
+  },
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 1,
+        "number": 2,
+        "name": "ロードフォンス",
+        "time": "1:23.3",
+        "margin": "-",
+        "jockey": "横山 和生",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 13.2
+      },
+      {
+        "rank": 2,
+        "frame": 5,
+        "number": 10,
+        "name": "バトルクライ",
+        "time": "1:23.5",
+        "margin": "1馬身",
+        "jockey": "原 優介",
+        "weight": "57.0",
+        "popular": 13,
+        "odds": 150.9
+      },
+      {
+        "rank": 3,
+        "frame": 4,
+        "number": 7,
+        "name": "ダノンフィーゴ",
+        "time": "1:23.5",
+        "margin": "クビ",
+        "jockey": "菅原 明良",
+        "weight": "56.0",
+        "popular": 4,
+        "odds": 7.2
+      },
+      {
+        "rank": 4,
+        "frame": 2,
+        "number": 3,
+        "name": "オメガギネス",
+        "time": "1:23.7",
+        "margin": "1 1/2馬身",
+        "jockey": "岩田 康誠",
+        "weight": "57.0",
+        "popular": 5,
+        "odds": 8.9
+      },
+      {
+        "rank": 5,
+        "frame": 6,
+        "number": 12,
+        "name": "マピュース",
+        "time": "1:23.8",
+        "margin": "1/2馬身",
+        "jockey": "田辺 裕信",
+        "weight": "54.0",
+        "popular": 8,
+        "odds": 25.9
+      },
+      {
+        "rank": 6,
+        "frame": 5,
+        "number": 9,
+        "name": "エンペラーワケア",
+        "time": "1:23.8",
+        "margin": "ハナ",
+        "jockey": "西村 淳也",
+        "weight": "57.0",
+        "popular": 2,
+        "odds": 3.9
+      },
+      {
+        "rank": 7,
+        "frame": 1,
+        "number": 1,
+        "name": "ウェイワードアクト",
+        "time": "1:23.9",
+        "margin": "クビ",
+        "jockey": "戸崎 圭太",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 5
+      },
+      {
+        "rank": 8,
+        "frame": 3,
+        "number": 5,
+        "name": "チカッパ",
+        "time": "1:23.9",
+        "margin": "クビ",
+        "jockey": "R.キング",
+        "weight": "57.0",
+        "popular": 11,
+        "odds": 40
+      },
+      {
+        "rank": 9,
+        "frame": 4,
+        "number": 8,
+        "name": "インユアパレス",
+        "time": "1:24.0",
+        "margin": "クビ",
+        "jockey": "川田 将雅",
+        "weight": "57.0",
+        "popular": 1,
+        "odds": 3.9
+      },
+      {
+        "rank": 10,
+        "frame": 8,
+        "number": 15,
+        "name": "サントノーレ",
+        "time": "1:24.2",
+        "margin": "1 1/2馬身",
+        "jockey": "横山 典弘",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 19.1
+      },
+      {
+        "rank": 11,
+        "frame": 3,
+        "number": 6,
+        "name": "マテンロウコマンド",
+        "time": "1:24.2",
+        "margin": "アタマ",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 9,
+        "odds": 26.6
+      },
+      {
+        "rank": 12,
+        "frame": 8,
+        "number": 16,
+        "name": "フェブランシェ",
+        "time": "1:24.4",
+        "margin": "3/4馬身",
+        "jockey": "C.ルメール",
+        "weight": "55.0",
+        "popular": 10,
+        "odds": 32.8
+      },
+      {
+        "rank": 13,
+        "frame": 2,
+        "number": 4,
+        "name": "アルファマム",
+        "time": "1:24.5",
+        "margin": "1/2馬身",
+        "jockey": "三浦 皇成",
+        "weight": "55.0",
+        "popular": 12,
+        "odds": 65
+      },
+      {
+        "rank": 14,
+        "frame": 7,
+        "number": 13,
+        "name": "メイショウカズサ",
+        "time": "1:24.6",
+        "margin": "1馬身",
+        "jockey": "武藤 雅",
+        "weight": "57.0",
+        "popular": 15,
+        "odds": 216.1
+      },
+      {
+        "rank": 15,
+        "frame": 7,
+        "number": 14,
+        "name": "ネオトキオ",
+        "time": "1:25.6",
+        "margin": "6馬身",
+        "jockey": "安藤 洋一",
+        "weight": "57.0",
+        "popular": 14,
+        "odds": 207.2
+      },
+      {
+        "rank": 16,
+        "frame": 6,
+        "number": 11,
+        "name": "ケイアイドリー",
+        "time": "1:25.8",
+        "margin": "1 1/4馬身",
+        "jockey": "杉原 誠人",
+        "weight": "57.0",
+        "popular": 16,
+        "odds": 284.7
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            2
+          ],
+          "amount": 1320,
+          "popular": 6
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            2
+          ],
+          "amount": 370,
+          "popular": 6
+        },
+        {
+          "numbers": [
+            10
+          ],
+          "amount": 2290,
+          "popular": 13
+        },
+        {
+          "numbers": [
+            7
+          ],
+          "amount": 270,
+          "popular": 4
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            2,
+            10
+          ],
+          "amount": 85830,
+          "popular": 71
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            2,
+            7
+          ],
+          "amount": 1220,
+          "popular": 14
+        },
+        {
+          "numbers": [
+            7,
+            10
+          ],
+          "amount": 15210,
+          "popular": 66
+        },
+        {
+          "numbers": [
+            2,
+            10
+          ],
+          "amount": 16460,
+          "popular": 73
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            2,
+            10
+          ],
+          "amount": 164220,
+          "popular": 143
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            2,
+            7,
+            10
+          ],
+          "amount": 159290,
+          "popular": 210
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            2,
+            10,
+            7
+          ],
+          "amount": 1660430,
+          "popular": 1440
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            1,
+            5
+          ],
+          "amount": 840,
+          "popular": 3
+        }
+      ]
+    }
+  }
+}
