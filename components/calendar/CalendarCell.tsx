@@ -1,14 +1,12 @@
-// components/calendar/CalendarCell.tsx
-
 import { shortenRaceName } from "./raceAbbr";
-import type { Race } from "@/lib/races";
+import type { CalendarRace } from "@/types/race";
 import { gradeRaces2026 } from "@/lib/grades2026";
 import Link from "next/link";
 
 type Props = {
     day: number | null;
     dateStr: string | null;
-    races: Race[];
+    races: CalendarRace[]; // ★ Race → CalendarRace に統一
     weekday: number;
     isToday: boolean;
     isHoliday: boolean;
@@ -17,7 +15,17 @@ type Props = {
 };
 
 /**
- * グレードに応じた背景色クラスを取得
+ * レース名の正規化（比較用）
+ */
+function normalizeRaceName(name: string): string {
+    return name
+        .replace(/\s+/g, "")
+        .replace(/ステークス|S$/g, "")
+        .trim();
+}
+
+/**
+ * グレード → Tailwind クラス（JRA公式カラー）
  */
 function getGradeClass(grade?: string): string {
     if (!grade) return "bg-gray-200 text-gray-800";
@@ -32,26 +40,16 @@ function getGradeClass(grade?: string): string {
         .toUpperCase();
 
     if (normalized.includes("I") && !normalized.includes("II") && !normalized.includes("III")) {
-        return "bg-red-500 text-white";  // GI
+        return "bg-blue-500 text-white";  // GI
     }
     if (normalized.includes("II") && !normalized.includes("III")) {
-        return "bg-blue-500 text-white";  // GII
+        return "bg-red-500 text-white";  // GII
     }
     if (normalized.includes("III")) {
         return "bg-green-500 text-white";  // GIII
     }
 
     return "bg-gray-200 text-gray-800";  // その他
-}
-
-/**
- * レース名の正規化（比較用）
- */
-function normalizeRaceName(name: string): string {
-    return name
-        .replace(/\s+/g, "")
-        .replace(/ステークス|S$/g, "")
-        .trim();
 }
 
 export function CalendarCell({
@@ -64,8 +62,9 @@ export function CalendarCell({
     holidayName,
     onClick
 }: Props) {
-    // ★ JRA重賞データから該当日のレースを取得
-    const jraRaces: Race[] = dateStr
+
+    // ★ JRA重賞データ → CalendarRace に変換
+    const jraRaces: CalendarRace[] = dateStr
         ? gradeRaces2026
             .filter(r => r.date === dateStr)
             .map(r => ({
@@ -73,26 +72,18 @@ export function CalendarCell({
                 name: r.name,
                 date: r.date,
                 grade: r.grade,
-                course: {
-                    surface: "",
-                    distance: "",
-                    direction: "",
-                },
-                horses: [],
-                result: null,
+                color: getGradeClass(r.grade), // ★ Tailwind クラスで統一
             }))
         : [];
 
-    // ★ Yahoo!スクレイピングデータとJRAデータを合成（重複除去）
-    const allRaces: Race[] = [...races];
+    // ★ Yahoo!スクレイピングデータとJRAデータを合成（CalendarRace で統一）
+    const allRaces: CalendarRace[] = [...races];
 
     for (const jraRace of jraRaces) {
-        // 同じレースが既に存在するかチェック
         const exists = allRaces.some(r => {
             const name1 = normalizeRaceName(r.name);
             const name2 = normalizeRaceName(jraRace.name);
 
-            // 日付・グレード・レース名で判定
             return (
                 r.date === jraRace.date &&
                 (name1 === name2 || name1.includes(name2) || name2.includes(name1))
@@ -131,13 +122,13 @@ export function CalendarCell({
 
             <div className="flex flex-wrap gap-1 mt-1">
                 {allRaces.map((race) => {
-                    // raceId が10桁の数字 → スクレイピング済み → リンクあり
                     const isRaceId = /^\d{10}$/.test(race.id);
 
-                    const gradeClass = getGradeClass(race.grade);
-
                     const badge = (
-                        <span className={`px-1 py-0.5 rounded text-[10px] font-bold ${gradeClass} ${!isRaceId ? "opacity-50" : ""}`}>
+                        <span
+                            className={`px-1 py-0.5 rounded text-[10px] font-bold ${race.color} ${!isRaceId ? "opacity-50" : ""
+                                } hover:opacity-80`}
+                        >
                             {shortenRaceName(race.name)}
                         </span>
                     );

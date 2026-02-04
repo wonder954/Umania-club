@@ -4,10 +4,11 @@ import { useState } from "react";
 import { getCalendarMatrix } from "./calendarMatrix";
 import { CalendarHeader } from "./CalendarHeader";
 import { CalendarCell } from "./CalendarCell";
-import type { Race } from "@/lib/races";
+
+import type { CalendarRace } from "@/types/race";
 
 export type RacesByDate = {
-    [date: string]: Race[];
+    [date: string]: CalendarRace[];
 };
 
 type RaceCalendarProps = {
@@ -18,6 +19,10 @@ type RaceCalendarProps = {
 
 export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalendarProps) {
     const today = new Date();
+
+    const [year, setYear] = useState(today.getFullYear());
+    const [month, setMonth] = useState(today.getMonth());
+
     const isToday = (d: number | null) => {
         if (!d) return false;
         return (
@@ -26,9 +31,6 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
             d === today.getDate()
         );
     };
-
-    const [year, setYear] = useState(today.getFullYear());
-    const [month, setMonth] = useState(today.getMonth());
 
     const matrix = getCalendarMatrix(year, month);
 
@@ -56,7 +58,9 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 ? `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                                 : null;
 
-                        const races = dateKey ? racesByDate[dateKey] ?? [] : [];  // ★ Race[] になる
+                        // ★ CalendarRace[] をそのまま渡す
+                        const races = dateKey ? racesByDate[dateKey] ?? [] : [];
+
                         const isHoliday = dateKey ? holidays[dateKey] !== undefined : false;
                         const holidayName = dateKey ? holidays[dateKey] ?? null : null;
 
@@ -65,7 +69,7 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 key={`${wi}-${di}`}
                                 day={day}
                                 dateStr={dateKey}
-                                races={races}          // ★ Race[] を渡す
+                                races={races} // ★ CalendarRace[] を渡す
                                 weekday={di}
                                 isToday={isToday(day)}
                                 isHoliday={isHoliday}
