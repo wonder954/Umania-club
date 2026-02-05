@@ -19,16 +19,19 @@ export function racesToCalendarRaces(races: Race[]): CalendarRace[] {
  */
 export function normalizeGrade(grade: string): string {
     return grade
-        .replace(/・/g, "")
-        .replace(/[ⅠⅡⅢ]/g, (m) => {
-            if (m === "Ⅰ") return "1";
-            if (m === "Ⅱ") return "2";
-            if (m === "Ⅲ") return "3";
-            return m;
-        })
-        .replace(/[IⅠ](?![IⅠ])/g, "1")
-        .replace(/[IⅠ]{2}(?![IⅠ])/g, "2")
-        .replace(/[IⅠ]{3}/g, "3");
+        .toUpperCase()
+        // 全角ローマ数字 → 半角
+        .replace(/Ⅰ/g, "I")
+        .replace(/Ⅱ/g, "II")
+        .replace(/Ⅲ/g, "III")
+        // アルファベットの III / II / I → 数字
+        .replace(/III/g, "3")
+        .replace(/II/g, "2")
+        .replace(/I/g, "1")
+        // G1, G2, G3 に統一
+        .replace(/G\s*1/, "G1")
+        .replace(/G\s*2/, "G2")
+        .replace(/G\s*3/, "G3");
 }
 
 /**

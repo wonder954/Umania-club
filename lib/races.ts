@@ -161,18 +161,24 @@ export async function getAllRaces(): Promise<Race[]> {
     const path = await import("path");
 
     const latestF = await getLatestFFolder();
-    const latestW = await getLatestWFolder();
+
+    // 直近4つの w フォルダを取得（1ヶ月分）
+    const allFolders = await listScraperFolders();
+    const wFolders = allFolders.filter(f => f.endsWith("w")).slice(0, 4);
 
     const foldersToRead: string[] = [];
     if (latestF) foldersToRead.push(latestF);
-    if (latestW && latestW !== latestF) foldersToRead.push(latestW);
+    foldersToRead.push(...wFolders);
 
-    console.log("[getAllRaces] Folders to read:", foldersToRead);
+    // 重複除去（latestF と wFolders[0] が同じ場合など）
+    const uniqueFolders = Array.from(new Set(foldersToRead));
+
+    console.log("[getAllRaces] Folders to read:", uniqueFolders);
 
     const races: Race[] = [];
     const seen = new Set<string>();
 
-    for (const folder of foldersToRead) {
+    for (const folder of uniqueFolders) {
         const racesDir = path.join(process.cwd(), SCRAPER_DATA_DIR, folder, "races");
         if (!fs.existsSync(racesDir)) continue;
 

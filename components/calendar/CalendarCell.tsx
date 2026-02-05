@@ -63,37 +63,8 @@ export function CalendarCell({
     onClick
 }: Props) {
 
-    // ★ JRA重賞データ → CalendarRace に変換
-    const jraRaces: CalendarRace[] = dateStr
-        ? gradeRaces2026
-            .filter(r => r.date === dateStr)
-            .map(r => ({
-                id: r.id,
-                name: r.name,
-                date: r.date,
-                grade: r.grade,
-                color: getGradeClass(r.grade), // ★ Tailwind クラスで統一
-            }))
-        : [];
-
-    // ★ Yahoo!スクレイピングデータとJRAデータを合成（CalendarRace で統一）
-    const allRaces: CalendarRace[] = [...races];
-
-    for (const jraRace of jraRaces) {
-        const exists = allRaces.some(r => {
-            const name1 = normalizeRaceName(r.name);
-            const name2 = normalizeRaceName(jraRace.name);
-
-            return (
-                r.date === jraRace.date &&
-                (name1 === name2 || name1.includes(name2) || name2.includes(name1))
-            );
-        });
-
-        if (!exists) {
-            allRaces.push(jraRace);
-        }
-    }
+    // ★ 親コンポーネントで既にマージ済みの CalendarRace[] が渡ってくる
+    const allRaces: CalendarRace[] = races;
 
     const bg =
         isHoliday ? "bg-red-50" :
