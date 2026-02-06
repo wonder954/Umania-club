@@ -33,6 +33,7 @@ const payoutLabels: Record<keyof Payout, string> = {
 
 export default function RaceResultSection({ result }: Props) {
     const [showAll, setShowAll] = useState(false);
+    const [showMorePayouts, setShowMorePayouts] = useState(false);
 
     if (!result) {
         return (
@@ -170,17 +171,19 @@ export default function RaceResultSection({ result }: Props) {
                             key={horse.number}
                             className={`border rounded-lg p-3 shadow-sm ${horse.rank <= 3 ? "bg-yellow-50" : "bg-white"}`}
                         >
-                            {/* 上段：着順・枠・馬番・馬名 */}
+                            {/* 上段：着順・枠・馬番・馬名・騎手（全部1行） */}
                             <div className="flex items-center gap-2 mb-3">
+
+                                {/* 着順 */}
                                 <div className="font-bold w-8 text-center text-lg">
                                     {horse.rank <= 3 ? (
                                         <span
                                             className={`
-                                                inline-flex items-center justify-center w-7 h-7 rounded-full font-bold text-sm
-                                                ${horse.rank === 1 ? "bg-yellow-400 text-yellow-900" : ""}
-                                                ${horse.rank === 2 ? "bg-gray-300 text-gray-700" : ""}
-                                                ${horse.rank === 3 ? "bg-orange-300 text-orange-900" : ""}
-                                            `}
+                    inline-flex items-center justify-center w-7 h-7 rounded-full font-bold text-sm
+                    ${horse.rank === 1 ? "bg-yellow-400 text-yellow-900" : ""}
+                    ${horse.rank === 2 ? "bg-gray-300 text-gray-700" : ""}
+                    ${horse.rank === 3 ? "bg-orange-300 text-orange-900" : ""}
+                `}
                                         >
                                             {horse.rank}
                                         </span>
@@ -189,54 +192,81 @@ export default function RaceResultSection({ result }: Props) {
                                     )}
                                 </div>
 
+                                {/* 枠 */}
                                 <span className={`px-2 py-1 rounded text-xs font-bold ${frameColors[horse.frame]}`}>
                                     {horse.frame}
                                 </span>
 
+                                {/* 馬番 */}
                                 <span className="font-mono font-bold text-base">{horse.number}</span>
 
-                                <span className="font-bold text-base flex-1">{horse.name}</span>
-                            </div>
+                                {/* 馬名（可変幅・省略） */}
+                                <span className="font-bold text-base truncate flex-1 min-w-0">
+                                    {horse.name}
+                                </span>
 
-                            {/* 騎手 */}
-                            <div className="text-sm text-gray-700 mb-2">
-                                騎手: {horse.jockey}
+                                {/* 騎手（右端固定） */}
+                                <span className="text-sm text-gray-700 shrink-0 ml-2">
+                                    {horse.jockey}
+                                </span>
                             </div>
 
                             {/* データグリッド：タイム・着差・人気・オッズを縦揃え */}
                             <div className="grid grid-cols-2 gap-2 text-sm">
-                                {/* 1行目 左: タイム */}
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">タイム:</span>
-                                    <span className="font-mono font-medium">{horse.time}</span>
+
+                                {/* タイム（1着のみバッジを大きく） */}
+                                <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
+                                    <span className="text-gray-600 text-right">タイム:</span>
+
+                                    {horse.rank === 1 ? (
+                                        <span className="px-3 py-1 rounded-full bg-yellow-200 text-yellow-900 text-sm font-mono font-bold shadow-sm">
+                                            {horse.time}
+                                        </span>
+                                    ) : (
+                                        <span className="font-mono font-medium text-right">{horse.time}</span>
+                                    )}
                                 </div>
 
-                                {/* 1行目 右: オッズ */}
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">オッズ:</span>
-                                    <span className="font-mono font-medium">{horse.odds}倍</span>
-                                </div>
-
-                                {/* 2行目 左: 着差 */}
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">着差:</span>
-                                    <span className="font-medium">{horse.margin}</span>
-                                </div>
-
-                                {/* 2行目 右: 人気（ラベル付きにするならここで整形） */}
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">人気:</span>
+                                {/* オッズ（倍率で色分け） */}
+                                <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
+                                    <span className="text-gray-600 text-right">オッズ:</span>
                                     <span
                                         className={`
-                font-medium
-                ${horse.popular === 1 ? "text-red-600 font-bold" : ""}
-                ${horse.popular === 2 ? "text-blue-600 font-bold" : ""}
-                ${horse.popular === 3 ? "text-green-600 font-bold" : ""}
+                px-2 py-0.5 rounded-full text-xs font-mono font-bold
+                ${horse.odds >= 100
+                                                ? "bg-red-100 text-red-700"
+                                                : horse.odds > 10
+                                                    ? "bg-blue-100 text-blue-700"
+                                                    : "bg-green-100 text-green-700"
+                                            }
             `}
                                     >
-                                        {horse.popular}番人気
+                                        {horse.odds}倍
                                     </span>
                                 </div>
+
+                                {/* 着差 */}
+                                <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
+                                    <span className="text-gray-600 text-right">着差:</span>
+                                    <span className="font-medium text-right">{horse.margin}</span>
+                                </div>
+
+                                {/* 人気（既存の色分けバッジ） */}
+                                <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
+                                    <span className="text-gray-600 text-right">人気:</span>
+                                    <span
+                                        className={`
+                px-2 py-0.5 rounded-full text-xs font-bold text-right
+                ${horse.popular === 1 ? "bg-red-100 text-red-700" : ""}
+                ${horse.popular === 2 ? "bg-blue-100 text-blue-700" : ""}
+                ${horse.popular === 3 ? "bg-green-100 text-green-700" : ""}
+                ${horse.popular > 3 ? "bg-gray-100 text-gray-700" : ""}
+            `}
+                                    >
+                                        {horse.popular}人気
+                                    </span>
+                                </div>
+
                             </div>
                         </div>
                     ))}
@@ -255,47 +285,7 @@ export default function RaceResultSection({ result }: Props) {
                 )}
             </div>
 
-            {/* 払戻金テーブル */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3">
-                    <h3 className="text-white font-bold">払戻金</h3>
-                </div>
 
-                <div className="p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {(Object.keys(payoutLabels) as Array<keyof Payout>).map((key) => {
-                            const items = result.payout[key];
-                            if (!items || items.length === 0) return null;
-
-                            return (
-                                <div key={key} className="border rounded-lg overflow-hidden">
-                                    <div className="bg-gray-100 px-3 py-2 font-bold text-sm">
-                                        {payoutLabels[key]}
-                                    </div>
-
-                                    <table className="w-full text-sm table-fixed">
-                                        <tbody>
-                                            {items.map((item, idx) => (
-                                                <tr key={idx} className="border-t">
-                                                    <td className="px-3 py-2 font-mono text-center">
-                                                        {item.numbers.join(" - ")}
-                                                    </td>
-                                                    <td className="px-3 py-2 text-right font-bold text-blue-600 tabular-nums">
-                                                        ¥{item.amount.toLocaleString()}
-                                                    </td>
-                                                    <td className="px-3 py-2 text-right text-gray-500 text-xs tabular-nums">
-                                                        {item.popular}人気
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }

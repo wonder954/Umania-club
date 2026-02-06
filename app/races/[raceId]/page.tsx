@@ -6,6 +6,8 @@ import Image from "next/image";
 import PredictionSection from "@/components/race/PredictionSection";
 import RaceResultSection from "@/components/race/RaceResultSection";
 import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
+import PayoutSection from "@/components/race/PayoutSection";
+
 
 type Props = {
     params: { raceId: string };
@@ -127,23 +129,38 @@ export default async function RacePage({ params }: Props) {
                 {race.result && (
                     <section>
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <span className="w-1 h-6 bg-purple-600 rounded-full"></span>
+                            <span className="text-purple-600 text-2xl animate-result">🏇</span>
                             レース結果
+                            <span className="text-purple-600 text-2xl animate-result">🏇</span>
                         </h2>
                         <RaceResultSection result={race.result} />
                     </section>
                 )}
 
-                {/* ★ ここに「みんなの予想と結果」セクションを追加する */}
+                {/* 払戻金セクション */}
                 {race.result && (
-                    <section id="post-section" className="bg-white p-6 rounded-xl shadow">
+                    <section>
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <span className="w-1 h-6 bg-green-600 rounded-full"></span>
+                            <span className="text-green-600 text-2xl animate-coin">💰</span>
+                            払戻金
+                            <span className="text-green-600 text-2xl animate-coin">💰</span>
+                        </h2>
+                        <PayoutSection payout={race.result.payout} />
+                    </section>
+                )}
+
+                {/* みんなの予想と結果 */}
+                {race.result && (
+                    <section id="post-section">
+                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span className="text-orange-500 text-2xl animate-flame">🔥</span>
                             みんなの予想と結果
+                            <span className="text-orange-500 text-2xl animate-flame">🔥</span>
                         </h2>
 
-                        {/* PostList に raceId と race を渡す */}
-                        <PostList raceId={race.id} race={race} />
+                        <div className="bg-white p-6 rounded-xl shadow">
+                            <PostList raceId={race.id} race={race} />
+                        </div>
                     </section>
                 )}
             </main>
