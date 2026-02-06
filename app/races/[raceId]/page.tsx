@@ -1,6 +1,6 @@
 import { getRace } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
-import PostList from "@/components/community/PostList";
+import PostList from "@/components/community/PostList/index";
 import Link from "next/link";
 import Image from "next/image";
 import PredictionSection from "@/components/race/PredictionSection";

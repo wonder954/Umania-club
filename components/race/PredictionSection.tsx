@@ -3,7 +3,7 @@
 import { useState } from "react";
 import MarkSelector from "@/components/prediction/MarkSelector";
 import PredictionForm from "@/components/prediction/PredictionForm";
-import PostList from "@/components/community/PostList";
+import PostList from "@/components/community/PostList/index";
 import { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
 

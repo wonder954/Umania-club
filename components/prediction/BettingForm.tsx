@@ -10,6 +10,7 @@ import { expandNagashi } from "@/utils/expandNagashi";
 import { BetType, Bet, InputMode, TrifectaPattern, NagashiSelectorValue } from "@/types/bet";
 import { Horse } from "@/types/horse";
 import { expandFormation } from "@/utils/expandFormation";
+import BetCard from "@/components/common/BetCard";
 
 const BET_TYPES: BetType[] = ["単勝", "複勝", "馬連", "馬単", "ワイド", "3連複", "3連単"];
 
@@ -429,143 +430,18 @@ export default function BettingForm({ horses, bets, onChange, allowedNumbers }: 
 
             {/* 追加済み買い目 */}
             {bets.length > 0 && (
-                <div className="border rounded-lg overflow-hidden">
+                <div className="space-y-3">
                     {bets.map((bet) => (
-                        <div
-                            key={bet.id}
-                            className="flex justify-between items-center p-3 border-b bg-white"
-                        >
-                            <div>
-                                <span className="inline-block bg-gray-200 text-gray-700 text-xs px-1.5 rounded mr-2">
-                                    {bet.type} / {bet.mode}
-                                    {bet.isMulti ? " / マルチ" : ""}
-                                </span>
+                        <div key={bet.id} className="relative">
+                            <BetCard bet={bet} />
 
-                                {/* ボックス */}
-                                {bet.box && (
-                                    <span className="text-sm font-mono">
-                                        {bet.box.join("-")}
-                                    </span>
-                                )}
-
-                                {/* 馬単（新ロジック） */}
-                                {bet.type === "馬単" && bet.axis && bet.wings && (
-                                    <span className="text-sm font-mono">
-                                        1着軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
-                                    </span>
-                                )}
-
-                                {/* 馬連（新ロジック） */}
-                                {bet.type === "馬連" && bet.axis && bet.wings && (
-                                    <span className="text-sm font-mono">
-                                        軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
-                                    </span>
-                                )}
-
-                                {/* 3連複（新ロジック） */}
-                                {bet.type === "3連複" && bet.axis && bet.wings && (
-                                    <span className="text-sm font-mono">
-                                        軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
-                                    </span>
-                                )}
-
-                                {/* ワイド（新ロジック） */}
-                                {bet.type === "ワイド" && bet.axis && bet.wings && (
-                                    <span className="text-sm font-mono">
-                                        軸: {bet.axis.join(",")} / 相手: {bet.wings.join(",")}
-                                    </span>
-                                )}
-
-                                {/* 3連単流し（特殊） */}
-                                {bet.trifectaNagashi && (
-                                    <div className="mt-2">
-                                        <button
-                                            onClick={() =>
-                                                setOpenBetId(openBetId === bet.id ? null : bet.id)
-                                            }
-                                            className="
-                                                flex items-center gap-1 
-                                                text-xs font-semibold
-                                                text-blue-600 hover:text-blue-800 
-                                                transition-colors
-                                            "
-                                        >
-                                            <span className="text-sm">
-                                                {openBetId === bet.id ? "▼" : "▶"}
-                                            </span>
-                                            <span className="underline">
-                                                {openBetId === bet.id ? "買い目を隠す" : "買い目を表示"}
-                                            </span>
-                                        </button>
-
-                                        {openBetId === bet.id && (
-                                            <div
-                                                className="
-                                                    mt-2 p-3 
-                                                    bg-gray-50 
-                                                    border border-gray-200 
-                                                    rounded-lg 
-                                                    shadow-sm
-                                                    space-y-1 
-                                                    text-xs font-mono text-gray-700
-                                                "
-                                            >
-                                                {(() => {
-                                                    const expanded = expandNagashi(bet);
-
-                                                    return expanded.map((arr, i) => (
-                                                        <div key={i} className="flex items-center gap-2">
-                                                            <span className="px-2 py-0.5 rounded bg-red-100 text-red-700">
-                                                                {arr[0]}
-                                                            </span>
-                                                            <span className="text-gray-500">→</span>
-                                                            <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-700">
-                                                                {arr[1]}
-                                                            </span>
-                                                            <span className="text-gray-500">→</span>
-                                                            <span className="px-2 py-0.5 rounded bg-green-100 text-green-700">
-                                                                {arr[2]}
-                                                            </span>
-                                                        </div>
-                                                    ));
-                                                })()}
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* フォーメーション */}
-                                {bet.formation && (
-                                    <>
-                                        {/* 三連単・三連複 → 3段階 */}
-                                        {(bet.type === "3連単" || bet.type === "3連複") && (
-                                            <span className="text-sm font-mono">
-                                                [{bet.formation.first.join(",")}] →
-                                                [{bet.formation.second.join(",")}] →
-                                                [{bet.formation.third.join(",")}]
-                                            </span>
-                                        )}
-
-                                        {/* 馬単・馬連・ワイド → 2段階 */}
-                                        {["馬単", "馬連", "ワイド"].includes(bet.type) && (
-                                            <span className="text-sm font-mono">
-                                                [{bet.formation.first.join(",")}] →
-                                                [{bet.formation.second.join(",")}]
-                                            </span>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <span className="text-sm font-bold">{bet.points}点</span>
-                                <button
-                                    onClick={() => removeBet(bet.id)}
-                                    className="text-red-400 hover:text-red-600 p-1"
-                                >
-                                    ×
-                                </button>
-                            </div>
+                            {/* 削除ボタンだけは BetCard の外側に残す */}
+                            <button
+                                onClick={() => removeBet(bet.id)}
+                                className="absolute top-2 right-2 text-red-400 hover:text-red-600 p-1"
+                            >
+                                ×
+                            </button>
                         </div>
                     ))}
                 </div>
