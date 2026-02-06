@@ -113,7 +113,7 @@ export default function PredictionSection({ race }: Props) {
             </section>
 
             {/* コミュニティ */}
-            <section>
+            <section id="post-section">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <span className="w-1 h-6 bg-green-600 rounded-full"></span>
                     みんなの予想

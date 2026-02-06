@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import PredictionSection from "@/components/race/PredictionSection";
 import RaceResultSection from "@/components/race/RaceResultSection";
+import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
 
 type Props = {
     params: { raceId: string };
@@ -106,6 +107,11 @@ export default async function RacePage({ params }: Props) {
                 </div>
             </section>
 
+            {/* みんなの予想へボタン */}
+            <div className="max-w-4xl mx-auto mt-4 px-4">
+                <ScrollToPostsButton />
+            </div>
+
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
                 {/* 予想セクション（結果がない場合のみ表示） */}
                 {!race.result ? (
@@ -130,7 +136,7 @@ export default async function RacePage({ params }: Props) {
 
                 {/* ★ ここに「みんなの予想と結果」セクションを追加する */}
                 {race.result && (
-                    <section className="mt-10">
+                    <section id="post-section" className="bg-white p-6 rounded-xl shadow">
                         <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                             <span className="w-1 h-6 bg-green-600 rounded-full"></span>
                             みんなの予想と結果

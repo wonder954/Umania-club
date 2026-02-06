@@ -28,6 +28,7 @@ body {
     text-wrap: balance;
   }
 
+  /* 既存の fadeIn */
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -42,5 +43,22 @@ body {
 
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
+  }
+
+  /* スライド＋フェード */
+  @keyframes slideFadeDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideFadeDown {
+    animation: slideFadeDown 0.35s ease-out;
   }
 }
