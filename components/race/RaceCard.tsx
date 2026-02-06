@@ -22,6 +22,7 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
     // If no color is defined, fallback to gray/blue default logic.
     const bgClass = colorClass.split(" ").find((c: string) => c.startsWith("bg-"));
     const borderClass = bgClass?.replace("bg-", "border-") || "border-blue-500";
+    console.log("RaceCard props.race:", race);
 
     return (
         <div

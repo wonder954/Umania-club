@@ -106,7 +106,8 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
             const rows = document.querySelectorAll('.hr-tableLeft__dataArea');
 
             rows.forEach(row => {
-                const title = row.querySelector('.hr-tableLeft__title')?.textContent?.trim() || '';
+                const titleElement = row.querySelector('.hr-tableLeft__title');
+                const title = titleElement?.childNodes[0]?.textContent?.trim() || '';
                 const grade = row.querySelector('.hr-label')?.textContent?.trim() || '';
                 const status = row.querySelector('.hr-tableLeft__status')?.textContent?.trim() || '';
                 const link = (row.querySelector('.hr-tableLeft__link') as HTMLAnchorElement)?.href || '';

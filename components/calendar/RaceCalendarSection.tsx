@@ -1,14 +1,12 @@
+// components/calendar/RaceCalendarSection.tsx
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { RaceCalendar } from "@/components/calendar/RaceCalendar";
-
-// ★ CalendarRace 用の変換 & グループ化
-import { racesToCalendarRaces } from "@/lib/race/racesToCalendarRaces";
-import { groupByDate as groupCalendarRaces } from "@/lib/race/groupByDate";
-import { gradeRaces2026 } from "@/lib/grades2026"; // Import JRA Data
-
+import { racesToCalendarRaces, groupByDate } from "@/lib/race/racesToCalendarRaces";
+import { gradeRaces2026 } from "@/lib/grades2026";
 import { Modal } from "@/components/common/Modal";
 import RaceCard from "@/components/race/RaceCard";
 
@@ -22,39 +20,31 @@ export function RaceCalendarSection({
     races: Race[];
     holidays: Record<string, string>;
 }) {
-    // ★ Race[] + JRA Data → Unified CalendarRace[]
+    // ★ Race[] + JRAデータ → CalendarRace[] に統合
     const calendarRaces: CalendarRace[] = racesToCalendarRaces(races, gradeRaces2026);
 
-    // ★ CalendarRace[] を日付ごとにグループ化（UI 用）
-    const racesByDate = groupCalendarRaces(calendarRaces);
+    // ★ CalendarRace[] を日付ごとにグループ化
+    const racesByDate = groupByDate(calendarRaces);
 
-    // ★ モーダルは Race[] または CalendarRace[] を使う
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRaces, setSelectedRaces] = useState<(Race | CalendarRace)[]>([]);
 
     function handleDayClick(dateStr: string) {
         const dayCalendarRaces = racesByDate[dateStr] ?? [];
 
-        if (dayCalendarRaces.length === 0) {
-            return;
-        }
+        if (dayCalendarRaces.length === 0) return;
 
-        // ★ Yahoo! Race (詳細あり) を優先して取得、なければ CalendarRace (簡易) を使用
-        // UI上は merged された dayCalendarRaces がすべて表示されているので、
-        // モーダルでもそれらをすべて表示すべき。
-
-        // 1. まずその日の詳細データ(Race)を探す
-        const fullRaces = races.filter(r => r.date === dateStr);
-
-        // 2. 詳細データがないレース（JRAのみ）を特定してマージする
-        //    (racesToCalendarRaces でマージ済みなので、dayCalendarRaces をベースにするのが確実)
-
+        // ★ CalendarRace → Race に変換（詳細データがあれば差し替え）
         const modalRaces = dayCalendarRaces.map(calRace => {
-            // IDが10桁（スクレイピング済み）なら fullRaces から探す
+            // raceId が10桁の数字 → races から詳細データを探す
             if (/^\d{10}$/.test(calRace.id)) {
-                return fullRaces.find(r => r.id === calRace.id) || calRace;
+                const fullRace = races.find(r => r.id === calRace.id);
+                if (fullRace) {
+                    return fullRace; // ★ 詳細版を返す
+                }
             }
-            // そうでなければ CalendarRace のまま
+
+            // 詳細データがなければ CalendarRace のまま
             return calRace;
         });
 
@@ -65,7 +55,7 @@ export function RaceCalendarSection({
     return (
         <>
             <RaceCalendar
-                racesByDate={racesByDate} // CalendarRace 用
+                racesByDate={racesByDate}
                 holidays={holidays}
                 onSelectDate={handleDayClick}
             />
@@ -73,8 +63,13 @@ export function RaceCalendarSection({
             <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
                 {selectedRaces.map(race => {
                     const isRaceId = /^\d{10}$/.test(race.id);
+
                     return isRaceId ? (
-                        <Link key={race.id} href={`/races/${race.id}`} className="block mb-4 hover:opacity-90 transition-opacity">
+                        <Link
+                            key={race.id}
+                            href={`/races/${race.id}`}
+                            className="block mb-4 hover:opacity-90 transition-opacity"
+                        >
                             <RaceCard race={race} />
                         </Link>
                     ) : (

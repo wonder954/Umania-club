@@ -160,15 +160,11 @@ export async function getAllRaces(): Promise<Race[]> {
     const fs = await import("fs");
     const path = await import("path");
 
-    const latestF = await getLatestFFolder();
-
-    // 直近4つの w フォルダを取得（1ヶ月分）
+    // 直近のフォルダを取得（予定・結果問わず、最新のものから順に確保）
+    // fフォルダでもwフォルダでも、最新のものには今週の出馬表が含まれている可能性があるため
+    // 過去1ヶ月分程度（約4-5週分）を含めるために上位6つを取得
     const allFolders = await listScraperFolders();
-    const wFolders = allFolders.filter(f => f.endsWith("w")).slice(0, 4);
-
-    const foldersToRead: string[] = [];
-    if (latestF) foldersToRead.push(latestF);
-    foldersToRead.push(...wFolders);
+    const foldersToRead = allFolders.slice(0, 6);
 
     // 重複除去（latestF と wFolders[0] が同じ場合など）
     const uniqueFolders = Array.from(new Set(foldersToRead));

@@ -4,6 +4,7 @@ import { getAllRaces } from "@/lib/races";
 import RaceCard from "@/components/race/RaceCard";
 import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/lib/holidays";
+import RaceSearchForm from "@/components/search/RaceSearchForm";
 
 export default async function Home() {
     const holidays = await fetchHolidays();
@@ -103,6 +104,11 @@ export default async function Home() {
                             </div>
                         )}
                     </div>
+                </div>
+
+                {/* 各種検索・カレンダー */}
+                <div className="mb-12">
+                    <RaceSearchForm races={races} />
                 </div>
 
                 {/* ★ 過去のレースカレンダー */}
