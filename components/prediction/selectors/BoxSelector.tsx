@@ -6,9 +6,11 @@ type Props = {
     selected: number[];
     onChange: (nums: number[]) => void;
     allowedNumbers?: number[];
+    /** 最大選択数（通常モード用） */
+    maxCount?: number;
 };
 
-export default function BoxSelector({ horses, selected, onChange, allowedNumbers }: Props) {
+export default function BoxSelector({ horses, selected, onChange, allowedNumbers, maxCount }: Props) {
     const toggle = (numStr: number | string) => {
         const num = Number(numStr);
         if (isNaN(num)) return;
@@ -16,6 +18,10 @@ export default function BoxSelector({ horses, selected, onChange, allowedNumbers
         if (selected.includes(num)) {
             onChange(selected.filter(n => n !== num));
         } else {
+            // 最大数チェック
+            if (maxCount && selected.length >= maxCount) {
+                return;  // 最大数に達している場合は選択不可
+            }
             onChange([...selected, num].sort((a, b) => a - b));
         }
     };

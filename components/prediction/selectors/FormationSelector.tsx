@@ -16,6 +16,8 @@ type Props = {
     onChange: (f: Formation) => void;
     allowedNumbers?: number[];
     selectedType: BetType;
+    /** 単数選択モード（通常買い用: 各着に1頭のみ） */
+    isSingleMode?: boolean;
 };
 
 export default function FormationSelector({
@@ -23,7 +25,8 @@ export default function FormationSelector({
     formation,
     onChange,
     allowedNumbers,
-    selectedType
+    selectedType,
+    isSingleMode = false
 }: Props) {
     const toggle = (key: keyof Formation, numStr: number | string) => {
         const num = Number(numStr);
@@ -31,12 +34,20 @@ export default function FormationSelector({
 
         const list = formation[key];
 
-        const updated =
-            list.includes(num)
-                ? list.filter(n => n !== num)
-                : [...list, num].sort((a, b) => a - b);
+        // 既に選択されている場合 → 解除
+        if (list.includes(num)) {
+            onChange({ ...formation, [key]: list.filter(n => n !== num) });
+            return;
+        }
 
-        onChange({ ...formation, [key]: updated });
+        // 未選択の場合
+        if (isSingleMode) {
+            // 単数モード: 既存の選択を置き換え（1頭のみ）
+            onChange({ ...formation, [key]: [num] });
+        } else {
+            // 通常（フォーメーション）: 追加
+            onChange({ ...formation, [key]: [...list, num].sort((a, b) => a - b) });
+        }
     };
 
     const renderRow = (label: string, key: keyof Formation) => (

@@ -8,13 +8,13 @@ export type BetType =
     | "3連単";
 
 
-export type InputMode = "box" | "formation" | "nagashi" | "normal";
+export type InputMode = "box" | "formation" | "nagashi";
 export type TrifectaPattern = "1" | "2" | "3" | "12" | "13" | "23";
 
 export type Bet = {
     id: string;
     type: BetType;
-    mode: InputMode;
+    mode: InputMode | null;  // null = 通常買い（1点買い）
     isMulti?: boolean;
     numbers: number[];
 

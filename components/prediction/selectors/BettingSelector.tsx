@@ -20,8 +20,8 @@ import { BettingInputState } from "../hooks/useBettingInput";
 interface BettingSelectorProps {
     /** 馬券タイプ */
     betType: BetType;
-    /** 入力方式 */
-    inputMode: InputMode;
+    /** 入力方式（null = 通常買い） */
+    inputMode: InputMode | null;
     /** 馬のリスト */
     horses: Horse[];
     /** 購入可能な馬番号のリスト（nullの場合は全馬購入可能） */
@@ -72,15 +72,58 @@ export function BettingSelector({
     onNagashiChange,
     onTrifectaNagashiChange,
 }: BettingSelectorProps) {
-    // ボックス・通常選択の場合
-    if (inputMode === "box" || inputMode === "normal") {
+    // 通常買い（inputMode === null）の場合
+    if (inputMode === null) {
+        // 馬単・三連単 → 順番選択UI（FormationSelector）
+        if (betType === "馬単" || betType === "3連単") {
+            return (
+                <>
+                    <div className="text-xs text-gray-600 mb-2 bg-blue-50 p-2 rounded">
+                        💡 {betType === "馬単" ? "1着、2着" : "1着、2着、3着"}の順に1頭ずつ選択
+                    </div>
+                    <FormationSelector
+                        horses={horses}
+                        formation={state.formation}
+                        onChange={onFormationChange}
+                        allowedNumbers={allowedNumbers}
+                        selectedType={betType}
+                        isSingleMode={true}
+                    />
+                </>
+            );
+        }
+
+        // その他（単勝・複勝・馬連・ワイド・三連複） → 通常選択
         return (
-            <BoxSelector
-                horses={horses.map((h) => ({ number: h.number, name: h.name }))}
-                selected={state.boxSelected}
-                onChange={onBoxChange}
-                allowedNumbers={allowedNumbers}
-            />
+            <>
+                {/* 通常買いの説明 */}
+                <div className="text-xs text-gray-600 mb-2 bg-blue-50 p-2 rounded">
+                    💡 {betType === "単勝" || betType === "複勝"
+                        ? "選んだ馬を1点ずつ購入"
+                        : "選んだ馬の組み合わせを1点として購入"}
+                </div>
+                <BoxSelector
+                    horses={horses.map((h) => ({ number: h.number, name: h.name }))}
+                    selected={state.boxSelected}
+                    onChange={onBoxChange}
+                    allowedNumbers={allowedNumbers}
+                    maxCount={betType === "馬連" || betType === "ワイド" ? 2 : betType === "3連複" ? 3 : undefined}
+                />
+            </>
+        );
+    }
+
+    // ボックスの場合
+    if (inputMode === "box") {
+        return (
+            <>
+                <BoxSelector
+                    horses={horses.map((h) => ({ number: h.number, name: h.name }))}
+                    selected={state.boxSelected}
+                    onChange={onBoxChange}
+                    allowedNumbers={allowedNumbers}
+                />
+            </>
         );
     }
 

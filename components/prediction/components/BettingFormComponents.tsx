@@ -68,14 +68,18 @@ import { INPUT_MODE_LABELS } from "../utils/bettingFormConstants";
 interface InputModeSelectorProps {
     /** 利用可能な入力方式のリスト */
     availableModes: readonly InputMode[];
-    /** 現在選択されている入力方式 */
-    selectedMode: InputMode;
+    /** 現在選択されている入力方式（null = 通常買い） */
+    selectedMode: InputMode | null;
     /** 入力方式が変更されたときのコールバック */
-    onChange: (mode: InputMode) => void;
+    onChange: (mode: InputMode | null) => void;
 }
 
 /**
  * 入力方式選択ボタングループコンポーネント
+ * 
+ * トグル動作：
+ * - ボタンをクリックするとその買い方が選択される
+ * - 再度クリックすると選択解除され、通常買い（null）に戻る
  */
 export function InputModeSelector({
     availableModes,
@@ -95,7 +99,7 @@ export function InputModeSelector({
                 return (
                     <button
                         key={mode}
-                        onClick={() => onChange(mode)}
+                        onClick={() => onChange(isSelected ? null : mode)} // トグル動作
                         aria-pressed={isSelected}
                         className={`
                             px-3 py-1 rounded-full text-sm
@@ -158,29 +162,31 @@ export function MultiCheckbox({ checked, onChange }: MultiCheckboxProps) {
  */
 
 interface PointsDisplayProps {
-    /** 計算された点数 */
+    /** 購入点数 */
     points: number;
     /** 馬券タイプ */
     betType: BetType;
-    /** 入力方式 */
-    inputMode: InputMode;
-    /** マルチかどうか */
-    isMulti: boolean;
-    /** 追加ボタンが押されたときのコールバック */
+    /** 入力方式（null = 通常買い） */
+    inputMode: InputMode | null;
+    /** 「追加する」ボタンのクリックハンドラ */
     onAdd: () => void;
+    /** 馬券追加が無効かどうか */
+    disabled?: boolean;
 }
 
 /**
- * 点数表示・追加ボタンコンポーネント
+ * 点数表示と追加ボタンコンポーネント
+ * 
+ * 購入点数の情報と「追加する」ボタンを表示します。
  */
 export function PointsDisplay({
     points,
     betType,
     inputMode,
-    isMulti,
     onAdd,
+    disabled = false
 }: PointsDisplayProps) {
-    const isDisabled = points === 0;
+    const isDisabled = disabled || points === 0;
 
     return (
         <div className="flex justify-between items-center bg-white p-3 rounded border">
@@ -189,8 +195,7 @@ export function PointsDisplay({
                 <span className="font-bold text-lg text-blue-600">{points}</span>{" "}
                 <span className="text-gray-700">点</span>
                 <span className="text-gray-400 text-xs ml-2">
-                    （{betType} / {INPUT_MODE_LABELS[inputMode]}
-                    {isMulti ? " / マルチ" : ""}）
+                    （{betType} / {inputMode ? INPUT_MODE_LABELS[inputMode] : "通常"}）
                 </span>
             </div>
 

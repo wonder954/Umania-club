@@ -35,6 +35,94 @@ function safeArrayCopy<T>(arr: T[] | undefined | null): T[] {
 }
 
 /**
+ * 入力状態から新しい馬券オブジェクトを作成（複数対応）
+ * 
+ * 単勝・複勝の通常買いの場合、選択した馬ごとに別々のBetを生成します。
+ * それ以外の場合は、従来通り1つのBetを生成します。
+ * 
+ * @param state - 現在の入力状態
+ * @returns 作成されたBetオブジェクトの配列
+ */
+export function createBetsFromInput(state: BettingInputState): Bet[] {
+    // 単勝・複勝の通常買い → 複数Bet生成
+    if (state.inputMode === null &&
+        (state.selectedType === "単勝" || state.selectedType === "複勝")) {
+        return state.boxSelected.map(number => ({
+            id: generateBetId(),
+            type: state.selectedType,
+            mode: null,
+            points: 1,
+            numbers: [number],
+            isMulti: false,
+        }));
+    }
+
+    // それ以外は従来通り1つ
+    return [createBetFromInput(state)];
+}
+
+/**
+ * 通常買いの馬券データを設定
+ * 
+ * - 馬単・三連単: formation から順番通りに numbers を設定（重複チェックあり）
+ * - その他: boxSelected から numbers を設定
+ * 
+ * @param bet - 設定先のBetオブジェクト
+ * @param state - 入力状態
+ */
+function setNormalBetData(bet: Bet, state: BettingInputState): void {
+    // 馬単: 1着→2着の順番 + 重複チェック
+    if (bet.type === "馬単") {
+        const first = state.formation.first[0];
+        const second = state.formation.second[0];
+
+        if (first !== undefined && second !== undefined) {
+            // 重複チェック（例: 4-4 は無効）
+            if (first === second) {
+                bet.numbers = [];
+                bet.points = 0;
+            } else {
+                bet.numbers = [first, second];
+                bet.points = 1;
+            }
+        } else {
+            bet.numbers = [];
+            bet.points = 0;
+        }
+        return;
+    }
+
+    // 三連単: 1着→2着→3着の順番 + 重複チェック
+    if (bet.type === "3連単") {
+        const first = state.formation.first[0];
+        const second = state.formation.second[0];
+        const third = state.formation.third[0];
+
+        if (first !== undefined && second !== undefined && third !== undefined) {
+            // 重複チェック（例: 4-4-4, 4-4-5 などは無効）
+            const numbers = [first, second, third];
+            const uniqueNumbers = new Set(numbers);
+
+            if (uniqueNumbers.size === 3) {
+                bet.numbers = numbers;
+                bet.points = 1;
+            } else {
+                bet.numbers = [];
+                bet.points = 0;
+            }
+        } else {
+            bet.numbers = [];
+            bet.points = 0;
+        }
+        return;
+    }
+
+    // その他（馬連・ワイド・三連複、または単勝・複勝）
+    bet.numbers = [...state.boxSelected];
+    bet.points = 1;
+}
+
+/**
  * 入力状態から新しい馬券オブジェクトを作成
  * 
  * この関数は以下の処理を行います:
@@ -51,14 +139,18 @@ export function createBetFromInput(state: BettingInputState): Bet {
     const newBet: Bet = {
         id: generateBetId(),
         type: state.selectedType,
-        mode: state.inputMode,
+        mode: state.inputMode,  // null を許容
         isMulti: state.isMulti,
         points: 0,
         numbers: [],
     };
 
+    // 通常買いの場合
+    if (state.inputMode === null) {
+        setNormalBetData(newBet, state);
+    }
     // 入力方式に応じてデータを設定
-    if (state.inputMode === "box" || state.inputMode === "normal") {
+    else if (state.inputMode === "box") {
         // ボックス・通常選択の場合
         setBoxBetData(newBet, state);
     } else if (state.inputMode === "formation") {

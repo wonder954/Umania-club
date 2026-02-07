@@ -15,7 +15,7 @@ import { AVAILABLE_MODES } from "../utils/bettingFormConstants";
 export interface BettingInputState {
     // 基本設定
     selectedType: BetType;
-    inputMode: InputMode;
+    inputMode: InputMode | null;  // null = 通常買い（1点買い）
     isMulti: boolean;
 
     // ボックス・通常選択
@@ -50,7 +50,7 @@ export interface BettingInputState {
 function createInitialState(): BettingInputState {
     return {
         selectedType: "3連単",
-        inputMode: "box",
+        inputMode: null,  // デフォルトは通常買い
         isMulti: false,
         boxSelected: [],
         formation: { first: [], second: [], third: [] },
@@ -96,7 +96,7 @@ export function useBettingInput() {
         setState((prev) => ({
             ...prev,
             selectedType: type,
-            inputMode: AVAILABLE_MODES[type][0], // その馬券タイプの最初の入力方式を選択
+            inputMode: null,  // 馬券タイプ変更時は通常買いにリセット
             isMulti: false, // マルチをリセット
         }));
     }, []);
@@ -106,7 +106,7 @@ export function useBettingInput() {
      * 
      * 方式変更時はマルチフラグもリセットされます。
      */
-    const setInputMode = useCallback((mode: InputMode) => {
+    const setInputMode = useCallback((mode: InputMode | null) => {
         setState((prev) => ({
             ...prev,
             inputMode: mode,

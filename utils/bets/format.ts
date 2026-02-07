@@ -5,6 +5,35 @@ import { Bet } from "@/types/bet";
 export function formatBetStructure(bet: Bet) {
     const { type, mode, numbers, formation } = bet;
 
+    // 通常買い（mode === null）
+    if (mode === null) {
+        // 馬単: 順番を表示
+        if (type === "馬単") {
+            return {
+                buyType: "通常",
+                rows: [
+                    { label: "1着 → 2着", values: numbers },
+                ],
+            };
+        }
+
+        // 三連単: 順番を表示
+        if (type === "3連単") {
+            return {
+                buyType: "通常",
+                rows: [
+                    { label: "1着 → 2着 → 3着", values: numbers },
+                ],
+            };
+        }
+
+        // その他: 通常表示
+        return {
+            buyType: "通常",
+            rows: [{ label: "", values: numbers }],
+        };
+    }
+
     // 単勝・複勝
     if (type === "単勝" || type === "複勝") {
         return {

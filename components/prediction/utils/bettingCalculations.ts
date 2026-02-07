@@ -57,6 +57,72 @@ export function calculateBoxPoints(betType: BetType, selectedCount: number): num
 }
 
 /**
+ * 通常買い（1点買い）の点数計算
+ * 
+ * 馬券タイプごとに異なるロジック:
+ * - 単勝・複勝: 選択数 = 点数（3頭選べば3点）
+ * - 馬単: 1着・2着が各1頭 + 重複なし → 1点
+ * - 三連単: 1着・2着・3着が各1頭 + 重複なし → 1点
+ * - 馬連・ワイド: 2頭選択（重複なし） → 1点
+ * - 三連複: 3頭選択（重複なし） → 1点
+ * 
+ * @param betType - 馬券の種類
+ * @param selectedCount - BoxSelectorで選択した馬の頭数
+ * @param formation - FormationSelectorで選択した着順データ（馬単・三連単用）
+ * @returns 購入点数
+ */
+export function calculateNormalPoints(
+    betType: BetType,
+    selectedCount: number,
+    formation?: { first: number[]; second: number[]; third: number[] }
+): number {
+    // 単勝・複勝: 選択数 = 点数
+    if (betType === "単勝" || betType === "複勝") {
+        return selectedCount;
+    }
+
+    // 馬単: 1着と2着が各1頭選ばれていれば1点 + 重複チェック
+    if (betType === "馬単") {
+        if (formation?.first.length !== 1 || formation?.second.length !== 1) {
+            return 0;
+        }
+        // 重複チェック（例: 4-4 は無効）
+        if (formation.first[0] === formation.second[0]) {
+            return 0;
+        }
+        return 1;
+    }
+
+    // 三連単: 1着、2着、3着が各1頭選ばれていれば1点 + 重複チェック
+    if (betType === "3連単") {
+        if (formation?.first.length !== 1 &&
+            formation?.second.length !== 1 &&
+            formation?.third.length !== 1) {
+            return 0;
+        }
+        // 重複チェック（例: 4-4-4, 4-4-5 は無効）
+        const numbers = [formation.first[0], formation.second[0], formation.third[0]];
+        const uniqueNumbers = new Set(numbers);
+        if (uniqueNumbers.size !== 3) {
+            return 0;
+        }
+        return 1;
+    }
+
+    // 馬連・ワイド: 2頭選択で1点
+    if (betType === "馬連" || betType === "ワイド") {
+        return selectedCount === 2 ? 1 : 0;
+    }
+
+    // 三連複: 3頭選択で1点
+    if (betType === "3連複") {
+        return selectedCount === 3 ? 1 : 0;
+    }
+
+    return 0;
+}
+
+/**
  * 3連単流しの点数を計算
  * 
  * 固定する着順と流す馬の組み合わせから点数を計算します。
@@ -121,13 +187,13 @@ export function calculateTrifectaNagashiPoints(
  * フォーメーションと流しは実際に展開して点数を数えます。
  * 
  * @param betType - 馬券の種類
- * @param inputMode - 入力方式
+ * @param inputMode - 入力方式（null = 通常買い）
  * @param state - 入力状態
  * @returns 購入点数
  */
 export function calculateCurrentPoints(
     betType: BetType,
-    inputMode: InputMode,
+    inputMode: InputMode | null,
     state: {
         boxSelected: number[];
         formation: { first: number[]; second: number[]; third: number[] };
@@ -143,8 +209,18 @@ export function calculateCurrentPoints(
         isMulti: boolean;
     }
 ): number {
+    // 通常買いの場合
+    if (inputMode === null) {
+        // 馬単・三連単は formation を使用
+        if (betType === "馬単" || betType === "3連単") {
+            return calculateNormalPoints(betType, 0, state.formation);
+        }
+        // それ以外は boxSelected を使用
+        return calculateNormalPoints(betType, state.boxSelected.length);
+    }
+
     // ボックス・通常選択の場合
-    if (inputMode === "box" || inputMode === "normal") {
+    if (inputMode === "box") {
         return calculateBoxPoints(betType, state.boxSelected.length);
     }
 

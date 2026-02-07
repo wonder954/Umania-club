@@ -35,7 +35,7 @@ import { AVAILABLE_MODES, isMultiAvailable } from "@/components/prediction/utils
 import { calculateCurrentPoints } from "@/components/prediction/utils/bettingCalculations";
 
 // 馬券作成ロジック
-import { createBetFromInput, isBetValid } from "@/components/prediction/utils/createBet";
+import { createBetsFromInput, isBetValid } from "@/components/prediction/utils/createBet";
 
 // UIコンポーネント
 import {
@@ -146,18 +146,17 @@ export default function BettingForm({
             return;
         }
 
-        // 入力状態からBetオブジェクトを作成
-        const newBet = createBetFromInput(state);
+        // 単勝・複勝の通常買いの場合、複数のBetが返される
+        const newBets = createBetsFromInput(state);
 
-        // 念のため、作成された馬券が有効かチェック
-        if (!isBetValid(newBet)) {
-            console.warn("無効な馬券が作成されました", newBet);
+        // すべてのBetが有効か確認
+        if (!newBets.every(bet => isBetValid(bet))) {
+            alert("選択内容が不完全です。馬券を追加できません。");
             return;
         }
 
-        // 馬券リストに追加
-        onChange([...bets, newBet]);
-
+        // 複数Betを追加
+        onChange([...bets, ...newBets]);
         // 入力フォームをリセット
         // 馬券タイプと入力方式は保持されます
         actions.resetInput();

@@ -8,7 +8,7 @@ export type Formation = {
 
 export type FormationBet = {
     type: string;
-    mode: string;
+    mode: string | null;  // null を許容
     isMulti?: boolean;
     formation?: Formation;
 };
