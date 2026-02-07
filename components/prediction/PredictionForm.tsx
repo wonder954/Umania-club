@@ -9,6 +9,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase-auth";
 import ShareImageGenerator from "@/components/share/ShareImageGenerator";
+import PredictionSuccess from "./PredictionSuccess";
+import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 
 type Props = {
     race: Race;
@@ -43,12 +45,7 @@ export default function PredictionForm({
 
     const totalPoints = bets.reduce((sum, bet) => sum + (bet.points || 0), 0);
 
-    const allowedNumbers = Object.keys(prediction)
-        .map(name => {
-            const horse = race.horses.find(h => h.name === name);
-            return horse?.number ? Number(horse.number) : null;
-        })
-        .filter((n): n is number => n !== null && !isNaN(n));
+    const allowedNumbers = getAllowedNumbers(prediction, race);
 
     const handleSubmit = async () => {
         if (!user) {
@@ -103,30 +100,12 @@ export default function PredictionForm({
 
     if (isSuccess) {
         return (
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center transition-all duration-500 ease-in-out">
-                <div className="text-5xl mb-4 animate-bounce">🎉</div>
-                <h2 className="text-2xl font-bold mb-2">投稿しました！</h2>
-                <p className="text-gray-500 mb-6">あなたの予想が公開されました。</p>
-
-                <div className="flex flex-col items-center">
-                    <ShareImageGenerator
-                        raceName={race.name}
-                        courseText={`${race.course.surface} ${race.course.distance}（${race.course.direction}${race.course.courseDetail}）`}
-                        grade={race.grade || ""}
-                        date={race.date || ""}
-                        prediction={prediction}
-                        horses={race.horses}
-                        comment={comment}
-                    />
-
-                    <button
-                        onClick={resetForm}
-                        className="mt-6 text-gray-400 hover:text-gray-600 underline text-sm"
-                    >
-                        新しい予想を投稿する
-                    </button>
-                </div>
-            </div>
+            <PredictionSuccess
+                race={race}
+                prediction={prediction}
+                comment={comment}
+                onReset={resetForm}
+            />
         );
     }
 

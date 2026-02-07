@@ -1,9 +1,10 @@
 import { getRace } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
-import PostList from "@/components/community/PostList/index";
 import Link from "next/link";
 import Image from "next/image";
-import PredictionSection from "@/components/race/PredictionSection";
+import PredictionArea from "@/components/race/PredictionArea";
+import CommunitySection from "@/components/race/CommunitySection";
+import CommunityResultSection from "@/components/race/CommunityResultSection";
 import RaceResultSection from "@/components/race/RaceResultSection";
 import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
 import PayoutSection from "@/components/race/PayoutSection";
@@ -117,7 +118,10 @@ export default async function RacePage({ params }: Props) {
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
                 {/* 予想セクション（結果がない場合のみ表示） */}
                 {!race.result ? (
-                    <PredictionSection race={race} />
+                    <>
+                        <PredictionArea race={race} />
+                        <CommunitySection race={race} />
+                    </>
                 ) : (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-center">
                         <h3 className="text-lg font-bold text-blue-800 mb-2">レース終了</h3>
@@ -125,44 +129,16 @@ export default async function RacePage({ params }: Props) {
                     </div>
                 )}
 
+
+
                 {/* レース結果セクション */}
-                {race.result && (
-                    <section>
-                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <span className="text-purple-600 text-2xl animate-result">🏇</span>
-                            レース結果
-                            <span className="text-purple-600 text-2xl animate-result">🏇</span>
-                        </h2>
-                        <RaceResultSection result={race.result} />
-                    </section>
-                )}
+                {race.result && <RaceResultSection result={race.result} />}
 
                 {/* 払戻金セクション */}
-                {race.result && (
-                    <section>
-                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <span className="text-green-600 text-2xl animate-coin">💰</span>
-                            払戻金
-                            <span className="text-green-600 text-2xl animate-coin">💰</span>
-                        </h2>
-                        <PayoutSection payout={race.result.payout} />
-                    </section>
-                )}
+                {race.result && <PayoutSection payout={race.result.payout} />}
 
                 {/* みんなの予想と結果 */}
-                {race.result && (
-                    <section id="post-section">
-                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <span className="text-orange-500 text-2xl animate-flame">🔥</span>
-                            みんなの予想と結果
-                            <span className="text-orange-500 text-2xl animate-flame">🔥</span>
-                        </h2>
-
-                        <div className="bg-white p-6 rounded-xl shadow">
-                            <PostList raceId={race.id} race={race} />
-                        </div>
-                    </section>
-                )}
+                {race.result && <CommunityResultSection race={race} />}
             </main>
         </div>
     );

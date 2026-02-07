@@ -22,55 +22,63 @@ export default function PayoutSection({ payout }: Props) {
     const [showMore, setShowMore] = useState(false);
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3">
-                <h3 className="text-white font-bold">払戻金</h3>
-            </div>
+        <section>
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <span className="text-green-600 text-2xl animate-coin">💰</span>
+                払戻金
+                <span className="text-green-600 text-2xl animate-coin">💰</span>
+            </h2>
 
-            <div className="p-4">
-
-                {/* グリッド（単勝・複勝・折りたたみ部分） */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                    {/* --- 単勝（win） --- */}
-                    {payout.win?.length > 0 && (
-                        <PayoutCard label="単勝" items={payout.win} />
-                    )}
-
-                    {/* --- 複勝（place） --- */}
-                    {payout.place?.length > 0 && (
-                        <PayoutCard label="複勝" items={payout.place} />
-                    )}
-
-                    {/* --- 折りたたみ部分 --- */}
-                    {showMore &&
-                        (Object.keys(payoutLabels) as Array<keyof Payout>)
-                            .filter((key) => key !== "win" && key !== "place")
-                            .map((key) => {
-                                const items = payout[key];
-                                if (!items?.length) return null;
-
-                                return (
-                                    <PayoutCard
-                                        key={key}
-                                        label={payoutLabels[key]}
-                                        items={items}
-                                        animated
-                                    />
-                                );
-                            })}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3">
+                    <h3 className="text-white font-bold">払戻金</h3>
                 </div>
 
-                {/* --- ボタンは grid の外に置く --- */}
-                <button
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-blue-600 font-bold mt-4 block mx-auto"
-                >
-                    {showMore ? "▲ 払戻金を閉じる" : "▼ 払戻金をもっと見る"}
-                </button>
+                <div className="p-4">
 
+                    {/* グリッド（単勝・複勝・折りたたみ部分） */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        {/* --- 単勝（win） --- */}
+                        {payout.win?.length > 0 && (
+                            <PayoutCard label="単勝" items={payout.win} />
+                        )}
+
+                        {/* --- 複勝（place） --- */}
+                        {payout.place?.length > 0 && (
+                            <PayoutCard label="複勝" items={payout.place} />
+                        )}
+
+                        {/* --- 折りたたみ部分 --- */}
+                        {showMore &&
+                            (Object.keys(payoutLabels) as Array<keyof Payout>)
+                                .filter((key) => key !== "win" && key !== "place")
+                                .map((key) => {
+                                    const items = payout[key];
+                                    if (!items?.length) return null;
+
+                                    return (
+                                        <PayoutCard
+                                            key={key}
+                                            label={payoutLabels[key]}
+                                            items={items}
+                                            animated
+                                        />
+                                    );
+                                })}
+                    </div>
+
+                    {/* --- ボタンは grid の外に置く --- */}
+                    <button
+                        onClick={() => setShowMore(!showMore)}
+                        className="text-blue-600 font-bold mt-4 block mx-auto"
+                    >
+                        {showMore ? "▲ 払戻金を閉じる" : "▼ 払戻金をもっと見る"}
+                    </button>
+
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
 
