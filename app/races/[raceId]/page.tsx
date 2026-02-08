@@ -64,32 +64,14 @@ export default async function RacePage({ params }: Props) {
             </header>
 
             {/* Race Info Card */}
-            <section className={`bg-white rounded-lg shadow-md p-6 border-l-8 ${gradeBorderColor[race.grade || ""] || "border-gray-400"} w-full max-w-4xl mx-auto mt-6`}>
+            <section
+                className={`bg-white rounded-lg shadow-md p-6 border-l-8 ${gradeBorderColor[race.grade || ""] || "border-gray-400"
+                    } w-full max-w-4xl mx-auto mt-6`}
+            >
                 <div className="flex flex-col gap-4">
 
-                    {/* 上段：グレード + 日付 */}
-                    <div className="flex items-center gap-2">
-                        <span className={`text-xs font-bold px-2 py-1 rounded ${race.grade === "GI" ? "bg-yellow-100 text-yellow-800" :
-                            race.grade === "GII" ? "bg-pink-100 text-pink-800" :
-                                "bg-green-100 text-green-800"
-                            }`}>
-                            {race.grade}
-                        </span>
-                        <span className="text-gray-500 text-sm">
-                            {formatDateWithWeekday(race.date)}
-                        </span>
-
-                    </div>
-
-                    {/* 中段：場所 / レース番号 */}
-                    {(race.place || race.raceNumber) && (
-                        <p className="text-gray-600 text-sm font-medium ml-1">
-                            {race.place} {race.raceNumber && `/ ${race.raceNumber}`}
-                        </p>
-                    )}
-
-                    {/* タイトル行 */}
-                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                    {/* 1行目：ロゴ + 日付 */}
+                    <div className="flex items-center justify-between">
                         <Image
                             src="/umania-club%20logo.png"
                             alt="Umania-club"
@@ -97,15 +79,46 @@ export default async function RacePage({ params }: Props) {
                             height={40}
                             className="h-8 w-auto object-contain"
                         />
-                        <h1 className="text-3xl font-extrabold text-gray-900 break-words">
-                            {race.name}
-                        </h1>
+                        <span className="text-gray-500 text-sm font-medium">
+                            {formatDateWithWeekday(race.date)}
+                        </span>
                     </div>
 
-                    {/* コース情報 */}
+
+                    {/* 2行目：京都（1行） + 11R（1行） + レース名 + グレード */}
+                    <div className="flex items-start gap-2">
+
+                        {/* 左側：京都 + 11R（縦2行・大きく） */}
+                        <div className="leading-tight text-lg font-bold text-gray-800 min-w-[42px]">
+                            <div>{race.place}</div>
+                            <div>{race.raceNumber}</div>
+                        </div>
+
+
+                        {/* 右側：レース名 + グレード（横並び・間隔を詰める） */}
+                        <div className="flex items-center gap-1 flex-wrap">
+                            <h1 className="text-3xl font-extrabold text-gray-900 break-words">
+                                {race.name}
+                            </h1>
+
+                            <span
+                                className={`text-3xl font-extrabold px-2 py-1 rounded ${race.grade === "GI"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : race.grade === "GII"
+                                        ? "bg-pink-100 text-pink-800"
+                                        : "bg-green-100 text-green-800"
+                                    }`}
+                            >
+                                {race.grade}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* 3行目：芝 / ダート + 距離 + 向き */}
                     <p className="text-gray-600 font-medium ml-1">
                         {race.course.surface} {race.course.distance}
-                        {race.course.direction && `（${race.course.direction}${race.course.courseDetail || ""}）`}
+                        {race.course.direction &&
+                            `（${race.course.direction}${race.course.courseDetail || ""}）`}
                     </p>
                 </div>
             </section>

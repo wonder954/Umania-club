@@ -26,16 +26,16 @@ export const BET_TYPES: readonly BetType[] = [
 /**
  * 各馬券タイプで利用可能な入力方式
  * 
- * - normal: 通常選択（単勝・複勝）
+ * - null: 通常選択（単勝・複勝・通常買い）
  * - box: ボックス（全組み合わせ）
  * - nagashi: 軸流し
  * - formation: フォーメーション
  * 
  * 単勝・複勝は通常選択のみ、それ以外は3つの方式が選択可能です。
  */
-export const AVAILABLE_MODES: Record<BetType, readonly InputMode[]> = {
-    "単勝": ["normal"],
-    "複勝": ["normal"],
+export const AVAILABLE_MODES: Record<BetType, readonly (InputMode | null)[]> = {
+    "単勝": [null],
+    "複勝": [null],
     "馬連": ["box", "nagashi", "formation"],
     "馬単": ["box", "nagashi", "formation"],
     "ワイド": ["box", "nagashi", "formation"],
@@ -47,9 +47,9 @@ export const AVAILABLE_MODES: Record<BetType, readonly InputMode[]> = {
  * 入力方式の日本語ラベル
  * 
  * UIに表示する際の日本語名を定義しています。
+ * null（通常）はコンポーネント側で "通常" と表示するためここには含めません。
  */
-export const INPUT_MODE_LABELS: Record<InputMode, string> = {
-    normal: "通常",
+export const INPUT_MODE_LABELS: Record<Exclude<InputMode, null>, string> = {
     box: "ボックス",
     nagashi: "流し",
     formation: "フォーメーション",
@@ -64,7 +64,7 @@ export const INPUT_MODE_LABELS: Record<InputMode, string> = {
  * @param inputMode - 入力方式
  * @returns マルチが利用可能かどうか
  */
-export function isMultiAvailable(betType: BetType, inputMode: InputMode): boolean {
+export function isMultiAvailable(betType: BetType, inputMode: InputMode | null): boolean {
     return (
         (betType === "3連単" && (inputMode === "formation" || inputMode === "nagashi")) ||
         (betType === "馬単" && (inputMode === "formation" || inputMode === "nagashi"))

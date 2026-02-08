@@ -1,6 +1,12 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Horse } from "@/types/horse";
 import { NagashiSelectorValue } from "@/types/bet";
+import NumberButton from "@/components/prediction/ui/NumberButton";
+import {
+    toggleMulti,
+    toggleAll
+} from "@/components/prediction/utils/toggle";
 
 type Props = {
     horses: Horse[];
@@ -13,59 +19,49 @@ export default function SanrenpukuSelector({
     allowedNumbers,
     onChange,
 }: Props) {
-    const [axis, setAxis] = useState<number[]>([]); // 軸1〜2頭
+    const [axis, setAxis] = useState<number[]>([]);
     const [opponents, setOpponents] = useState<number[]>([]);
     const [isAllOpponents, setIsAllOpponents] = useState(false);
 
-    // 軸馬は印のみ
-    const axisCandidates = horses.filter((h) =>
+    // ★ 軸：印ありだけ
+    const axisCandidates = horses.filter(h =>
         allowedNumbers.includes(Number(h.number))
     );
 
-    // 相手は全馬（軸は除外）
-    const opponentCandidates = horses.filter(
-        (h) => !axis.includes(Number(h.number))
-    );
+    // ★ 相手：全馬（軸に選んだ馬だけ除外）
+    const opponentCandidates = horses.filter(h => {
+        const num = Number(h.number);
+        return !axis.includes(num); // 軸以外は全部OK
+    });
 
-    // 軸の選択（最大2頭）
+    // 軸（最大2頭）
     const toggleAxis = (num: number) => {
         if (axis.includes(num)) {
-            setAxis(axis.filter((n) => n !== num));
+            setAxis(axis.filter(n => n !== num));
             return;
         }
         if (axis.length < 2) {
             setAxis([...axis, num]);
-            setOpponents([]); // 軸変更時に相手リセット
-            setIsAllOpponents(false);
-        }
-    };
-
-    // 相手の選択
-    const toggleOpponent = (num: number) => {
-        if (opponents.includes(num)) {
-            setOpponents(opponents.filter((n) => n !== num));
-        } else {
-            setOpponents([...opponents, num]);
-        }
-    };
-
-    // 総流し
-    const toggleAllOpponents = () => {
-        if (isAllOpponents) {
             setOpponents([]);
             setIsAllOpponents(false);
-        } else {
-            setOpponents(opponentCandidates.map((h) => Number(h.number)));
-            setIsAllOpponents(true);
         }
     };
 
-    // 親へ通知（統一型）
+    // 相手（複数選択）
+    const toggleOpponent = (num: number) => {
+        setOpponents(toggleMulti(opponents, num));
+    };
+
+    // 総流し（印ありだけ）
+    const toggleAllOpponents = () => {
+        const allNums = opponentCandidates.map(h => Number(h.number));
+        const next = toggleAll(opponents, allNums);
+        setOpponents(next);
+        setIsAllOpponents(next.length === allNums.length);
+    };
+
     useEffect(() => {
-        onChange({
-            axis,        // ← number[] のままでOK（BettingForm 側で吸収）
-            opponents,
-        });
+        onChange({ axis, opponents });
     }, [axis, opponents]);
 
     return (
@@ -75,29 +71,26 @@ export default function SanrenpukuSelector({
             <div>
                 <p className="font-bold mb-2">軸馬（印のみ・最大2頭）</p>
                 <div className="grid grid-cols-6 gap-2">
-                    {axisCandidates.map((h) => {
+                    {axisCandidates.map(h => {
                         const num = Number(h.number);
-                        const selected = axis.includes(num);
                         return (
-                            <button
+                            <NumberButton
                                 key={num}
+                                num={num}
+                                name={h.name}
+                                selected={axis.includes(num)}
+                                color="red"
                                 onClick={() => toggleAxis(num)}
-                                className={`aspect-square rounded flex items-center justify-center font-mono font-bold text-lg ${selected
-                                    ? "bg-red-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                {num}
-                            </button>
+                            />
                         );
                     })}
                 </div>
             </div>
 
-            {/* 相手馬 */}
+            {/* 相手馬（印のみ） */}
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <p className="font-bold">相手（全馬）</p>
+                    <p className="font-bold">相手（印のみ）</p>
 
                     <label className="flex items-center gap-1 text-xs cursor-pointer">
                         <input
@@ -110,23 +103,22 @@ export default function SanrenpukuSelector({
                 </div>
 
                 <div className="grid grid-cols-6 gap-2">
-                    {opponentCandidates.map((h) => {
+                    {opponentCandidates.map(h => {
                         const num = Number(h.number);
                         return (
-                            <button
+                            <NumberButton
                                 key={num}
+                                num={num}
+                                name={h.name}
+                                selected={opponents.includes(num)}
+                                color="blue"
                                 onClick={() => toggleOpponent(num)}
-                                className={`aspect-square rounded flex items-center justify-center font-mono font-bold text-lg ${opponents.includes(num)
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                {num}
-                            </button>
+                            />
                         );
                     })}
                 </div>
             </div>
+
         </div>
     );
 }

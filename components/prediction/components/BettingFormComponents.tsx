@@ -67,7 +67,7 @@ import { INPUT_MODE_LABELS } from "../utils/bettingFormConstants";
 
 interface InputModeSelectorProps {
     /** 利用可能な入力方式のリスト */
-    availableModes: readonly InputMode[];
+    availableModes: readonly (InputMode | null)[];
     /** 現在選択されている入力方式（null = 通常買い） */
     selectedMode: InputMode | null;
     /** 入力方式が変更されたときのコールバック */
@@ -94,6 +94,9 @@ export function InputModeSelector({
     return (
         <div role="group" aria-label="入力方式選択" className="flex flex-wrap gap-2 mb-4">
             {availableModes.map((mode) => {
+                // null (通常) はボタンとして表示しない（トグルで解除して戻るため）
+                if (mode === null) return null;
+
                 const isSelected = selectedMode === mode;
 
                 return (

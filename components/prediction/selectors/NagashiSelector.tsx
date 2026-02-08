@@ -1,5 +1,10 @@
 "use client";
 import React from "react";
+import NumberButton from "@/components/prediction/ui/NumberButton";
+import {
+    toggleSingle,
+    toggleMulti
+} from "@/components/prediction/utils/toggle";
 
 type Props = {
     horses: { number?: number | string; name: string }[];
@@ -7,6 +12,7 @@ type Props = {
     wings: number[];
     onChangeAxis: (nums: number[]) => void;
     onChangeWings: (nums: number[]) => void;
+    allowedNumbers?: number[];
 };
 
 export default function NagashiSelector({
@@ -14,31 +20,27 @@ export default function NagashiSelector({
     axis,
     wings,
     onChangeAxis,
-    onChangeWings
+    onChangeWings,
+    allowedNumbers
 }: Props) {
 
-    // ★ 軸は単一選択
-    const toggleAxis = (numStr: number | string) => {
-        const num = Number(numStr);
-        if (isNaN(num)) return;
+    // ★ 軸：印ありだけ
+    const axisCandidates = allowedNumbers
+        ? horses.filter(h => allowedNumbers.includes(Number(h.number)))
+        : horses;
 
-        if (axis.includes(num)) {
-            onChangeAxis([]);      // 解除
-        } else {
-            onChangeAxis([num]);   // 上書き
-        }
+    // ★ 相手：全馬
+    const wingCandidates = horses;
+
+    // 軸（単一選択）
+    const toggleAxis = (num: number) => {
+        const next = toggleSingle(axis[0] ?? null, num);
+        onChangeAxis(next ? [next] : []);
     };
 
-    // 相手は複数選択OK（今まで通り）
-    const toggle = (list: number[], setter: (n: number[]) => void, numStr: number | string) => {
-        const num = Number(numStr);
-        if (isNaN(num)) return;
-
-        if (list.includes(num)) {
-            setter(list.filter(n => n !== num));
-        } else {
-            setter([...list, num].sort((a, b) => a - b));
-        }
+    // 相手（複数選択）
+    const toggleWing = (num: number) => {
+        onChangeWings(toggleMulti(wings, num));
     };
 
     return (
@@ -48,21 +50,19 @@ export default function NagashiSelector({
             <div>
                 <p className="font-bold mb-2">軸</p>
                 <div className="grid grid-cols-6 gap-2">
-                    {horses.map(h => (
-                        <button
-                            key={h.number}
-                            type="button"
-                            onClick={() => toggleAxis(h.number!)}   // ★ ここを変更
-                            className={`
-                                aspect-square rounded flex items-center justify-center font-mono font-bold text-lg
-                                ${axis.includes(Number(h.number))
-                                    ? "bg-red-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"}
-                            `}
-                        >
-                            {h.number}
-                        </button>
-                    ))}
+                    {axisCandidates.map(h => {
+                        const num = Number(h.number);
+                        return (
+                            <NumberButton
+                                key={num}
+                                num={num}
+                                name={h.name}
+                                selected={axis.includes(num)}
+                                color="red"
+                                onClick={() => toggleAxis(num)}
+                            />
+                        );
+                    })}
                 </div>
             </div>
 
@@ -70,21 +70,19 @@ export default function NagashiSelector({
             <div>
                 <p className="font-bold mb-2">相手</p>
                 <div className="grid grid-cols-6 gap-2">
-                    {horses.map(h => (
-                        <button
-                            key={h.number}
-                            type="button"
-                            onClick={() => toggle(wings, onChangeWings, h.number!)}
-                            className={`
-                                aspect-square rounded flex items-center justify-center font-mono font-bold text-lg
-                                ${wings.includes(Number(h.number))
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"}
-                            `}
-                        >
-                            {h.number}
-                        </button>
-                    ))}
+                    {wingCandidates.map(h => {
+                        const num = Number(h.number);
+                        return (
+                            <NumberButton
+                                key={num}
+                                num={num}
+                                name={h.name}
+                                selected={wings.includes(num)}
+                                color="blue"
+                                onClick={() => toggleWing(num)}
+                            />
+                        );
+                    })}
                 </div>
             </div>
 

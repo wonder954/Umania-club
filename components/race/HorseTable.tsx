@@ -11,10 +11,9 @@ type Props = {
 
 /**
  * 出馬表コンポーネント（印選択付き）
- * 
- * 責務:
- * - レースの出馬表を表示
- * - 各馬に印を選択できる機能を提供
+ *
+ * PC版：従来のテーブル表示
+ * スマホ版：netkeiba式（枠→馬番→印→馬名1行）
  */
 export default function HorseTable({ race, prediction, onPredictionChange }: Props) {
     // 枠番の色
@@ -38,52 +37,112 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
             </h2>
 
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="px-3 py-2 text-left">枠</th>
-                            <th className="px-3 py-2 text-left">馬番</th>
-                            <th className="px-3 py-2 text-left">印</th>
-                            <th className="px-3 py-2 text-left">馬名</th>
-                            <th className="px-3 py-2 text-left">斤量</th>
-                            <th className="px-3 py-2 text-left">騎手</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        {race.horses.map((horse) => {
-                            const frame = Number(horse.frame);
+                {/* スマホ版（md未満） */}
+                <div className="md:hidden">
+                    {race.horses.map((horse) => {
+                        const frame = Number(horse.frame);
 
-                            return (
-                                <tr key={horse.number || horse.name} className="border-t">
-                                    <td className="px-3 py-2">
-                                        {horse.frame && (
+                        // 騎手名を3文字に整形（空白・ドット除去）
+                        const jockeyShort =
+                            horse.jockey?.replace(/[\s.]/g, "").slice(0, 3) || "---";
+
+                        return (
+                            <div
+                                key={horse.number || horse.name}
+                                className="flex items-center gap-2 py-2 border-b px-3"
+                            >
+                                {/* 枠番 */}
+                                <div
+                                    className={`w-8 h-8 flex items-center justify-center rounded font-bold ${frameColors[frame]}`}
+                                >
+                                    {horse.frame}
+                                </div>
+
+                                {/* 馬番 */}
+                                <div className="w-8 text-center font-medium">
+                                    {horse.number}
+                                </div>
+
+                                {/* 印 */}
+                                <div className="flex gap-1">
+                                    <MarkSelector
+                                        prediction={prediction}
+                                        targetKey={horse.name}
+                                        onChange={onPredictionChange}
+                                    />
+                                </div>
+
+                                {/* 馬名 + 斤量/騎手（右側2行） */}
+                                <div className="flex-1 flex items-center justify-between">
+                                    {/* 馬名（1行固定） */}
+                                    <div className="font-bold whitespace-nowrap overflow-hidden text-ellipsis text-[14px]">
+                                        {horse.name}
+                                    </div>
+
+                                    {/* 斤量 / 騎手（縦2行・小さく） */}
+                                    <div className="text-[13px] text-gray-600 text-right leading-tight ml-2 shrink-0">
+                                        <div>{horse.weight}</div>
+                                        <div>{jockeyShort}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* ---------------------- */}
+                {/* 🖥 PC版（md以上） */}
+                {/* ---------------------- */}
+                <div className="hidden md:block">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="px-3 py-2 text-left">枠</th>
+                                <th className="px-3 py-2 text-left">馬番</th>
+                                <th className="px-3 py-2 text-left">印</th>
+                                <th className="px-3 py-2 text-left">馬名</th>
+                                <th className="px-3 py-2 text-left">斤量</th>
+                                <th className="px-3 py-2 text-left">騎手</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {race.horses.map((horse) => {
+                                const frame = Number(horse.frame);
+
+                                return (
+                                    <tr key={horse.number || horse.name} className="border-t">
+                                        <td className="px-3 py-2">
                                             <span
-                                                className={`px-3 py-1 rounded font-bold inline-block text-center ${frameColors[frame] || ""}`}
+                                                className={`px-3 py-1 rounded font-bold inline-block text-center ${frameColors[frame]}`}
                                             >
                                                 {horse.frame}
                                             </span>
-                                        )}
-                                    </td>
+                                        </td>
 
-                                    <td className="px-3 py-2">{horse.number || "-"}</td>
+                                        <td className="px-3 py-2">{horse.number || "-"}</td>
 
-                                    <td className="px-3 py-2">
-                                        <MarkSelector
-                                            prediction={prediction}
-                                            targetKey={horse.name}
-                                            onChange={onPredictionChange}
-                                        />
-                                    </td>
+                                        <td className="px-3 py-2">
+                                            <MarkSelector
+                                                prediction={prediction}
+                                                targetKey={horse.name}
+                                                onChange={onPredictionChange}
+                                            />
+                                        </td>
 
-                                    <td className="px-3 py-2">{horse.name}</td>
-                                    <td className="px-3 py-2">{horse.weight}</td>
-                                    <td className="px-3 py-2">{horse.jockey}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                        <td className="px-3 py-2 whitespace-nowrap">
+                                            {horse.name}
+                                        </td>
+
+                                        <td className="px-3 py-2">{horse.weight}</td>
+                                        <td className="px-3 py-2">{horse.jockey}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     );

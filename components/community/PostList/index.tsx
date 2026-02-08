@@ -126,7 +126,7 @@ export default function PostList({ raceId, race }: Props) {
         }
 
         // 通常
-        if (mode === "normal") {
+        if (mode === null) {
             return numbers.join(", ");
         }
 

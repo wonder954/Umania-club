@@ -1,6 +1,13 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Horse } from "@/types/horse";
 import { NagashiSelectorValue } from "@/types/bet";
+import NumberButton from "@/components/prediction/ui/NumberButton";
+import {
+    toggleSingle,
+    toggleMulti,
+    toggleAll
+} from "@/components/prediction/utils/toggle";
 
 type Props = {
     horses: Horse[];
@@ -17,37 +24,37 @@ export default function UmarenSelector({
     const [opponents, setOpponents] = useState<number[]>([]);
     const [isAllOpponents, setIsAllOpponents] = useState(false);
 
-    // 軸馬は印のみ
-    const axisCandidates = horses.filter((h) =>
+    // ★ 軸：印ありだけ
+    const axisCandidates = horses.filter(h =>
         allowedNumbers.includes(Number(h.number))
     );
 
-    // 相手は全馬（軸は除外）
+    // ★ 相手：全馬（軸だけ除外）
     const opponentCandidates = horses.filter(
-        (h) => Number(h.number) !== axis
+        h => Number(h.number) !== axis
     );
 
-    // 相手の選択
+    // 軸（単一選択）
+    const toggleAxis = (num: number) => {
+        const next = toggleSingle(axis, num);
+        setAxis(next);
+        setOpponents([]);
+        setIsAllOpponents(false);
+    };
+
+    // 相手（複数選択）
     const toggleOpponent = (num: number) => {
-        if (opponents.includes(num)) {
-            setOpponents(opponents.filter((n) => n !== num));
-        } else {
-            setOpponents([...opponents, num]);
-        }
+        setOpponents(toggleMulti(opponents, num));
     };
 
-    // 総流し
+    // ★ 総流し：全馬対象（軸以外）
     const toggleAllOpponents = () => {
-        if (isAllOpponents) {
-            setOpponents([]);
-            setIsAllOpponents(false);
-        } else {
-            setOpponents(opponentCandidates.map((h) => Number(h.number)));
-            setIsAllOpponents(true);
-        }
+        const allNums = opponentCandidates.map(h => Number(h.number));
+        const next = toggleAll(opponents, allNums);
+        setOpponents(next);
+        setIsAllOpponents(next.length === allNums.length);
     };
 
-    // 親へ通知
     useEffect(() => {
         onChange({ axis, opponents });
     }, [axis, opponents]);
@@ -59,23 +66,17 @@ export default function UmarenSelector({
             <div>
                 <p className="font-bold mb-2">軸馬（印のみ）</p>
                 <div className="grid grid-cols-6 gap-2">
-                    {axisCandidates.map((h) => {
+                    {axisCandidates.map(h => {
                         const num = Number(h.number);
                         return (
-                            <button
+                            <NumberButton
                                 key={num}
-                                onClick={() => {
-                                    setAxis(num);
-                                    setOpponents([]); // 軸変更時に相手リセット
-                                    setIsAllOpponents(false);
-                                }}
-                                className={`aspect-square rounded flex items-center justify-center font-mono font-bold text-lg ${axis === num
-                                    ? "bg-red-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                {num}
-                            </button>
+                                num={num}
+                                name={h.name}
+                                selected={axis === num}
+                                color="red"
+                                onClick={() => toggleAxis(num)}
+                            />
                         );
                     })}
                 </div>
@@ -97,19 +98,18 @@ export default function UmarenSelector({
                 </div>
 
                 <div className="grid grid-cols-6 gap-2">
-                    {opponentCandidates.map((h) => {
+                    {opponentCandidates.map(h => {
                         const num = Number(h.number);
+
                         return (
-                            <button
+                            <NumberButton
                                 key={num}
+                                num={num}
+                                name={h.name}
+                                selected={opponents.includes(num)}
+                                color="blue"
                                 onClick={() => toggleOpponent(num)}
-                                className={`aspect-square rounded flex items-center justify-center font-mono font-bold text-lg ${opponents.includes(num)
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                {num}
-                            </button>
+                            />
                         );
                     })}
                 </div>

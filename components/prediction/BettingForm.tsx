@@ -232,7 +232,6 @@ export default function BettingForm({
                     points={calculatedPoints}
                     betType={state.selectedType}
                     inputMode={state.inputMode}
-                    isMulti={state.isMulti}
                     onAdd={handleAddBet}
                 />
             </div>
