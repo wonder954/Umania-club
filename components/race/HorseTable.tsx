@@ -35,6 +35,9 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                 出馬表
                 <span className="text-blue-500 text-2xl">🏇</span>
             </h2>
+            <p className="text-sm text-gray-500 px-1 mt-1 mb-2">
+                ※買い目を追加するには、まず出馬表で印をつけてください
+            </p>
 
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
 
@@ -91,9 +94,7 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                     })}
                 </div>
 
-                {/* ---------------------- */}
-                {/* 🖥 PC版（md以上） */}
-                {/* ---------------------- */}
+                {/* PC版（md以上） */}
                 <div className="hidden md:block">
                     <table className="w-full text-sm">
                         <thead className="bg-gray-100">

@@ -1,38 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import HorseTable from "@/components/race/HorseTable";
 import PredictionForm from "@/components/prediction/PredictionForm";
 import { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
 
-type Props = {
-    race: Race;
-};
-
-/**
- * 予想エリアコンポーネント
- * 
- * 責務:
- * - 出馬表（印選択）の表示
- * - 予想フォームの表示
- * - 予想入力に関するstate管理
- */
-export default function PredictionArea({ race }: Props) {
+export default function PredictionArea({ race }: { race: Race }) {
     const [prediction, setPrediction] = useState<Record<string, string>>({});
     const [bets, setBets] = useState<Bet[]>([]);
     const [comment, setComment] = useState("");
 
+    // ★ 出馬表のセクションへのref
+    const horseTableRef = useRef<HTMLDivElement>(null);
+
+    /**
+     * 新しい投稿ボタンが押されたときの処理
+     * 出馬表の先頭にスムーズにスクロールする
+     */
+    const handleReset = () => {
+        // 状態をリセット
+        setPrediction({});
+        setBets([]);
+        setComment("");
+
+        // 次のレンダリング後にスクロール実行
+        setTimeout(() => {
+            horseTableRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",  // 画面の上端に配置
+            });
+        }, 0);
+    };
+
     return (
         <div className="space-y-8">
-            {/* 出馬表（印選択） */}
-            <HorseTable
-                race={race}
-                prediction={prediction}
-                onPredictionChange={setPrediction}
-            />
+            {/* 出馬表セクション - ここにrefを設定 */}
+            <div ref={horseTableRef} className="scroll-mt-24">
+                <HorseTable
+                    race={race}
+                    prediction={prediction}
+                    onPredictionChange={setPrediction}
+                />
+            </div>
 
-            {/* 予想フォーム */}
+
+            {/* 予想フォームセクション */}
             <section>
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <span className="text-blue-500 text-2xl">🐎</span>
@@ -48,6 +61,7 @@ export default function PredictionArea({ race }: Props) {
                     setBets={setBets}
                     comment={comment}
                     setComment={setComment}
+                    onReset={handleReset}
                 />
             </section>
         </div>

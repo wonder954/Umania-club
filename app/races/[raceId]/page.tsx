@@ -1,3 +1,4 @@
+
 import { getRace } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
 import Link from "next/link";
@@ -132,7 +133,9 @@ export default async function RacePage({ params }: Props) {
                 {/* 予想セクション（結果がない場合のみ表示） */}
                 {!race.result ? (
                     <>
-                        <PredictionArea race={race} />
+                        <PredictionArea
+                            race={race}
+                        />
                         <CommunitySection race={race} />
                     </>
                 ) : (

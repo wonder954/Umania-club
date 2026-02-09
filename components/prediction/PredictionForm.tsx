@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import MarkSelector from "./MarkSelector";
 import BettingForm from "./BettingForm";
 import { Bet } from "@/types/bet";
@@ -26,6 +26,7 @@ type Props = {
     setComment: React.Dispatch<React.SetStateAction<string>>;
 
     onPostSuccess?: () => void;
+    onReset?: () => void;
 };
 
 export default function PredictionForm({
@@ -36,7 +37,8 @@ export default function PredictionForm({
     setBets,
     comment,
     setComment,
-    onPostSuccess
+    onPostSuccess,
+    onReset
 }: Props) {
     const { user, loginAnonymous } = useAuth();
 
@@ -46,6 +48,17 @@ export default function PredictionForm({
     const totalPoints = bets.reduce((sum, bet) => sum + (bet.points || 0), 0);
 
     const allowedNumbers = getAllowedNumbers(prediction, race);
+
+    const addButtonRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (allowedNumbers.length === 7) {
+            addButtonRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    }, [allowedNumbers]);
 
     const handleSubmit = async () => {
         if (!user) {
@@ -94,7 +107,10 @@ export default function PredictionForm({
         setPrediction({});
         setBets([]);
         setComment("");
+        // 親コンポーネントにリセットを通知（スクロール処理などを実行）
+        onReset?.();
     };
+
 
 
 
@@ -122,7 +138,10 @@ export default function PredictionForm({
 
                 {/* Section: Bets */}
                 <section>
+                    {/* ← ここに ref を置く */}
+                    <div ref={addButtonRef}></div>
                     <h3 className="text-lg font-bold border-l-4 border-blue-500 pl-3 mb-4">買い目</h3>
+                    <p className="text-sm text-gray-500 mb-4">※買い目は、出馬表で印をつけた馬だけ選択できます。</p>
 
                     {race.horses.some(h => h.number) ? (
                         <>
@@ -130,8 +149,9 @@ export default function PredictionForm({
                                 horses={race.horses}
                                 bets={bets}
                                 onChange={setBets}
-                                allowedNumbers={allowedNumbers}   // ← これを追加
+                                allowedNumbers={allowedNumbers}
                             />
+
                             <div className="mt-2 text-right font-bold text-gray-700">
                                 合計: {totalPoints} 点
                             </div>

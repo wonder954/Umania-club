@@ -6,11 +6,12 @@ import {
     toggleMulti,
     toggleAll
 } from "@/components/prediction/utils/toggle";
+import { Horse } from "@/types/horse";
 
 type TrifectaPattern = "1" | "2" | "3" | "12" | "13" | "23";
 
 type Props = {
-    horses: { number?: number | string; name: string }[];
+    horses: Horse[];
     allowedNumbers: number[];
     onChange: (bet: {
         pattern: TrifectaPattern;
@@ -39,10 +40,12 @@ export default function TrifectaNagashiSelector({
     const needSecond = pattern === "2" || pattern === "12" || pattern === "23";
     const needThird = pattern === "3" || pattern === "13" || pattern === "23";
 
+    // 軸候補: 印ありだけ
     const axisCandidates = horses.filter(h =>
         allowedNumbers.includes(Number(h.number))
     );
 
+    // 相手候補: 選ばれた軸以外すべて
     const wingCandidates = horses.filter(
         h => ![first, second, third].includes(Number(h.number))
     );
@@ -68,8 +71,14 @@ export default function TrifectaNagashiSelector({
         const allNums = wingCandidates.map(h => Number(h.number));
         const next = toggleAll(wings, allNums);
         setWings(next);
-        setIsAllWings(next.length === allNums.length);
+        setIsAllWings(next.length === allNums.length && allNums.length > 0);
     };
+
+    // 総流しチェックボックスの同期
+    useEffect(() => {
+        const allNums = wingCandidates.map(h => Number(h.number));
+        setIsAllWings(allNums.length > 0 && wings.length === allNums.length);
+    }, [wingCandidates, wings]);
 
     useEffect(() => {
         onChange({ pattern, first, second, third, wings });
@@ -80,7 +89,7 @@ export default function TrifectaNagashiSelector({
 
             {/* パターン選択 */}
             <div>
-                <p className="font-bold mb-2">固定パターン</p>
+                <p className="font-bold mb-2 text-sm md:text-base">固定パターン</p>
                 <div className="grid grid-cols-3 gap-2">
                     {[
                         { key: "1", label: "1着固定" },
@@ -101,9 +110,9 @@ export default function TrifectaNagashiSelector({
                                 setWings([]);
                                 setIsAllWings(false);
                             }}
-                            className={`py-2 rounded text-sm font-bold ${pattern === p.key
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-white border text-gray-700 hover:bg-gray-100"
+                            className={`py-2 rounded text-xs md:text-sm font-bold ${pattern === p.key
+                                ? "bg-blue-600 text-white"
+                                : "bg-white border text-gray-700 hover:bg-gray-100"
                                 }`}
                         >
                             {p.label}
@@ -115,8 +124,8 @@ export default function TrifectaNagashiSelector({
             {/* 1着 */}
             {needFirst && (
                 <div>
-                    <p className="font-bold mb-2">1着（印のみ）</p>
-                    <div className="grid grid-cols-6 gap-2">
+                    <p className="font-bold mb-2 text-sm md:text-base">1着（印のみ）</p>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2">
                         {axisCandidates.map(h => {
                             const num = Number(h.number);
                             return (
@@ -137,8 +146,8 @@ export default function TrifectaNagashiSelector({
             {/* 2着 */}
             {needSecond && (
                 <div>
-                    <p className="font-bold mb-2">2着（印のみ）</p>
-                    <div className="grid grid-cols-6 gap-2">
+                    <p className="font-bold mb-2 text-sm md:text-base">2着（印のみ）</p>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2">
                         {axisCandidates.map(h => {
                             const num = Number(h.number);
                             return (
@@ -159,8 +168,8 @@ export default function TrifectaNagashiSelector({
             {/* 3着 */}
             {needThird && (
                 <div>
-                    <p className="font-bold mb-2">3着（印のみ）</p>
-                    <div className="grid grid-cols-6 gap-2">
+                    <p className="font-bold mb-2 text-sm md:text-base">3着（印のみ）</p>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2">
                         {axisCandidates.map(h => {
                             const num = Number(h.number);
                             return (
@@ -181,19 +190,20 @@ export default function TrifectaNagashiSelector({
             {/* 流す馬 */}
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <p className="font-bold">流す馬（全馬）</p>
+                    <p className="font-bold text-sm md:text-base">流す馬（全馬）</p>
 
-                    <label className="flex items-center gap-1 text-xs cursor-pointer">
+                    <label className="flex items-center gap-1 cursor-pointer select-none">
                         <input
                             type="checkbox"
                             checked={isAllWings}
                             onChange={toggleAllWings}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                         />
-                        総流し
+                        <span className="text-sm font-bold text-gray-700">総流し</span>
                     </label>
                 </div>
 
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2">
                     {wingCandidates.map(h => {
                         const num = Number(h.number);
                         return (

@@ -32,9 +32,8 @@ export default function NumberButton({
             className={`
     aspect-square rounded flex flex-col items-center justify-center
     font-mono font-bold
-    text-base md:text-sm        /* ← PC で数字を少し小さく */
-    md:aspect-[0.9]             /* ← PC で少しだけ縦長にして圧縮 */
-    md:w-12 md:h-12             /* ← PC で全体サイズを縮小 */
+    text-base md:text-base        
+    md:w-19 md:h-19             /* ← PC で全体サイズを縮小 */
     ${selected ? selectedClass : "bg-white border text-gray-700 hover:bg-gray-100"}
     ${disabled ? "opacity-30 cursor-not-allowed" : ""}
   `}
