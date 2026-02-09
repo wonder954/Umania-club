@@ -24,5 +24,3 @@ npx tsx run-friday.ts    # 金曜
 - run-friday の完全自動化
 - scraper の安定化
 - レースデータのキャッシュ・インデックス化
-🎨 UI/UX
-- 買い目入力 UI の最適化

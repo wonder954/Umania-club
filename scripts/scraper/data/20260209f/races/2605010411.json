@@ -1,0 +1,189 @@
+{
+  "raceId": "2605010411",
+  "info": {
+    "date": "2026-02-10",
+    "place": "東京",
+    "title": "東京新聞杯",
+    "grade": "GIII",
+    "surface": "芝",
+    "distance": "1600m",
+    "direction": "左",
+    "weightType": "別定",
+    "placeDetail": "1回東京4日",
+    "raceNumber": "11R"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "シャンパンカラー",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "岩田 康誠",
+      "weight": 59,
+      "odds": 16.8,
+      "popular": 10
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "ラヴァンダ",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "岩田 望来",
+      "weight": 56,
+      "odds": 10.2,
+      "popular": 5
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "シリウスコルト",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "三浦 皇成",
+      "weight": 58,
+      "odds": 13.9,
+      "popular": 8
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "マジックサンズ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "武 豊",
+      "weight": 57,
+      "odds": 10.2,
+      "popular": 6
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "エルトンバローズ",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "津村 明秀",
+      "weight": 58,
+      "odds": 6.3,
+      "popular": 1
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "オフトレイル",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "菅原 明良",
+      "weight": 59,
+      "odds": 10.8,
+      "popular": 7
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "トロヴァトーレ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "C.ルメール",
+      "weight": 58,
+      "odds": 8.4,
+      "popular": 3
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ヤマニンサルバム",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "小崎 綾也",
+      "weight": 57,
+      "odds": 61.4,
+      "popular": 15
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "サクラトゥジュール",
+      "jockey": "R.キング",
+      "weight": 57,
+      "odds": 20.2,
+      "popular": 12
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "エンペラーズソード",
+      "jockey": "原 優介",
+      "weight": 57,
+      "odds": 8.7,
+      "popular": 4
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "レッドモンレーヴ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "佐々木 大輔",
+      "weight": 58,
+      "odds": 20.4,
+      "popular": 13
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "ウォーターリヒト",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "高杉 吏麒",
+      "weight": 58,
+      "odds": 6.5,
+      "popular": 2
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "メイショウチタン",
+      "sex": "牡",
+      "age": 9,
+      "jockey": "吉田 豊",
+      "weight": 57,
+      "odds": 64.4,
+      "popular": 16
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "ミッキーゴージャス",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "横山 典弘",
+      "weight": 55,
+      "odds": 14.4,
+      "popular": 9
+    },
+    {
+      "frame": 8,
+      "number": 15,
+      "name": "ウンブライル",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "戸崎 圭太",
+      "weight": 55,
+      "odds": 23.6,
+      "popular": 14
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "ブエナオンダ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "横山 武史",
+      "weight": 58,
+      "odds": 19.8,
+      "popular": 11
+    }
+  ]
+}

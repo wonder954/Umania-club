@@ -17,12 +17,19 @@ export default async function Home() {
     const dd = String(now.getDate()).padStart(2, '0');
     const today = `${yyyy}-${mm}-${dd}`;
 
-    // 今後のレース
+    // 日付差を計算する関数（d1 - d2）
+    const diffDays = (d1: string, d2: string) => {
+        const t1 = new Date(d1).getTime();
+        const t2 = new Date(d2).getTime();
+        return Math.floor((t1 - t2) / (1000 * 60 * 60 * 24));
+    };
+
+    // 今後のレース（今日〜7日以内の未来）
     const upcomingRaces = races
-        .filter(r => r.date >= today)
+        .filter(r => diffDays(r.date, today) >= 0 && diffDays(r.date, today) <= 7)
         .sort((a, b) => a.date.localeCompare(b.date));
 
-    // 過去レース
+    // 過去レース（カレンダー用）
     const pastRaces = races
         .filter(r => r.date < today)
         .sort((a, b) => b.date.localeCompare(a.date));
@@ -30,15 +37,17 @@ export default async function Home() {
     // カレンダー用
     const calendarRaces = pastRaces;
 
-    // 先週の結果（最新の開催日から3日以内）
+    // 最新の過去レース日（例：昨日のレース）
     const latestPastDate = pastRaces[0]?.date;
+
+    // 先週のレース結果（最新開催日 ±2日）
     const lastWeekRaces = latestPastDate
         ? pastRaces.filter(r => {
             const d1 = new Date(latestPastDate);
             const d2 = new Date(r.date);
             const diffTime = Math.abs(d1.getTime() - d2.getTime());
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays <= 3;
+            const diff = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            return diff <= 2; // ← ここがポイント
         })
         : [];
 
@@ -83,7 +92,11 @@ export default async function Home() {
 
                 {/* 今週の重賞レース */}
                 <section id="upcoming" className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-xl font-bold mb-2">今週の重賞レース</h2>
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <img src="/horse-icon.png" alt="" className="w-8 h-8" />
+                        今週の重賞レース
+                        <img src="/horse-icon.png" alt="" className="w-8 h-8" />
+                    </h2>
                     <p className="text-gray-500 mb-4">直近で開催される重賞レースをチェック</p>
 
                     <div className="grid gap-6">
@@ -103,7 +116,11 @@ export default async function Home() {
 
                 {/* 先週の結果 */}
                 <section className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-xl font-bold mb-2">先週の重賞レース結果</h2>
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <img src="/result-icon.png" alt="" className="w-8 h-8" />
+                        先週の重賞レース結果
+                        <img src="/result-icon.png" alt="" className="w-8 h-8" />
+                    </h2>
                     <p className="text-gray-500 mb-4">直近の開催結果をまとめて確認</p>
 
                     <div className="grid gap-6">
@@ -123,13 +140,21 @@ export default async function Home() {
 
                 {/* レース検索 */}
                 <section className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-xl font-bold mb-4">レースを探す</h2>
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <img src="/search-icon.png" alt="" className="w-8 h-8" />
+                        レースを探す
+                        <img src="/search-icon.png" alt="" className="w-8 h-8" />
+                    </h2>
                     <RaceSearchForm races={races} />
                 </section>
 
                 {/* カレンダー */}
                 <section id="calendar" className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-xl font-bold mb-4">過去のレースカレンダー</h2>
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
+                        過去のレースカレンダー
+                        <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
+                    </h2>
                     <RaceCalendarSection races={calendarRaces} holidays={holidays} />
                 </section>
 

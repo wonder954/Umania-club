@@ -1,0 +1,117 @@
+{
+  "raceId": "2608020411",
+  "info": {
+    "date": "2026-02-10",
+    "place": "京都",
+    "title": "きさらぎ賞",
+    "grade": "GIII",
+    "surface": "芝",
+    "distance": "1800m",
+    "direction": "右",
+    "courseDetail": "外",
+    "weightType": "馬齢",
+    "placeDetail": "2回京都4日",
+    "raceNumber": "11R"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ゾロアストロ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "T.ハマーハンセン",
+      "weight": 57,
+      "odds": 4.2,
+      "popular": 1
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "エムズビギン",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "川田 将雅",
+      "weight": 57,
+      "odds": 4.2,
+      "popular": 2
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "サトノアイボリー",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "団野 大成",
+      "weight": 57,
+      "odds": 35.9,
+      "popular": 9
+    },
+    {
+      "frame": 4,
+      "number": 4,
+      "name": "ゴーイントゥスカイ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "荻野 極",
+      "weight": 57,
+      "odds": 4.3,
+      "popular": 3
+    },
+    {
+      "frame": 5,
+      "number": 5,
+      "name": "ストームゲイル",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "吉村 誠之助",
+      "weight": 57,
+      "odds": 13.4,
+      "popular": 7
+    },
+    {
+      "frame": 6,
+      "number": 6,
+      "name": "コレオシークエンス",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "浜中 俊",
+      "weight": 57,
+      "odds": 16.3,
+      "popular": 8
+    },
+    {
+      "frame": 7,
+      "number": 7,
+      "name": "ラフターラインズ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "藤岡 佑介",
+      "weight": 55,
+      "odds": 6.4,
+      "popular": 4
+    },
+    {
+      "frame": 8,
+      "number": 8,
+      "name": "ショウナンガルフ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "横山 和生",
+      "weight": 57,
+      "odds": 8.3,
+      "popular": 5
+    },
+    {
+      "frame": 8,
+      "number": 9,
+      "name": "ローベルクランツ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "松山 弘平",
+      "weight": 57,
+      "odds": 9.1,
+      "popular": 6
+    }
+  ]
+}
