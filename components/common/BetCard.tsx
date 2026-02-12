@@ -14,23 +14,30 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
     const hitInfo = showHit && race?.result ? judgeHit(bet, race.result) : null;
 
     return (
-        <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-
-            {/* 馬券種 ＋ 買い方（横並び） */}
+        <div
+            className="
+                bg-white/70 backdrop-blur-sm 
+                p-4 rounded-2xl 
+                border border-white/40 
+                shadow-sm space-y-3
+            "
+        >
+            {/* 馬券種 ＋ 買い方 */}
             <div className="flex items-center gap-2 text-xs font-semibold">
-                {/* 馬券種：深緑 */}
-                <span className="px-2 py-1 rounded-full bg-green-700 text-white">
+
+                {/* 馬券種（濃い緑 → 透明緑） */}
+                <span className="px-2 py-1 rounded-full bg-green-600/70 text-white shadow-sm">
                     {bet.type}
                 </span>
 
-                {/* 買い方：落ち着いたグレー */}
-                <span className="px-2 py-1 rounded-full bg-gray-200 text-gray-700">
+                {/* 買い方（グレー → 透明グレー） */}
+                <span className="px-2 py-1 rounded-full bg-slate-200/70 text-slate-700 shadow-sm">
                     {structure.buyType}
                 </span>
 
-                {/* マルチ：ゴールド */}
+                {/* マルチ（黄色 → 透明黄色） */}
                 {bet.isMulti && (
-                    <span className="px-2 py-1 rounded-full bg-yellow-200 text-yellow-800">
+                    <span className="px-2 py-1 rounded-full bg-yellow-200/70 text-yellow-800 shadow-sm">
                         マルチ
                     </span>
                 )}
@@ -41,37 +48,40 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
                 {structure.rows.map((row, i) => (
                     <div key={i} className="text-sm">
                         {row.label && (
-                            <div className="font-bold text-gray-700">{row.label}</div>
+                            <div className="font-bold text-slate-700">{row.label}</div>
                         )}
-                        <div className="ml-2 text-gray-900">
+                        <div className="ml-2 text-slate-900">
                             ［{row.values.join(", ")}］
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* 的中/不的中 ＋ 点数（横並び） */}
+            {/* 的中/不的中 ＋ 点数 */}
             <div className="flex items-center justify-between pt-1">
 
-                {/* 的中/不的中 */}
+                {/* 的中/不的中（色を薄く） */}
                 {hitInfo ? (
                     <span
-                        className={`text-xs font-bold px-2 py-1 rounded ${hitInfo.isHit
-                            ? "bg-red-100 text-red-700"
-                            : "bg-gray-200 text-gray-600"
-                            }`}
+                        className={`
+                            text-xs font-bold px-2 py-1 rounded shadow-sm
+                            ${hitInfo.isHit
+                                ? "bg-red-100/70 text-red-700"
+                                : "bg-slate-200/70 text-slate-600"
+                            }
+                        `}
                     >
                         {hitInfo.isHit
                             ? `🎯 払戻 ${hitInfo.payout.toLocaleString()}円`
                             : "❌ 不的中"}
                     </span>
                 ) : (
-                    <span className="text-xs text-gray-500">　</span>
+                    <span className="text-xs text-slate-400">　</span>
                 )}
 
                 {/* 点数 */}
-                <span className="text-xs font-bold text-gray-700">
-                    {bet.points}点
+                <span className="text-xs font-bold text-slate-700">
+                    合計{bet.points}点
                 </span>
             </div>
         </div>

@@ -5,6 +5,7 @@ import RaceCard from "@/components/race/RaceCard";
 import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/lib/holidays";
 import RaceSearchForm from "@/components/search/RaceSearchForm";
+import { FlagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 
 export default async function Home() {
     const holidays = await fetchHolidays();
@@ -13,8 +14,8 @@ export default async function Home() {
     // 現在の日付（JST）
     const now = new Date();
     const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
     const today = `${yyyy}-${mm}-${dd}`;
 
     // 日付差を計算する関数（d1 - d2）
@@ -26,37 +27,34 @@ export default async function Home() {
 
     // 今後のレース（今日〜7日以内の未来）
     const upcomingRaces = races
-        .filter(r => diffDays(r.date, today) >= 0 && diffDays(r.date, today) <= 7)
+        .filter((r) => diffDays(r.date, today) >= 0 && diffDays(r.date, today) <= 7)
         .sort((a, b) => a.date.localeCompare(b.date));
 
     // 過去レース（カレンダー用）
     const pastRaces = races
-        .filter(r => r.date < today)
+        .filter((r) => r.date < today)
         .sort((a, b) => b.date.localeCompare(a.date));
 
-    // カレンダー用
     const calendarRaces = pastRaces;
 
-    // 最新の過去レース日（例：昨日のレース）
     const latestPastDate = pastRaces[0]?.date;
 
-    // 先週のレース結果（最新開催日 ±2日）
     const lastWeekRaces = latestPastDate
-        ? pastRaces.filter(r => {
+        ? pastRaces.filter((r) => {
             const d1 = new Date(latestPastDate);
             const d2 = new Date(r.date);
             const diffTime = Math.abs(d1.getTime() - d2.getTime());
             const diff = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            return diff <= 2; // ← ここがポイント
+            return diff <= 2;
         })
         : [];
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-gray-50">
+        <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-transparent">
             <div className="w-full max-w-3xl">
 
                 {/* Hero Banner */}
-                <div className="mb-10 w-full overflow-hidden rounded-2xl shadow-xl">
+                <div className="mb-10 w-full overflow-hidden rounded-2xl shadow-md">
                     <Image
                         src="/umania-club%20banner.png"
                         alt="Umania-club Banner"
@@ -69,35 +67,65 @@ export default async function Home() {
 
                 {/* Hero Text */}
                 <div className="text-center mb-12">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                        JRA重賞レース情報をサクッとチェック
-                    </h1>
-                    <p className="text-gray-600 mb-4">
-                        予想投稿・結果をまとめて確認できる競馬アプリ
-                    </p>
-
+                    <div className="text-center mb-12 bg-white/40 backdrop-blur-sm rounded-xl p-4">
+                        <h1 className="text-2xl font-bold text-slate-800 mb-2">
+                            JRA重賞レース情報をサクッとチェック
+                        </h1>
+                        <p className="text-slate-700">
+                            予想投稿・結果をまとめて確認できる競馬アプリ
+                        </p>
+                    </div>
                     <div className="flex justify-center gap-4">
+
+                        {/* 今週のレース */}
                         <Link href="#upcoming">
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                            <div
+                                className="
+                                    px-4 py-2 rounded-xl 
+                                    bg-white/70 backdrop-blur-sm 
+                                    text-slate-700 text-sm 
+                                    shadow-sm hover:shadow-md 
+                                    border border-white/40 
+                                    hover:bg-white/80 
+                                    transition cursor-pointer 
+                                    flex items-center gap-2
+                                "
+                            >
+                                <FlagIcon className="w-5 h-5 text-slate-500" />
                                 今週のレース
-                            </button>
+                            </div>
                         </Link>
+
+                        {/* カレンダーを見る */}
                         <Link href="#calendar">
-                            <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition">
+                            <div
+                                className="
+                                    px-4 py-2 rounded-xl 
+                                    bg-white/70 backdrop-blur-sm 
+                                    text-slate-700 text-sm 
+                                    shadow-sm hover:shadow-md 
+                                    border border-white/40 
+                                    hover:bg-white/80 
+                                    transition cursor-pointer 
+                                    flex items-center gap-2
+                                "
+                            >
+                                <CalendarDaysIcon className="w-5 h-5 text-slate-500" />
                                 カレンダーを見る
-                            </button>
+                            </div>
                         </Link>
+
                     </div>
                 </div>
 
                 {/* 今週の重賞レース */}
-                <section id="upcoming" className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <section className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/horse-icon.png" alt="" className="w-8 h-8" />
                         今週の重賞レース
                         <img src="/horse-icon.png" alt="" className="w-8 h-8" />
                     </h2>
-                    <p className="text-gray-500 mb-4">直近で開催される重賞レースをチェック</p>
+                    <p className="text-slate-600 mb-4">直近で開催される重賞レースをチェック</p>
 
                     <div className="grid gap-6">
                         {upcomingRaces.length > 0 ? (
@@ -107,21 +135,21 @@ export default async function Home() {
                                 </Link>
                             ))
                         ) : (
-                            <div className="text-center p-10 bg-gray-100 rounded-lg">
-                                <p className="text-gray-500">現在予定されているレースはありません</p>
+                            <div className="text-center p-10 bg-white/50 rounded-lg">
+                                <p className="text-slate-500">現在予定されているレースはありません</p>
                             </div>
                         )}
                     </div>
                 </section>
 
                 {/* 先週の結果 */}
-                <section className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <section className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/result-icon.png" alt="" className="w-8 h-8" />
                         先週の重賞レース結果
                         <img src="/result-icon.png" alt="" className="w-8 h-8" />
                     </h2>
-                    <p className="text-gray-500 mb-4">直近の開催結果をまとめて確認</p>
+                    <p className="text-slate-600 mb-4">直近の開催結果をまとめて確認</p>
 
                     <div className="grid gap-6">
                         {lastWeekRaces.length > 0 ? (
@@ -131,16 +159,16 @@ export default async function Home() {
                                 </Link>
                             ))
                         ) : (
-                            <div className="text-center p-10 bg-gray-100 rounded-lg">
-                                <p className="text-gray-400">過去のレース履歴はありません</p>
+                            <div className="text-center p-10 bg-white/50 rounded-lg">
+                                <p className="text-slate-500">過去のレース履歴はありません</p>
                             </div>
                         )}
                     </div>
                 </section>
 
                 {/* レース検索 */}
-                <section className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <section className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/search-icon.png" alt="" className="w-8 h-8" />
                         レースを探す
                         <img src="/search-icon.png" alt="" className="w-8 h-8" />
@@ -149,8 +177,8 @@ export default async function Home() {
                 </section>
 
                 {/* カレンダー */}
-                <section id="calendar" className="mb-12 bg-white p-6 rounded-xl shadow">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <section id="calendar" className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
+                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
                         過去のレースカレンダー
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />

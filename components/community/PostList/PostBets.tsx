@@ -1,4 +1,4 @@
-//UI部品（買い目）
+// UI部品（買い目）
 
 import { Post } from "./types";
 import { Race } from "@/lib/races";
@@ -15,6 +15,7 @@ type Props = {
     vertical?: boolean;
 };
 
+
 export default function PostBets({
     post,
     race,
@@ -26,16 +27,23 @@ export default function PostBets({
 }: Props) {
     if (!post.bets || post.bets.length === 0) return null;
 
+    // 投稿内の合計点数
+    const totalPoints = post.bets.reduce((sum, b) => sum + b.points, 0);
+
     return (
         <div className={vertical ? "space-y-2" : "mb-3"}>
-            {/* トグルボタン */}
+
+            {/* トグルボタン（透明色 × 元の色を薄く残す） */}
             <button
                 onClick={() => toggleBets(post.id)}
-                className={`text-xs px-3 py-2 rounded-lg font-semibold w-full text-left transition
-                    ${postHit.isHit
-                        ? "bg-red-100 text-red-700"
-                        : "bg-blue-100 text-blue-800"
-                    }`}
+                className={`
+        text-xs px-3 py-2 rounded-xl font-semibold w-full text-left transition
+        shadow-sm backdrop-blur-sm
+        ${postHit.isHit
+                        ? "bg-red-100/70 text-red-700"
+                        : "bg-blue-100/70 text-blue-800"
+                    }
+    `}
             >
                 {race?.result ? (
                     postHit.isHit ? (
@@ -44,21 +52,24 @@ export default function PostBets({
                         <>❌ 不的中</>
                     )
                 ) : (
-                    <>買い目 {post.bets.length}点</>
+                    <>買い目（{totalPoints}点）</>
                 )}
+
                 <span className="float-right">
                     {expandedBets.has(post.id) ? "▲" : "▼"}
                 </span>
             </button>
 
-            {/* 展開部分 */}
+            {/* 展開部分（透明白 × 柔らかい影） */}
             {expandedBets.has(post.id) && (
                 <div
-                    className={
-                        vertical
-                            ? "space-y-3 bg-blue-50 p-3 rounded-lg"
-                            : "mt-3 space-y-2 bg-blue-50 p-3 rounded-lg"
-                    }
+                    className={`
+                        ${vertical ? "space-y-3" : "mt-3 space-y-2"}
+                        bg-white/60 backdrop-blur-sm 
+                        p-3 rounded-xl 
+                        border border-white/40 
+                        shadow-sm
+                    `}
                 >
                     {post.bets.map((bet: Bet, index: number) => (
                         <BetCard key={index} bet={bet} race={race} showHit />

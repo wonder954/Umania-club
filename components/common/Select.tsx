@@ -27,28 +27,46 @@ export function Select({
     return (
         <div className={`flex flex-col ${className}`}>
             {label && (
-                <label className="mb-1 text-sm font-semibold text-gray-700">
+                <label className="mb-1 text-sm font-semibold text-slate-700">
                     {label}
                 </label>
             )}
+
             <div className="relative">
                 <select
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     disabled={disabled}
-                    className="appearance-none w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 disabled:bg-gray-100 disabled:text-gray-400"
+                    className="
+                        appearance-none w-full 
+                        bg-white/70 backdrop-blur-sm 
+                        border border-white/40 
+                        text-slate-800 text-sm 
+                        rounded-xl 
+                        focus:ring-blue-300 focus:border-blue-300 
+                        block p-2.5 
+                        disabled:bg-white/40 disabled:text-slate-400
+                        shadow-sm
+                    "
                 >
                     <option value="" disabled>
                         {placeholder}
                     </option>
+
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
                     ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+
+                {/* ▼ アイコン（透明感を持たせる） */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-600/80">
+                    <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                    >
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
                 </div>

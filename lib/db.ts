@@ -35,6 +35,8 @@ export async function createPost(raceId: string, postData: any) {
 
     await addDoc(postsRef, {
         ...postData,
+        authorName: postData.authorName,
+        authorIcon: postData.authorIcon,
         createdAt: Timestamp.now()
     });
 }

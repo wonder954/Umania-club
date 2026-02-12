@@ -10,7 +10,14 @@ type Formation = {
     third: number[];
 };
 
-type BetType = "単勝" | "複勝" | "馬連" | "馬単" | "ワイド" | "3連複" | "3連単";
+type BetType =
+    | "単勝"
+    | "複勝"
+    | "馬連"
+    | "馬単"
+    | "ワイド"
+    | "3連複"
+    | "3連単";
 
 type Props = {
     horses: Horse[];
@@ -37,18 +44,36 @@ export default function FormationBaseSelector({
     const toggle = (key: keyof Formation, num: number) => {
         const list = formation[key];
         const next = isSingleMode
-            ? [toggleSingle(list[0] ?? null, num)].filter((n): n is number => n !== null)
+            ? [toggleSingle(list[0] ?? null, num)].filter(
+                (n): n is number => n !== null
+            )
             : toggleMulti(list, num);
 
         onChange({ ...formation, [key]: next });
     };
 
+    /** ラベル + グリッド（細田守 UI） */
     const renderRow = (label: string, key: keyof Formation) => (
-        <div className="mb-4">
-            <p className="font-bold mb-2 text-sm md:text-base">{label}</p>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2">
+        <div
+            className="
+                bg-white/60 backdrop-blur-sm 
+                p-4 rounded-xl 
+                border border-white/40 shadow-sm
+            "
+        >
+            <p className="font-bold mb-3 text-slate-800 text-sm md:text-base">
+                {label}
+            </p>
+
+            <div
+                className="
+                    grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] 
+                    gap-2
+                "
+            >
                 {candidates.map(h => {
                     const num = Number(h.number);
+
                     return (
                         <NumberButton
                             key={num}

@@ -30,19 +30,23 @@ export default function BoxBaseSelector({
         if (selected.includes(num)) {
             onChange(selected.filter(n => n !== num));
         } else {
-            // 最大数チェック
-            if (maxCount && selected.length >= maxCount) {
-                return;
-            }
+            if (maxCount && selected.length >= maxCount) return;
             onChange([...selected, num].sort((a, b) => a - b));
         }
     };
 
     return (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2 mb-4">
+        <div
+            className="
+                grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] 
+                gap-2 mb-4 
+                bg-white/40 backdrop-blur-sm 
+                p-3 rounded-xl 
+                border border-white/40 shadow-sm
+            "
+        >
             {candidates.map(h => {
                 const num = Number(h.number);
-                // candidatesでフィルタリング済みなのでdisabledチェックは不要（または印なしは除外されている）
 
                 return (
                     <NumberButton

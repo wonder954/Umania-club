@@ -40,10 +40,10 @@ export function BetTypeSelector({ selectedType, onChange }: BetTypeSelectorProps
                         aria-pressed={isSelected}
                         className={`
                             px-3 py-1 rounded-full text-sm whitespace-nowrap
-                            transition-colors duration-200
+                            transition shadow-sm
                             ${isSelected
-                                ? "bg-blue-600 text-white font-bold"
-                                : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
+                                ? "bg-blue-500/80 text-white font-bold"
+                                : "bg-white/70 backdrop-blur-sm border border-white/40 text-slate-700 hover:bg-white/90"
                             }
                         `}
                     >
@@ -86,15 +86,11 @@ export function InputModeSelector({
     selectedMode,
     onChange,
 }: InputModeSelectorProps) {
-    // 選択肢が1つしかない場合は表示しない
-    if (availableModes.length <= 1) {
-        return null;
-    }
+    if (availableModes.length <= 1) return null;
 
     return (
         <div role="group" aria-label="入力方式選択" className="flex flex-wrap gap-2 mb-4">
             {availableModes.map((mode) => {
-                // null (通常) はボタンとして表示しない（トグルで解除して戻るため）
                 if (mode === null) return null;
 
                 const isSelected = selectedMode === mode;
@@ -102,14 +98,13 @@ export function InputModeSelector({
                 return (
                     <button
                         key={mode}
-                        onClick={() => onChange(isSelected ? null : mode)} // トグル動作
+                        onClick={() => onChange(isSelected ? null : mode)}
                         aria-pressed={isSelected}
                         className={`
-                            px-3 py-1 rounded-full text-sm
-                            transition-colors duration-200
+                            px-3 py-1 rounded-full text-sm transition shadow-sm
                             ${isSelected
-                                ? "bg-green-600 text-white font-bold"
-                                : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50"
+                                ? "bg-green-500/80 text-white font-bold"
+                                : "bg-white/70 backdrop-blur-sm border border-white/40 text-slate-700 hover:bg-white/90"
                             }
                         `}
                     >
@@ -144,15 +139,20 @@ interface MultiCheckboxProps {
  */
 export function MultiCheckbox({ checked, onChange }: MultiCheckboxProps) {
     return (
-        <label className="flex items-center gap-2 mb-4 cursor-pointer">
+        <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
             <input
                 type="checkbox"
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
-                className="w-4 h-4 cursor-pointer"
+                className="
+                    w-4 h-4 
+                    text-blue-600/80 
+                    rounded 
+                    focus:ring-blue-300
+                "
                 aria-label="マルチにする"
             />
-            <span className="text-sm font-bold select-none">マルチにする</span>
+            <span className="text-sm font-bold text-slate-700">マルチにする</span>
         </label>
     );
 }
@@ -192,27 +192,31 @@ export function PointsDisplay({
     const isDisabled = disabled || points === 0;
 
     return (
-        <div className="flex justify-between items-center bg-white p-3 rounded border">
-            {/* 点数表示 */}
+        <div
+            className="
+                flex justify-between items-center 
+                bg-white/70 backdrop-blur-sm 
+                p-3 rounded-xl 
+                border border-white/40 shadow-sm
+            "
+        >
             <div className="text-sm">
                 <span className="font-bold text-lg text-blue-600">{points}</span>{" "}
-                <span className="text-gray-700">点</span>
-                <span className="text-gray-400 text-xs ml-2">
+                <span className="text-slate-700">点</span>
+                <span className="text-slate-500 text-xs ml-2">
                     （{betType} / {inputMode ? INPUT_MODE_LABELS[inputMode] : "通常"}）
                 </span>
             </div>
 
-            {/* 追加ボタン */}
             <button
                 onClick={onAdd}
                 disabled={isDisabled}
                 aria-label="馬券を追加"
                 className={`
-                    px-4 py-2 rounded-lg text-sm font-bold
-                    transition-colors duration-200
+                    px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm
                     ${isDisabled
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-black text-white hover:bg-gray-800"
+                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                        : "bg-blue-500/80 text-white hover:bg-blue-500/90"
                     }
                 `}
             >

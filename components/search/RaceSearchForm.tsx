@@ -23,8 +23,16 @@ export default function RaceSearchForm({ races }: Props) {
     } = useRaceSearch(races);
 
     return (
-        <div className="w-full max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8">
-            <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+        <div
+            className="
+                w-full max-w-4xl mx-auto 
+                bg-white/70 backdrop-blur-sm 
+                p-6 rounded-2xl shadow-sm 
+                border border-white/40 
+                mb-8
+            "
+        >
+            <h2 className="text-lg font-bold text-slate-800 mb-4 border-b border-slate-300/40 pb-2">
                 過去のレースを検索
             </h2>
 
@@ -35,7 +43,7 @@ export default function RaceSearchForm({ races }: Props) {
                     options={years}
                     onChange={(val) => {
                         setSelectedYear(val.toString());
-                        setSelectedMonth(""); // 年を変えたら月をリセット
+                        setSelectedMonth("");
                     }}
                 />
                 <Select
@@ -48,41 +56,75 @@ export default function RaceSearchForm({ races }: Props) {
                 />
             </div>
 
-            {/* レース一覧表示 (月が選択されたら表示) */}
+            {/* レース一覧表示 */}
             {selectedMonth && (
                 <div className="mt-4">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
                         レース一覧 ({filteredRaces.length}件)
                     </label>
-                    <div className="bg-gray-50 rounded-lg p-2 max-h-60 overflow-y-auto border border-gray-200">
+
+                    <div
+                        className="
+                            bg-white/50 backdrop-blur-sm 
+                            rounded-xl p-2 
+                            max-h-60 overflow-y-auto 
+                            border border-slate-300/40
+                        "
+                    >
                         {filteredRaces.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-4">
+                            <p className="text-slate-400 text-sm text-center py-4">
                                 該当するレースデータはありません
                             </p>
                         ) : (
                             <div className="space-y-2">
                                 {filteredRaces.map((race) => {
                                     const colorClass = getColorFromGrade(race.grade ?? "OP");
-                                    // Extract the background color for the border (e.g., "bg-red-500" -> "border-red-500")
-                                    const bgClass = colorClass.split(" ").find((c: string) => c.startsWith("bg-"));
-                                    const borderClass = bgClass?.replace("bg-", "border-") || "border-gray-200";
+
+                                    // グレード色を薄くする
+                                    const gradeColor = colorClass
+                                        .replace("bg-", "bg-")
+                                        .replace("text-", "text-")
+                                        + "/80";
+
+                                    // 枠線色も薄く
+                                    const bgClass = colorClass
+                                        .split(" ")
+                                        .find((c: string) => c.startsWith("bg-"));
+                                    const borderClass = bgClass
+                                        ? bgClass.replace("bg-", "border-") + "/60"
+                                        : "border-slate-300/40";
 
                                     return (
                                         <Link
                                             key={race.id}
                                             href={`/races/${race.id}`}
-                                            className={`block w-full text-left px-4 py-3 bg-white hover:bg-gray-50 border-l-4 ${borderClass} border-r border-y border-gray-100 rounded-r-md shadow-sm transition-all hover:shadow-md flex justify-between items-center group`}
+                                            className={`
+                                                block w-full text-left px-4 py-3 
+                                                bg-white/70 backdrop-blur-sm 
+                                                hover:bg-white/90 
+                                                border-l-4 ${borderClass}
+                                                border border-white/40 
+                                                rounded-xl shadow-sm 
+                                                transition-all hover:shadow-md 
+                                                flex justify-between items-center group
+                                            `}
                                         >
                                             <div className="flex flex-col">
-                                                <span className="text-xs text-gray-500 mb-0.5">
+                                                <span className="text-xs text-slate-500 mb-0.5">
                                                     {formatDateWithWeekday(race.date)} {race.place}
                                                 </span>
-                                                <span className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                                <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors">
                                                     {race.name}
                                                 </span>
                                             </div>
+
                                             {race.grade && (
-                                                <span className={`text-xs font-bold px-2.5 py-1 rounded ${colorClass}`}>
+                                                <span
+                                                    className={`
+                                                        text-xs font-bold px-2.5 py-1 rounded 
+                                                        ${gradeColor}
+                                                    `}
+                                                >
                                                     {race.grade}
                                                 </span>
                                             )}

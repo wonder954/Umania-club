@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import MarkSelector from "./MarkSelector";
 import BettingForm from "./BettingForm";
 import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
@@ -8,23 +7,19 @@ import { Race } from "@/lib/races";
 import { useAuth } from "@/hooks/useAuth";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase-auth";
-import ShareImageGenerator from "@/components/share/ShareImageGenerator";
 import PredictionSuccess from "./PredictionSuccess";
 import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 type Props = {
     race: Race;
-
-    // ★ RacePage から受け取る state
     prediction: Record<string, string>;
     setPrediction: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-
     bets: Bet[];
     setBets: React.Dispatch<React.SetStateAction<Bet[]>>;
-
     comment: string;
     setComment: React.Dispatch<React.SetStateAction<string>>;
-
     onPostSuccess?: () => void;
     onReset?: () => void;
 };
@@ -63,7 +58,6 @@ export default function PredictionForm({
     const handleSubmit = async () => {
         if (!user) {
             await loginAnonymous();
-
             await new Promise((resolve) => {
                 const unsub = onAuthStateChanged(auth, (u) => {
                     if (u) {
@@ -74,24 +68,25 @@ export default function PredictionForm({
             });
         }
 
-        if (Object.keys(prediction).length === 0 && bets.length === 0 && !comment) {
-            alert("予想、買い目、コメントのいずれかを入力してください");
-            return;
-        }
+        const current = auth.currentUser;
+
+        const snap = await getDoc(doc(db, "users", current.uid));
+        const profile = snap.data();
+
+        const postData = {
+            userId: current.uid,
+            authorName: profile?.name ?? "名無し",
+            authorIcon: profile?.iconUrl ?? "/profile-icons/default1.png",
+            prediction,
+            bets,
+            comment,
+            raceId: race.id,
+            raceName: race.name
+        };
 
         setIsSubmitting(true);
         try {
-            const postData = {
-                userId: auth.currentUser?.uid || "unknown",
-                prediction,
-                bets,
-                comment,
-                raceId: race.id,
-                raceName: race.name
-            };
-
             await createPost(race.id, postData);
-
             setIsSuccess(true);
             onPostSuccess?.();
         } catch (e) {
@@ -107,12 +102,8 @@ export default function PredictionForm({
         setPrediction({});
         setBets([]);
         setComment("");
-        // 親コンポーネントにリセットを通知（スクロール処理などを実行）
         onReset?.();
     };
-
-
-
 
     if (isSuccess) {
         return (
@@ -126,10 +117,12 @@ export default function PredictionForm({
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="p-4 bg-gray-800 text-white flex justify-between items-center">
-                <h2 className="font-bold">予想を入力</h2>
-                <div className="text-xs text-gray-300">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/40 overflow-hidden">
+
+            {/* Header */}
+            <div className="p-4 bg-white/40 backdrop-blur-sm border-b border-white/40 flex justify-between items-center">
+                <h2 className="font-bold text-slate-800">予想を入力</h2>
+                <div className="text-xs text-slate-500">
                     {user ? `Logged in as ${user.displayName || "Anonymous"}` : "未ログイン"}
                 </div>
             </div>
@@ -138,10 +131,14 @@ export default function PredictionForm({
 
                 {/* Section: Bets */}
                 <section>
-                    {/* ← ここに ref を置く */}
                     <div ref={addButtonRef}></div>
-                    <h3 className="text-lg font-bold border-l-4 border-blue-500 pl-3 mb-4">買い目</h3>
-                    <p className="text-sm text-gray-500 mb-4">※買い目は、出馬表で印をつけた馬だけ選択できます。</p>
+
+                    <h3 className="text-lg font-bold border-l-4 border-blue-400 pl-3 mb-4 text-slate-800">
+                        買い目
+                    </h3>
+                    <p className="text-sm text-slate-500 mb-4">
+                        ※買い目は、出馬表で印をつけた馬だけ選択できます。
+                    </p>
 
                     {race.horses.some(h => h.number) ? (
                         <>
@@ -152,17 +149,17 @@ export default function PredictionForm({
                                 allowedNumbers={allowedNumbers}
                             />
 
-                            <div className="mt-2 text-right font-bold text-gray-700">
+                            <div className="mt-2 text-right font-bold text-slate-700">
                                 合計: {totalPoints} 点
                             </div>
                         </>
                     ) : (
-                        <div className="bg-gray-100 p-6 rounded-lg text-center border overflow-hidden relative">
-                            <div className="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl text-gray-500 pointer-events-none select-none">
+                        <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl text-center border border-white/40 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl text-slate-500 pointer-events-none select-none">
                                 ?
                             </div>
-                            <p className="text-gray-600 font-bold mb-2">出馬表確定待ち</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-slate-700 font-bold mb-2">出馬表確定待ち</p>
+                            <p className="text-sm text-slate-500">
                                 枠順・馬番が確定後（金曜日頃）、<br />
                                 買い目の入力が可能になります。
                             </p>
@@ -172,36 +169,45 @@ export default function PredictionForm({
 
                 {/* Section: Comment */}
                 <section>
-                    <h3 className="text-lg font-bold border-l-4 border-green-500 pl-3 mb-4">コメント</h3>
+                    <h3 className="text-lg font-bold border-l-4 border-green-400 pl-3 mb-4 text-slate-800">
+                        コメント
+                    </h3>
                     <textarea
-                        className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="
+                            w-full border border-white/40 rounded-xl p-3 
+                            bg-white/60 backdrop-blur-sm
+                            focus:outline-none focus:ring-2 focus:ring-green-300
+                            text-slate-700
+                        "
                         rows={3}
                         placeholder="この馬を選んだ理由は..."
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         maxLength={150}
                     />
-                    <div className="text-right text-xs text-gray-400 mt-1">
+                    <div className="text-right text-xs text-slate-400 mt-1">
                         {comment.length} / 150
                     </div>
                 </section>
 
                 {/* Submit */}
-                <div className="pt-4 border-t">
+                <div className="pt-4 border-t border-white/40">
                     <button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                         className={`
-              w-full py-4 rounded-xl font-bold text-lg shadow-lg transition
-              ${isSubmitting
-                                ? "bg-gray-400 cursor-not-allowed text-white"
-                                : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transform hover:-translate-y-1"}
-            `}
+                            w-full py-4 rounded-xl font-bold text-lg shadow-sm transition
+                            ${isSubmitting
+                                ? "bg-slate-400 cursor-not-allowed text-white"
+                                : "bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 transform hover:-translate-y-1"
+                            }
+                        `}
                     >
                         {isSubmitting ? "送信中..." : "予想を投稿する"}
                     </button>
+
                     {!user && (
-                        <p className="text-center text-xs text-gray-500 mt-2">
+                        <p className="text-center text-xs text-slate-500 mt-2">
                             ※投稿すると自動的にゲストログインします
                         </p>
                     )}

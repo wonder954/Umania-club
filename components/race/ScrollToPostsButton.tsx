@@ -9,7 +9,14 @@ export default function ScrollToPostsButton() {
     return (
         <button
             onClick={handleClick}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold shadow hover:bg-blue-700 transition"
+            className="
+                w-full py-4 rounded-xl font-bold text-slate-800
+                bg-white/70 backdrop-blur-sm
+                shadow-sm hover:shadow-md
+                border border-white/40
+                hover:bg-white/80
+                transition
+            "
         >
             みんなの予想を見る
         </button>

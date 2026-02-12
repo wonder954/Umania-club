@@ -12,6 +12,7 @@
     "scrape:friday": "node scripts/scrape-race-friday.js"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.13.4",
     "cheerio": "^1.2.0",
     "dotenv": "^17.2.3",

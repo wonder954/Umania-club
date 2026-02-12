@@ -1,207 +1,222 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState, useEffect } from "react";
 
+type ProfileEditorProps = {
+    currentPhoto: string | null;
+    name: string;
+    favoriteHorse: string;
+    onChangeName: (value: string) => void;
+    onChangeFavoriteHorse: (value: string) => void;
+    onSelect: (url: string) => Promise<void> | void;   // プリセット選択
+    onUpload: (file: File) => Promise<void> | void;    // カスタム画像アップロード
+    onSave: () => Promise<void>;
+    onClose: () => void;
+};
+
+const PRESET_ICONS = [
+    "/profile-icons/default1.png",
+    "/profile-icons/default2.png",
+    "/profile-icons/default3.png",
+];
 
 export default function ProfileEditor({
     currentPhoto,
+    name,
+    favoriteHorse,
+    onChangeName,
+    onChangeFavoriteHorse,
     onSelect,
     onUpload,
+    onSave,
     onClose,
-}: {
-    currentPhoto: string;
-    onSelect: (url: string) => Promise<void>;
-    onUpload: (file: File) => Promise<void>;
-    onClose: () => void;
-}) {
-    const defaultIcons = [
-        "/profile-icons/default1.png",
-        "/profile-icons/default2.png",
-        "/profile-icons/default3.png",
-    ];
+}: ProfileEditorProps) {
+    const [preview, setPreview] = useState<string>(currentPhoto ?? "/profile-icons/default1.png");
+    const [file, setFile] = useState<File | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [saved, setSaved] = useState(false);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string>(currentPhoto);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [saved, setSaved] = useState<false | "show" | "fadeout">(false);
+    useEffect(() => {
+        setPreview(currentPhoto ?? "/profile-icons/default1.png");
+    }, [currentPhoto]);
 
-    const handleFileChange = (file: File) => {
-        setPreview(URL.createObjectURL(file));
-        setSelectedFile(file);
-        setError(null);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        setFile(f);
+        const url = URL.createObjectURL(f);
+        setPreview(url);
+    };
+
+    const handleSelectPreset = async (url: string) => {
+        setFile(null);
+        setPreview(url);
+        await onSelect(url);
     };
 
     const handleSave = async () => {
-        setLoading(true);
-        setError(null);
-
+        if (isSaving) return;
+        setIsSaving(true);
         try {
-            if (selectedFile) {
-                await onUpload(selectedFile);
-            } else {
-                await onSelect(preview);
+            if (file) {
+                await onUpload(file);
             }
 
-            // 保存成功アニメーション
-            setSaved("show");
+            // 名前・好きな馬の保存
+            await onSave();
 
-            // まず 600ms 表示させる
+            setSaved(true);
             setTimeout(() => {
-                // フェードアウト開始
-                setSaved("fadeout");
-            }, 600);
-
-            // フェードアウトが終わる 800ms 後に閉じる
-            setTimeout(() => {
-                onClose();
                 setSaved(false);
-            }, 600 + 800);
-
-        } catch (err) {
-            console.error("画像保存エラー:", err);
-            setError("画像の保存に失敗しました。もう一度お試しください。");
+                onClose();
+            }, 900);
         } finally {
-            setLoading(false);
+            setIsSaving(false);
         }
     };
 
     return (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative">
-
-                {/* 保存完了アニメーション */}
-                {saved && (
-                    <div
-                        className={`
-      absolute inset-0 flex items-center justify-center 
-      bg-white/90 backdrop-blur-sm rounded-xl z-50
-      ${saved === "fadeout" ? "animate-fadeOut" : ""}
-    `}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 backdrop-blur-sm">
+            <div
+                className="
+            bg-white/70 backdrop-blur-sm 
+            rounded-2xl shadow-sm w-full max-w-md p-6 
+            border border-white/40
+            animate-[fadeIn_0.15s_ease-out]
+        "
+            >
+                {/* ヘッダー */}
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-slate-800">プロフィール編集</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-slate-500 hover:text-slate-700 transition"
                     >
-                        <div className="text-green-600 text-xl font-bold flex items-center gap-2 drop-shadow">
-                            <span className="text-3xl">✔</span>
-                            保存しました
+                        ✕
+                    </button>
+                </div>
+
+                <div className="space-y-5">
+
+                    {/* 名前 */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                            名前
+                        </label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => onChangeName(e.target.value)}
+                            className="
+                        w-full px-3 py-2 rounded-lg text-sm
+                        bg-white/60 backdrop-blur-sm
+                        border border-white/40 shadow-sm
+                        focus:ring-blue-300 focus:border-blue-300
+                    "
+                            placeholder="名前を入力"
+                        />
+                    </div>
+
+                    {/* 好きな馬 */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                            好きな馬
+                        </label>
+                        <input
+                            type="text"
+                            value={favoriteHorse}
+                            onChange={(e) => onChangeFavoriteHorse(e.target.value)}
+                            className="
+                        w-full px-3 py-2 rounded-lg text-sm
+                        bg-white/60 backdrop-blur-sm
+                        border border-white/40 shadow-sm
+                        focus:ring-blue-300 focus:border-blue-300
+                    "
+                            placeholder="例: オルフェーヴル"
+                        />
+                    </div>
+
+                    {/* 現在のアイコン */}
+                    <div>
+                        <p className="text-sm font-medium text-slate-700 mb-2">現在のアイコン</p>
+                        <div className="flex items-center gap-3">
+                            <img
+                                src={preview}
+                                alt="preview"
+                                className="w-20 h-20 rounded-full object-cover border border-white/60 shadow-sm"
+                            />
+                            <p className="text-xs text-slate-500">
+                                プリセットを選ぶか、画像をアップロードできます。
+                            </p>
                         </div>
                     </div>
-                )}
 
-                {/* ✕ ボタン */}
-                <button
-                    onClick={onClose}
-                    disabled={loading}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl 
-                             disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    ✕
-                </button>
-
-                <h2 className="text-xl font-bold mb-4">プロフィール画像を変更</h2>
-
-                {/* エラーメッセージ */}
-                {error && (
-                    <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                        {error}
-                    </div>
-                )}
-
-                {/* プレビュー */}
-                <div className="flex justify-center mb-4">
-                    <img
-                        src={preview}
-                        alt="プレビュー"
-                        className="w-24 h-24 rounded-full border shadow-sm object-cover"
-                    />
-                </div>
-
-                {/* 現在のアイコン */}
-                <p className="mb-2 text-gray-600">現在のアイコンに戻す</p>
-                <div className="flex gap-4 mb-6">
-                    <img
-                        src={currentPhoto}
-                        alt="現在のアイコン"
-                        onClick={() => {
-                            if (!loading) {
-                                setPreview(currentPhoto);
-                                setSelectedFile(null);
-                                setError(null);
-                            }
-                        }}
-                        className={`w-16 h-16 rounded-full border cursor-pointer transition
-                            ${preview === currentPhoto ? "ring-4 ring-blue-400" : "hover:opacity-80"}
-                            ${loading ? "opacity-50 cursor-not-allowed" : ""}
-                        `}
-                    />
-                </div>
-
-                {/* デフォルトアイコン */}
-                <p className="mb-2 text-gray-600">デフォルトアイコンを選択</p>
-                <div className="flex gap-4 mb-6">
-                    {defaultIcons.map((icon) => (
-                        <img
-                            key={icon}
-                            src={icon}
-                            alt="デフォルトアイコン"
-                            onClick={() => {
-                                if (!loading) {
-                                    setPreview(icon);
-                                    setSelectedFile(null);
-                                    setError(null);
-                                }
-                            }}
-                            className={`w-16 h-16 rounded-full border cursor-pointer transition 
-                                ${preview === icon ? "ring-4 ring-blue-400" : "hover:opacity-80"}
-                                ${loading ? "opacity-50 cursor-not-allowed" : ""}
+                    {/* プリセット */}
+                    <div>
+                        <p className="text-sm font-medium text-slate-700 mb-2">デフォルトアイコン</p>
+                        <div className="flex gap-3">
+                            {PRESET_ICONS.map((icon) => (
+                                <button
+                                    key={icon}
+                                    type="button"
+                                    onClick={() => handleSelectPreset(icon)}
+                                    className={`
+                                w-14 h-14 rounded-full border border-white/40 overflow-hidden
+                                transition transform
+                                ${preview === icon
+                                            ? "ring-4 ring-blue-300/70 scale-105 shadow-md"
+                                            : "hover:scale-105 hover:shadow-sm"
+                                        }
                             `}
-                        />
-                    ))}
+                                >
+                                    <img src={icon} alt="" className="w-full h-full object-cover" />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* アップロード */}
+                    <div>
+                        <p className="text-sm font-medium text-slate-700 mb-2">カスタム画像をアップロード</p>
+                        <label
+                            className="
+                        flex flex-col items-center justify-center gap-2
+                        border-2 border-dashed border-white/40 rounded-xl
+                        py-4 cursor-pointer
+                        bg-white/40 backdrop-blur-sm
+                        hover:bg-white/60 transition
+                    "
+                        >
+                            <span className="text-sm text-slate-700">クリックして画像を選択</span>
+                            <span className="text-xs text-slate-500">正方形の画像がおすすめです</span>
+                            <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                        </label>
+                    </div>
                 </div>
 
-                {/* アップロード */}
-                <p className="mb-2 text-gray-600">画像をアップロード</p>
-
-                <div
-                    className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center 
-                              transition ${loading
-                            ? "opacity-50 cursor-not-allowed"
-                            : "cursor-pointer hover:bg-gray-50"
-                        }`}
-                    onClick={() => !loading && fileInputRef.current?.click()}
-                >
-                    <p className="text-gray-600">クリックして画像を選択</p>
-                </div>
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    className="hidden"
-                    disabled={loading}
-                    onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleFileChange(file);
-                    }}
-                />
-
-                {/* 保存ボタン */}
-                <button
-                    onClick={handleSave}
-                    disabled={loading}
-                    className="mt-6 w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600 
-                             transition disabled:bg-blue-300 disabled:cursor-not-allowed
-                             flex items-center justify-center gap-2"
-                >
-                    {loading ? (
-                        <>
-                            <span className="animate-spin inline-block w-4 h-4 border-2 border-white 
-                                           border-t-transparent rounded-full"></span>
-                            保存中...
-                        </>
+                {/* フッター */}
+                <div className="mt-6 flex items-center justify-between">
+                    {saved ? (
+                        <span className="text-sm text-green-600">保存しました</span>
                     ) : (
-                        "保存する"
+                        <span className="text-xs text-slate-500">アイコン・名前・好きな馬が保存されます</span>
                     )}
-                </button>
+
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className={`
+                    px-4 py-2 rounded-xl text-sm font-bold text-white shadow-sm
+                    transition
+                    ${isSaving
+                                ? "bg-blue-300 cursor-wait scale-95"
+                                : "bg-blue-500/80 hover:bg-blue-500/90"
+                            }
+                `}
+                    >
+                        {isSaving ? "保存中..." : "保存する"}
+                    </button>
+                </div>
             </div>
         </div>
     );
