@@ -5,6 +5,8 @@ import HorseTable from "@/components/race/HorseTable";
 import PredictionForm from "@/components/prediction/PredictionForm";
 import { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
+import Image from "next/image";
+
 
 export default function PredictionArea({ race }: { race: Race }) {
     const [prediction, setPrediction] = useState<Record<string, string>>({});
@@ -27,7 +29,7 @@ export default function PredictionArea({ race }: { race: Race }) {
     };
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-10 relative overflow-visible">
 
             {/* 出馬表 */}
             <div ref={horseTableRef} className="scroll-mt-24">
@@ -41,9 +43,21 @@ export default function PredictionArea({ race }: { race: Race }) {
             {/* 予想フォーム */}
             <section>
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
-                    <span className="text-slate-500 text-2xl">🐎</span>
+                    <Image
+                        src="/prediction.png"
+                        alt="prediction"
+                        width={28}
+                        height={28}
+                        className="h-7 w-auto object-contain drop-shadow-sm"
+                    />
                     あなたの予想
-                    <span className="text-slate-500 text-2xl">🐎</span>
+                    <Image
+                        src="/prediction.png"
+                        alt="prediction"
+                        width={28}
+                        height={28}
+                        className="h-7 w-auto object-contain drop-shadow-sm"
+                    />
                 </h2>
 
                 <PredictionForm

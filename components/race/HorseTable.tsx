@@ -2,6 +2,8 @@
 
 import MarkSelector from "@/components/prediction/MarkSelector";
 import type { Race } from "@/lib/races";
+import Image from "next/image";
+
 
 type Props = {
     race: Race;
@@ -25,10 +27,23 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
     return (
         <section>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
-                <span className="text-blue-500/80 text-2xl">🏇</span>
+                <Image
+                    src="/newspaper.png"
+                    alt="newspaper"
+                    width={28}
+                    height={28}
+                    className="h-7 w-auto object-contain drop-shadow-sm"
+                />
                 出馬表
-                <span className="text-blue-500/80 text-2xl">🏇</span>
+                <Image
+                    src="/newspaper.png"
+                    alt="newspaper"
+                    width={28}
+                    height={28}
+                    className="h-7 w-auto object-contain drop-shadow-sm"
+                />
             </h2>
+
 
             <p className="text-sm text-slate-500 px-1 mt-1 mb-2">
                 ※買い目を追加するには、まず出馬表で印をつけてください

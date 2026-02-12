@@ -173,13 +173,13 @@ export default function PostList({ raceId, race }: Props) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="relative w-full min-h-fit space-y-6">
             {posts.map((post) => {
 
                 let postHit = { isHit: false, payout: 0 };
 
                 if (race?.result) {
-                    const results = post.bets.map(bet => judgeHit(bet, race.result!)); // Added ! since race.result is checked
+                    const results = post.bets.map(bet => judgeHit(bet, race.result!));
                     const hitOnes = results.filter(r => r.isHit);
 
                     if (hitOnes.length > 0) {
@@ -202,7 +202,9 @@ export default function PostList({ raceId, race }: Props) {
                         toggleComments={toggleComments}
                         comments={comments[post.id] || []}
                         commentText={commentText[post.id] || ""}
-                        setCommentText={(text: string) => setCommentText(prev => ({ ...prev, [post.id]: text }))}
+                        setCommentText={(text: string) =>
+                            setCommentText(prev => ({ ...prev, [post.id]: text }))
+                        }
                         handleAddComment={handleAddComment}
                         handleDelete={handleDelete}
                         postHit={postHit}

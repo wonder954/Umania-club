@@ -2,6 +2,7 @@
 
 import PostList from "@/components/community/PostList/index";
 import type { Race } from "@/lib/races";
+import Image from "next/image";
 
 type Props = {
     race: Race;
@@ -11,11 +12,23 @@ export default function CommunitySection({ race }: Props) {
     return (
         <section id="post-section">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
-                {/* 元の青を薄く残す */}
-                <span className="text-blue-500/80 text-2xl">💬</span>
+                <Image
+                    src="/flag.png"
+                    alt="prediction"
+                    width={28}
+                    height={28}
+                    className="h-7 w-auto object-contain drop-shadow-sm"
+                />
                 みんなの予想
-                <span className="text-blue-500/80 text-2xl">💬</span>
+                <Image
+                    src="/flag.png"
+                    alt="prediction"
+                    width={28}
+                    height={28}
+                    className="h-7 w-auto object-contain drop-shadow-sm"
+                />
             </h2>
+
 
             {/* PostList を透明白カードで包む */}
             <div

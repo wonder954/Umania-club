@@ -15,12 +15,18 @@ import {
 import { uploadUserIcon } from "@/lib/userIcon";
 import { PencilIcon } from "@heroicons/react/24/outline";
 
+// ★ これが必要！
+import { Modal } from "@/components/common/Modal";
+import { useModal } from "@/hooks/useModal";
+
 export default function MyPage() {
     const { user, loading, reloadUser } = useAuth();
     const router = useRouter();
 
     const [profile, setProfile] = useState<any>(null);
-    const [editing, setEditing] = useState(false);
+
+    // ★ editing を useModal に置き換える
+    const profileModal = useModal();
 
     const [name, setName] = useState("");
     const [favoriteHorse, setFavoriteHorse] = useState("");
@@ -76,7 +82,7 @@ export default function MyPage() {
             favoriteHorse,
         });
 
-        setEditing(false);
+        profileModal.hide();
     };
 
     if (loading || !user || !profile) {
@@ -88,20 +94,20 @@ export default function MyPage() {
 
             <div
                 className="
-        bg-white/70 backdrop-blur-sm 
-        rounded-2xl shadow-sm 
-        p-6 relative 
-        border border-white/40
-    "
+                    bg-white/70 backdrop-blur-sm 
+                    rounded-2xl shadow-sm 
+                    p-6 relative 
+                    border border-white/40
+                "
             >
                 {/* 編集ボタン */}
                 <button
-                    onClick={() => setEditing(true)}
+                    onClick={profileModal.show}
                     className="
-            absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5
-            bg-white/70 backdrop-blur-sm text-slate-800 text-sm rounded-full
-            hover:bg-white/90 hover:shadow-sm transition-all border border-white/40
-        "
+                        absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5
+                        bg-white/70 backdrop-blur-sm text-slate-800 text-sm rounded-full
+                        hover:bg-white/90 hover:shadow-sm transition-all border border-white/40
+                    "
                 >
                     <PencilIcon className="w-4 h-4 text-slate-600" />
                     編集
@@ -114,19 +120,19 @@ export default function MyPage() {
                             src={profile.iconUrl ?? "/profile-icons/default1.png"}
                             alt="user icon"
                             className="
-                    w-20 h-20 rounded-full object-cover 
-                    border border-white/60 shadow-sm 
-                    transition-transform group-hover:scale-105
-                "
+                                w-20 h-20 rounded-full object-cover 
+                                border border-white/60 shadow-sm 
+                                transition-transform group-hover:scale-105
+                            "
                         />
 
                         <div
                             className="
-                    absolute inset-0 bg-slate-900/30 rounded-full opacity-0 
-                    group-hover:opacity-100 flex items-center justify-center 
-                    transition-opacity cursor-pointer
-                "
-                            onClick={() => setEditing(true)}
+                                absolute inset-0 bg-slate-900/30 rounded-full opacity-0 
+                                group-hover:opacity-100 flex items-center justify-center 
+                                transition-opacity cursor-pointer
+                            "
+                            onClick={profileModal.show}
                         >
                             <span className="material-icons text-white text-3xl">
                                 photo_camera
@@ -158,7 +164,7 @@ export default function MyPage() {
             </div>
 
             {/* 編集モーダル */}
-            {editing && (
+            <Modal open={profileModal.open} onClose={profileModal.hide}>
                 <ProfileEditor
                     currentPhoto={profile.iconUrl}
                     name={name}
@@ -168,9 +174,9 @@ export default function MyPage() {
                     onSelect={handleSelectPhoto}
                     onUpload={handleUploadPhoto}
                     onSave={handleSaveAll}
-                    onClose={() => setEditing(false)}
+                    onClose={profileModal.hide}
                 />
-            )}
+            </Modal>
         </div>
     );
 }

@@ -116,6 +116,9 @@ export default function PredictionForm({
         );
     }
 
+    const hasMarks = Object.values(prediction).some(v => v !== "");
+
+
     return (
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/40 overflow-hidden">
 
@@ -194,17 +197,18 @@ export default function PredictionForm({
                 <div className="pt-4 border-t border-white/40">
                     <button
                         onClick={handleSubmit}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !hasMarks}
                         className={`
-                            w-full py-4 rounded-xl font-bold text-lg shadow-sm transition
-                            ${isSubmitting
-                                ? "bg-slate-400 cursor-not-allowed text-white"
+        w-full py-4 rounded-xl font-bold text-lg shadow-sm transition
+        ${isSubmitting || !hasMarks
+                                ? "bg-slate-300 cursor-not-allowed text-white"
                                 : "bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 transform hover:-translate-y-1"
                             }
-                        `}
+    `}
                     >
                         {isSubmitting ? "送信中..." : "予想を投稿する"}
                     </button>
+
 
                     {!user && (
                         <p className="text-center text-xs text-slate-500 mt-2">

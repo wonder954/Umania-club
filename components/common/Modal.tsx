@@ -1,3 +1,8 @@
+"use client";
+
+import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
+
 type ModalProps = {
     open: boolean;
     onClose: () => void;
@@ -5,42 +10,32 @@ type ModalProps = {
 };
 
 export function Modal({ open, onClose, children }: ModalProps) {
-    if (!open) return null;
+    const [mounted, setMounted] = useState(false);
 
-    return (
-        <div
-            className="
-                fixed inset-0 
-                bg-black/30 backdrop-blur-sm 
-                flex items-center justify-center 
-                z-50
-            "
-        >
+    useEffect(() => setMounted(true), []);
+
+    if (!open || !mounted) return null;
+
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
             <div
                 className="
                     bg-white/70 backdrop-blur-sm 
-                    rounded-2xl p-6 
-                    max-w-lg w-full 
-                    shadow-sm border border-white/40
-                    relative
+                    rounded-2xl shadow-sm w-full max-w-lg p-6 
+                    border border-white/40 relative
+                    max-h-[90vh] overflow-y-auto
                 "
             >
-                {/* 閉じるボタン */}
                 <button
-                    className="
-                        absolute top-3 right-3 
-                        text-slate-600 hover:text-slate-800 
-                        text-xl font-bold
-                    "
                     onClick={onClose}
+                    className="absolute top-3 right-3 text-slate-600 hover:text-slate-800 text-xl font-bold"
                 >
                     ×
                 </button>
 
-                <div className="mt-2 space-y-4 text-slate-800">
-                    {children}
-                </div>
+                {children}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

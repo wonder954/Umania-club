@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { toPng } from "html-to-image";
 
 type Props = {
@@ -79,7 +80,7 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
             </button>
 
             {/* Hidden Container for Image Generation */}
-            <div className="fixed top-0 left-0 -z-50 opacity-0 pointer-events-none">
+            <div className="fixed top-0 left-0 z-[1] opacity-0 pointer-events-none">
                 <div
                     ref={ref}
                     className="w-[1200px] h-[630px] bg-[#f8f7f2] text-gray-900 font-serif p-12 flex flex-col relative overflow-hidden box-border"
@@ -181,8 +182,8 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
             </div>
 
             {/* Preview Modal */}
-            {imageUrl && (
-                <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
+            {imageUrl && typeof window !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
                     <div className="bg-white rounded-xl p-4 max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-auto">
                         <div className="flex justify-between items-center border-b pb-2">
                             <div className="flex-1">
@@ -219,7 +220,8 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
