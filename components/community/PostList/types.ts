@@ -12,6 +12,7 @@ export type Post = {
     raceId: string;
     raceName: string;
     createdAt: Timestamp;
+    likes: string[];
 };
 
 export type Comment = {
@@ -21,4 +22,5 @@ export type Comment = {
     authorIcon: string;
     text: string;
     createdAt: Timestamp;
+    likes?: string[];
 };

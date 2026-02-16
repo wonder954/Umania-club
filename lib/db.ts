@@ -11,7 +11,10 @@ import {
     orderBy,
     addDoc,
     deleteDoc,
-    Timestamp
+    Timestamp,
+    updateDoc,
+    arrayUnion,
+    arrayRemove
 } from "firebase/firestore";
 
 export type UserProfile = {
@@ -74,4 +77,47 @@ export async function getPostComments(raceId: string, postId: string) {
 export async function deleteComment(raceId: string, postId: string, commentId: string) {
     const ref = doc(db, "races", raceId, "posts", postId, "comments", commentId);
     await deleteDoc(ref);
+}
+
+export async function togglePostLike(raceId: string, postId: string, userId: string) {
+    const ref = doc(db, "races", raceId, "posts", postId);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const likes: string[] = data.likes ?? [];
+
+    if (likes.includes(userId)) {
+        // いいね解除
+        await updateDoc(ref, {
+            likes: arrayRemove(userId)
+        });
+    } else {
+        // いいね追加
+        await updateDoc(ref, {
+            likes: arrayUnion(userId)
+        });
+    }
+}
+
+export async function toggleCommentLike(
+    raceId: string,
+    postId: string,
+    commentId: string,
+    userId: string
+) {
+    const ref = doc(db, "races", raceId, "posts", postId, "comments", commentId);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const likes: string[] = data.likes ?? [];
+
+    if (likes.includes(userId)) {
+        await updateDoc(ref, { likes: arrayRemove(userId) });
+    } else {
+        await updateDoc(ref, { likes: arrayUnion(userId) });
+    }
 }
