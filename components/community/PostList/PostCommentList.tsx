@@ -1,25 +1,37 @@
 import { Comment } from "./types";
+import CommentHeader from "./CommentHeader";
 
 type Props = {
     comments?: Comment[];
+    currentUserUid?: string;
+    handleDeleteComment: (commentId: string) => void;
 };
 
-export default function PostCommentList({ comments }: Props) {
+export default function PostCommentList({
+    comments,
+    currentUserUid,
+    handleDeleteComment,
+}: Props) {
     if (!comments || comments.length === 0) return null;
 
     return (
         <>
             {comments.map((comment) => (
-                <div key={comment.id} className="bg-white p-3 rounded border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-gray-600">
-                            {comment.userId.substring(0, 8)}...
-                        </span>
-                        <span className="text-xs text-gray-400">
-                            {comment.createdAt?.toDate?.().toLocaleString()}
-                        </span>
-                    </div>
-                    <p className="text-sm text-gray-800">{comment.text}</p>
+                <div
+                    key={comment.id}
+                    className="bg-white p-3 rounded border border-gray-200"
+                >
+                    {/* コメントヘッダー（アイコン・名前・日時・削除） */}
+                    <CommentHeader
+                        comment={comment}
+                        currentUserUid={currentUserUid}
+                        handleDeleteComment={handleDeleteComment}
+                    />
+
+                    {/* コメント本文 */}
+                    <p className="text-sm text-gray-800 whitespace-pre-line ml-8">
+                        {comment.text}
+                    </p>
                 </div>
             ))}
         </>

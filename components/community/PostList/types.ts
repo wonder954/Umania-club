@@ -2,18 +2,21 @@ import { Timestamp } from "firebase/firestore";
 
 export type Post = {
     id: string;
-    userId: string;
+    authorId: string;
     authorName: string;
     authorIcon: string;
+    visibility: string;
     prediction: Record<string, string>;
     bets: any[];
     comment: string;
+    raceId: string;
+    raceName: string;
     createdAt: Timestamp;
 };
 
 export type Comment = {
     id: string;
-    userId: string;
+    authorId: string;
     authorName: string;
     authorIcon: string;
     text: string;

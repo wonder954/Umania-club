@@ -20,6 +20,7 @@ type Props = {
     setCommentText: (text: string) => void;
     handleAddComment: (postId: string) => void;
     handleDelete: (postId: string) => void;
+    handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
     renderNumbers: (bet: Bet, race?: Race) => string;
 };

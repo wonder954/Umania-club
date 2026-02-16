@@ -24,6 +24,7 @@ type Props = {
     setCommentText: (text: string) => void;
     handleAddComment: (postId: string) => void;
     handleDelete: (postId: string) => void;
+    handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
     renderNumbers: (bet: Bet, race?: Race) => string;
 };
@@ -42,20 +43,25 @@ export default function PostCardPC(props: Props) {
         setCommentText,
         handleAddComment,
         handleDelete,
+        handleDeleteComment,
         postHit,
         renderNumbers,
     } = props;
 
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 animate-fadeIn">
+
+            {/* 投稿者情報（authorName / authorIcon を直接使用） */}
             <PostHeader
                 post={post}
                 currentUserUid={user?.uid}
                 handleDelete={handleDelete}
             />
 
+            {/* 印 */}
             <PostPrediction post={post} race={race} />
 
+            {/* 買い目 */}
             <PostBets
                 post={post}
                 race={race}
@@ -65,8 +71,10 @@ export default function PostCardPC(props: Props) {
                 renderNumbers={renderNumbers}
             />
 
+            {/* 投稿本文 */}
             <PostComment post={post} />
 
+            {/* コメント開閉 */}
             <div className="mt-4 pt-3 border-t flex justify-between items-center text-sm text-gray-400">
                 <button
                     onClick={() => toggleComments(post.id)}
@@ -77,9 +85,15 @@ export default function PostCardPC(props: Props) {
                 </button>
             </div>
 
+            {/* コメント一覧 + 入力欄 */}
             {showComments.has(post.id) && (
                 <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-lg">
-                    <PostCommentList comments={comments} />
+                    <PostCommentList
+                        comments={comments}
+                        currentUserUid={user?.uid}
+                        handleDeleteComment={handleDeleteComment}
+                    />
+
                     <PostCommentForm
                         postId={post.id}
                         user={user}

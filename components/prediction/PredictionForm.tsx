@@ -74,9 +74,10 @@ export default function PredictionForm({
         const profile = snap.data();
 
         const postData = {
-            userId: current.uid,
+            authorId: current.uid,
             authorName: profile?.name ?? "名無し",
             authorIcon: profile?.iconUrl ?? "/profile-icons/default1.png",
+            visibility: "public",
             prediction,
             bets,
             comment,

@@ -35,6 +35,8 @@ export async function createPost(raceId: string, postData: any) {
 
     await addDoc(postsRef, {
         ...postData,
+        authorId: postData.authorId,
+        visibility: postData.visibility ?? "public",
         authorName: postData.authorName,
         authorIcon: postData.authorIcon,
         createdAt: Timestamp.now()
@@ -67,4 +69,9 @@ export async function getPostComments(raceId: string, postId: string) {
     const q = query(commentsRef, orderBy("createdAt", "asc"));
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function deleteComment(raceId: string, postId: string, commentId: string) {
+    const ref = doc(db, "races", raceId, "posts", postId, "comments", commentId);
+    await deleteDoc(ref);
 }
