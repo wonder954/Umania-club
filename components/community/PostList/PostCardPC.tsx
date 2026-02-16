@@ -1,4 +1,4 @@
-//PC専用レイアウト
+// PC専用レイアウト
 
 import { User } from "firebase/auth";
 import { Bet } from "@/types/bet";
@@ -15,15 +15,14 @@ type Props = {
     post: Post;
     race?: Race;
     user: User | null;
+    comments: Comment[];
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
     showComments: Set<string>;
     toggleComments: (postId: string) => void;
-    comments: Comment[];
     commentText: string;
     setCommentText: (text: string) => void;
-    handleAddComment: (postId: string) => void;
-    handleDelete: (postId: string) => void;
+    handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
     renderNumbers: (bet: Bet, race?: Race) => string;
@@ -34,15 +33,14 @@ export default function PostCardPC(props: Props) {
         post,
         race,
         user,
+        comments,
         expandedBets,
         toggleBets,
         showComments,
         toggleComments,
-        comments,
         commentText,
         setCommentText,
         handleAddComment,
-        handleDelete,
         handleDeleteComment,
         postHit,
         renderNumbers,
@@ -51,11 +49,10 @@ export default function PostCardPC(props: Props) {
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 animate-fadeIn">
 
-            {/* 投稿者情報（authorName / authorIcon を直接使用） */}
+            {/* 投稿者情報 */}
             <PostHeader
                 post={post}
-                currentUserUid={user?.uid}
-                handleDelete={handleDelete}
+                currentUserUid={user?.uid}  // ✅ 修正: 現在ログインしているユーザーのID
             />
 
             {/* 印 */}
@@ -90,12 +87,11 @@ export default function PostCardPC(props: Props) {
                 <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-lg">
                     <PostCommentList
                         comments={comments}
-                        currentUserUid={user?.uid}
+                        currentUserUid={user?.uid}  // ✅ 修正: 現在ログインしているユーザーのID
                         handleDeleteComment={handleDeleteComment}
                     />
 
                     <PostCommentForm
-                        postId={post.id}
                         user={user}
                         commentText={commentText}
                         setCommentText={setCommentText}

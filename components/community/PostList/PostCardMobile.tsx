@@ -10,21 +10,19 @@ import PostComment from "./PostComment";
 import PostCommentList from "./PostCommentList";
 import PostCommentForm from "./PostCommentForm";
 import PostBets from "./PostBets";
-import { judgeHit } from "@/utils/race/judge";
 
 type Props = {
     post: Post;
     race?: Race;
     user: User | null;
+    comments: Comment[];
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
     showComments: Set<string>;
     toggleComments: (postId: string) => void;
-    comments: Comment[];
     commentText: string;
     setCommentText: (text: string) => void;
-    handleAddComment: (postId: string) => void;
-    handleDelete: (postId: string) => void;
+    handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
     renderNumbers: (bet: Bet, race?: Race) => string;
@@ -35,15 +33,14 @@ export default function PostCardMobile(props: Props) {
         post,
         race,
         user,
+        comments,
         expandedBets,
         toggleBets,
         showComments,
         toggleComments,
-        comments,
         commentText,
         setCommentText,
         handleAddComment,
-        handleDelete,
         handleDeleteComment,
         postHit,
         renderNumbers,
@@ -52,19 +49,19 @@ export default function PostCardMobile(props: Props) {
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 space-y-6">
 
-            {/* 投稿者情報（authorName / authorIcon を直接使用） */}
+            {/* 投稿者情報 */}
             <PostHeader
                 post={post}
                 currentUserUid={user?.uid}
-                handleDelete={handleDelete}
+            // 投稿削除は PostHeader 内で完結
             />
 
-            {/* 印（スマホは縦並び） */}
+            {/* 印 */}
             <div className="space-y-2">
                 <PostPrediction post={post} race={race} vertical />
             </div>
 
-            {/* 買い目（スマホはカード化） */}
+            {/* 買い目 */}
             <PostBets
                 post={post}
                 race={race}
@@ -89,7 +86,7 @@ export default function PostCardMobile(props: Props) {
                 </button>
             </div>
 
-            {/* コメント一覧（開閉） */}
+            {/* コメント一覧 */}
             {showComments.has(post.id) && (
                 <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
                     <PostCommentList
@@ -99,7 +96,6 @@ export default function PostCardMobile(props: Props) {
                     />
 
                     <PostCommentForm
-                        postId={post.id}
                         user={user}
                         commentText={commentText}
                         setCommentText={setCommentText}

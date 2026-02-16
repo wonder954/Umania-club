@@ -1,15 +1,13 @@
 import { User } from "firebase/auth";
 
 type Props = {
-    postId: string;
     user: User | null;
     commentText: string;
     setCommentText: (text: string) => void;
-    handleAddComment: (postId: string) => void;
+    handleAddComment: (text: string) => void;
 };
 
 export default function PostCommentForm({
-    postId,
     user,
     commentText,
     setCommentText,
@@ -25,8 +23,6 @@ export default function PostCommentForm({
 
     return (
         <div className="flex gap-2 mt-3">
-
-            {/* 入力欄（透明白 × 柔らかい境界線） */}
             <input
                 type="text"
                 value={commentText || ""}
@@ -43,14 +39,13 @@ export default function PostCommentForm({
                 "
                 onKeyPress={(e) => {
                     if (e.key === "Enter") {
-                        handleAddComment(postId);
+                        handleAddComment(commentText);
                     }
                 }}
             />
 
-            {/* 送信ボタン（青を薄く残す） */}
             <button
-                onClick={() => handleAddComment(postId)}
+                onClick={() => handleAddComment(commentText)}
                 className="
                     px-4 py-2 
                     bg-blue-500/80 text-white 
