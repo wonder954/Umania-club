@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { toPng } from "html-to-image";
+import { Modal } from "@/components/common/Modal";
 
 type Props = {
     raceName: string;
@@ -182,9 +183,10 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
             </div>
 
             {/* Preview Modal */}
-            {imageUrl && typeof window !== 'undefined' && createPortal(
-                <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
-                    <div className="bg-white rounded-xl p-4 max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-auto">
+            {imageUrl && (
+                <Modal open={!!imageUrl} onClose={() => setImageUrl(null)}>
+                    <div className="flex flex-col gap-4 max-w-4xl w-full max-h-[90vh] overflow-auto">
+
                         <div className="flex justify-between items-center border-b pb-2">
                             <div className="flex-1">
                                 <h3 className="font-bold text-lg">シェア用画像生成完了！</h3>
@@ -200,8 +202,21 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
                             </button>
                         </div>
 
-                        <div className="bg-gray-100 p-2 rounded border flex justify-center">
-                            <img src={imageUrl} alt="Prediction OGP" className="max-w-full h-auto shadow-lg" />
+                        {/* ★ 透明感のあるプレビュー背景 */}
+                        <div className="
+                bg-white/40 
+                backdrop-blur-md 
+                p-4 
+                rounded-2xl 
+                border border-white/50 
+                shadow-xl 
+                flex justify-center
+            ">
+                            <img
+                                src={imageUrl}
+                                alt="Prediction OGP"
+                                className="max-w-full h-auto rounded-xl shadow-lg"
+                            />
                         </div>
 
                         <div className="flex justify-end gap-3 mt-2">
@@ -219,9 +234,9 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
                                 <span>Xに投稿する</span>
                             </button>
                         </div>
+
                     </div>
-                </div>,
-                document.body
+                </Modal>
             )}
         </div>
     );

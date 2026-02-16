@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CameraIcon } from "@heroicons/react/24/outline";
 import ProfileEditor from "@/components/mypage/ProfileEditor";
 import {
     getUserProfile,
@@ -134,9 +135,8 @@ export default function MyPage() {
                             "
                             onClick={profileModal.show}
                         >
-                            <span className="material-icons text-white text-3xl">
-                                photo_camera
-                            </span>
+                            <CameraIcon className="w-6 h-6 text-white" />
+                            photo_camera
                         </div>
                     </div>
 
@@ -177,6 +177,6 @@ export default function MyPage() {
                     onClose={profileModal.hide}
                 />
             </Modal>
-        </div>
+        </div >
     );
 }

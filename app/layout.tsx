@@ -19,13 +19,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ja">
-            <head>
-                <link
-                    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-                    rel="stylesheet"
-                />
-            </head>
-
             {/* 背景レイヤー全体 */}
             <body className={`${inter.className} min-h-screen`}>
                 <div className="relative w-full min-h-screen">

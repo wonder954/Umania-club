@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Modal } from "@/components/common/Modal";
-import { useModal } from "@/hooks/useModal";
 
 
 type ProfileEditorProps = {

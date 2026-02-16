@@ -6,48 +6,46 @@ import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/lib/holidays";
 import RaceSearchForm from "@/components/search/RaceSearchForm";
 import { FlagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { getRaceWeekKey, getPreviousWeekKey, formatDate } from "@/lib/dateUtils";
 
 export default async function Home() {
     const holidays = await fetchHolidays();
     const races = await getAllRaces();
 
-    // 現在の日付（JST）
+    // 今日（JST）
     const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    const today = `${yyyy}-${mm}-${dd}`;
+    const today = formatDate(now);
 
-    // 日付差を計算する関数（d1 - d2）
-    const diffDays = (d1: string, d2: string) => {
-        const t1 = new Date(d1).getTime();
-        const t2 = new Date(d2).getTime();
-        return Math.floor((t1 - t2) / (1000 * 60 * 60 * 24));
-    };
+    // 昨日
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
 
-    // 今後のレース（今日〜7日以内の未来）
+    // 昨日が属する開催週 → 今週
+    const thisWeekKey = getRaceWeekKey(formatDate(yesterday));
+
+    // 先週の開催週
+    const lastWeekKey = getPreviousWeekKey(thisWeekKey);
+
+    // 今週の出馬表（次の開催週）
     const upcomingRaces = races
-        .filter((r) => diffDays(r.date, today) >= 0 && diffDays(r.date, today) <= 7)
+        .filter((r) => {
+            const raceWeek = getRaceWeekKey(r.date);
+            return raceWeek > thisWeekKey;
+        })
         .sort((a, b) => a.date.localeCompare(b.date));
 
-    // 過去レース（カレンダー用）
-    const pastRaces = races
+    // 先週の結果（昨日の開催週）
+    const lastWeekRaces = races
+        .filter((r) => {
+            const raceWeek = getRaceWeekKey(r.date);
+            return raceWeek === lastWeekKey;
+        })
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+    // カレンダー用（過去レース）
+    const calendarRaces = races
         .filter((r) => r.date < today)
         .sort((a, b) => b.date.localeCompare(a.date));
-
-    const calendarRaces = pastRaces;
-
-    const latestPastDate = pastRaces[0]?.date;
-
-    const lastWeekRaces = latestPastDate
-        ? pastRaces.filter((r) => {
-            const d1 = new Date(latestPastDate);
-            const d2 = new Date(r.date);
-            const diffTime = Math.abs(d1.getTime() - d2.getTime());
-            const diff = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            return diff <= 2;
-        })
-        : [];
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-transparent">
@@ -119,7 +117,7 @@ export default async function Home() {
                 </div>
 
                 {/* 今週の重賞レース */}
-                <section className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
+                <section id="upcoming" className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
                     <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/horse-icon.png" alt="" className="w-8 h-8" />
                         今週の重賞レース
