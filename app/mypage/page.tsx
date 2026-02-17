@@ -1,9 +1,10 @@
 "use client";
 
+import { updateUserCache } from "@/lib/userCache";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CameraIcon } from "@heroicons/react/24/outline";
+import { CameraIcon, PencilIcon } from "@heroicons/react/24/outline";
 import ProfileEditor from "@/components/mypage/ProfileEditor";
 import {
     getUserProfile,
@@ -14,9 +15,7 @@ import {
     updateUserFavoriteHorse,
 } from "@/lib/user";
 import { uploadUserIcon } from "@/lib/userIcon";
-import { PencilIcon } from "@heroicons/react/24/outline";
 
-// ★ これが必要！
 import { Modal } from "@/components/common/Modal";
 import { useModal } from "@/hooks/useModal";
 
@@ -26,7 +25,6 @@ export default function MyPage() {
 
     const [profile, setProfile] = useState<any>(null);
 
-    // ★ editing を useModal に置き換える
     const profileModal = useModal();
 
     const [name, setName] = useState("");
@@ -48,17 +46,23 @@ export default function MyPage() {
         }
     }, [user]);
 
+    // ★ 写真を選択したとき（icon に統一）
     const handleSelectPhoto = async (url: string): Promise<void> => {
         if (!user) return;
         await updateUserPhoto(user.uid, url);
         await updateAuthUserPhoto(url);
         await reloadUser();
-        setProfile({ ...profile, iconUrl: url });
+        setProfile({ ...profile, icon: url });
+
+        // ★ userCache を更新
+        updateUserCache(user.uid, { ...profile, icon: url });
     };
 
+    // ★ 写真をアップロードしたとき（icon に統一）
     const handleUploadPhoto = async (file: File): Promise<void> => {
         if (!user) return;
-        const currentUrl = profile.iconUrl ?? "";
+
+        const currentUrl = profile.icon ?? "";
 
         const newUrl = await uploadUserIcon(user.uid, file, currentUrl);
 
@@ -66,7 +70,11 @@ export default function MyPage() {
         await updateAuthUserPhoto(newUrl);
         await reloadUser();
 
-        setProfile({ ...profile, iconUrl: newUrl });
+        setProfile({ ...profile, icon: newUrl });
+
+        // ★ userCache を更新
+        updateUserCache(user.uid, { ...profile, icon: newUrl });
+
     };
 
     const handleSaveAll = async () => {
@@ -92,23 +100,14 @@ export default function MyPage() {
 
     return (
         <div className="max-w-xl mx-auto mt-10">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-6 relative border border-white/40">
 
-            <div
-                className="
-                    bg-white/70 backdrop-blur-sm 
-                    rounded-2xl shadow-sm 
-                    p-6 relative 
-                    border border-white/40
-                "
-            >
                 {/* 編集ボタン */}
                 <button
                     onClick={profileModal.show}
-                    className="
-                        absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5
+                    className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5
                         bg-white/70 backdrop-blur-sm text-slate-800 text-sm rounded-full
-                        hover:bg-white/90 hover:shadow-sm transition-all border border-white/40
-                    "
+                        hover:bg-white/90 hover:shadow-sm transition-all border border-white/40"
                 >
                     <PencilIcon className="w-4 h-4 text-slate-600" />
                     編集
@@ -118,25 +117,18 @@ export default function MyPage() {
                 <div className="flex items-center gap-4 mb-6">
                     <div className="relative group">
                         <img
-                            src={profile.iconUrl ?? "/profile-icons/default1.png"}
+                            src={profile.icon ?? "/profile-icons/default1.png"}
                             alt="user icon"
-                            className="
-                                w-20 h-20 rounded-full object-cover 
-                                border border-white/60 shadow-sm 
-                                transition-transform group-hover:scale-105
-                            "
+                            className="w-20 h-20 rounded-full object-cover border border-white/60 shadow-sm transition-transform group-hover:scale-105"
                         />
 
                         <div
-                            className="
-                                absolute inset-0 bg-slate-900/30 rounded-full opacity-0 
+                            className="absolute inset-0 bg-slate-900/30 rounded-full opacity-0 
                                 group-hover:opacity-100 flex items-center justify-center 
-                                transition-opacity cursor-pointer
-                            "
+                                transition-opacity cursor-pointer"
                             onClick={profileModal.show}
                         >
                             <CameraIcon className="w-6 h-6 text-white" />
-                            photo_camera
                         </div>
                     </div>
 
@@ -166,7 +158,7 @@ export default function MyPage() {
             {/* 編集モーダル */}
             <Modal open={profileModal.open} onClose={profileModal.hide}>
                 <ProfileEditor
-                    currentPhoto={profile.iconUrl}
+                    currentPhoto={profile.icon}
                     name={name}
                     favoriteHorse={favoriteHorse}
                     onChangeName={setName}
@@ -177,6 +169,6 @@ export default function MyPage() {
                     onClose={profileModal.hide}
                 />
             </Modal>
-        </div >
+        </div>
     );
 }

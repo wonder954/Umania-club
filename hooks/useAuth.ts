@@ -31,6 +31,7 @@ export function useAuth() {
                     await saveUser({
                         uid: currentUser.uid,
                         name: currentUser.displayName || "Anonymous",
+                        icon: currentUser.photoURL || "/profile-icons/default1.png", // ★ ここが重要
                         provider: currentUser.isAnonymous ? "anonymous" : "google",
                         createdAt: Timestamp.now()
                     });

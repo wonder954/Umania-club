@@ -1,36 +1,78 @@
+import { User } from "firebase/auth";
 import { Comment } from "./types";
 import CommentItem from "./CommentItem";
 
 type Props = {
     comments?: Comment[];
-    currentUserUid?: string;
+    user: User | null;
     handleDeleteComment: (commentId: string) => void;
 
-    // ★ 追加
     raceId: string;
     postId: string;
+
+    replyTarget: string | null;
+    setReplyTarget: (id: string | null) => void;
+    replyText: string;
+    setReplyText: (text: string) => void;
+    handleAddReply: (text: string, parentId: string) => void;
 };
 
 export default function PostCommentList({
     comments,
-    currentUserUid,
+    user,
     handleDeleteComment,
     raceId,
     postId,
+    replyTarget,
+    setReplyTarget,
+    replyText,
+    setReplyText,
+    handleAddReply,
 }: Props) {
     if (!comments || comments.length === 0) return null;
 
+    // 親コメントと返信コメントを分離
+    const parents = comments.filter(c => !c.parentId);
+    const replies = comments.filter(c => c.parentId);
+
+    const getReplies = (parentId: string) =>
+        replies.filter(r => r.parentId === parentId);
+
     return (
         <>
-            {comments.map((comment) => (
-                <CommentItem
-                    key={comment.id}
-                    comment={comment}
-                    raceId={raceId}   // ★ 渡せるようになる
-                    postId={postId}   // ★ 渡せるようになる
-                    currentUserUid={currentUserUid}
-                    handleDeleteComment={handleDeleteComment}
-                />
+            {parents.map(parent => (
+                <div key={parent.id}>
+                    <CommentItem
+                        comment={parent}
+                        raceId={raceId}
+                        postId={postId}
+                        user={user}
+                        handleDeleteComment={handleDeleteComment}
+                        replyTarget={replyTarget}
+                        setReplyTarget={setReplyTarget}
+                        replyText={replyText}
+                        setReplyText={setReplyText}
+                        handleAddReply={handleAddReply}
+                    />
+
+                    {/* 返信コメント */}
+                    {getReplies(parent.id).map(reply => (
+                        <div key={reply.id} className="ml-10">
+                            <CommentItem
+                                comment={reply}
+                                raceId={raceId}
+                                postId={postId}
+                                user={user}
+                                handleDeleteComment={handleDeleteComment}
+                                replyTarget={replyTarget}
+                                setReplyTarget={setReplyTarget}
+                                replyText={replyText}
+                                setReplyText={setReplyText}
+                                handleAddReply={handleAddReply}
+                            />
+                        </div>
+                    ))}
+                </div>
             ))}
         </>
     );

@@ -17,12 +17,12 @@ export async function uploadUserIcon(uid: string, file: File, currentIconUrl: st
     // 4. 新しいURLを取得
     const newUrl = await getDownloadURL(fileRef);
 
-    // 5. Firestore を更新
+    // 5. Firestore を更新（icon に統一）
     const userRef = doc(db, "users", uid);
-    await updateDoc(userRef, { iconUrl: newUrl });
+    await updateDoc(userRef, { icon: newUrl });
 
     // 6. 古いアイコンを削除（デフォルト以外）
-    if (!isDefaultIcon) {
+    if (!isDefaultIcon && currentIconUrl) {
         try {
             const oldRef = ref(storage, currentIconUrl);
             await deleteObject(oldRef);

@@ -20,6 +20,7 @@ import {
 export type UserProfile = {
     uid: string;
     name: string | null;
+    icon: string | null;
     provider: "anonymous" | "google";
     createdAt: Timestamp;
 };
@@ -29,7 +30,13 @@ export async function saveUser(user: UserProfile) {
     const snap = await getDoc(userRef);
 
     if (!snap.exists()) {
-        await setDoc(userRef, user);
+        await setDoc(userRef, {
+            uid: user.uid,
+            name: user.name ?? "名無し",
+            icon: user.icon ?? "/profile-icons/default1.png", // ★ 追加
+            provider: user.provider,
+            createdAt: Timestamp.now()
+        });
     }
 }
 
@@ -37,11 +44,13 @@ export async function createPost(raceId: string, postData: any) {
     const postsRef = collection(db, "races", raceId, "posts");
 
     await addDoc(postsRef, {
-        ...postData,
         authorId: postData.authorId,
         visibility: postData.visibility ?? "public",
-        authorName: postData.authorName,
-        authorIcon: postData.authorIcon,
+        prediction: postData.prediction ?? {},
+        bets: postData.bets ?? [],
+        comment: postData.comment ?? "",
+        raceId: postData.raceId,
+        raceName: postData.raceName,
         createdAt: Timestamp.now()
     });
 }
@@ -61,8 +70,11 @@ export async function deletePost(raceId: string, postId: string) {
 
 export async function addComment(raceId: string, postId: string, commentData: any) {
     const commentsRef = collection(db, "races", raceId, "posts", postId, "comments");
+
     await addDoc(commentsRef, {
-        ...commentData,
+        text: commentData.text,
+        authorId: commentData.authorId,
+        parentId: commentData.parentId ?? null,
         createdAt: Timestamp.now()
     });
 }
@@ -120,4 +132,9 @@ export async function toggleCommentLike(
     } else {
         await updateDoc(ref, { likes: arrayUnion(userId) });
     }
+}
+
+export async function updateUserProfile(uid: string, data: any) {
+    const ref = doc(db, "users", uid);
+    await updateDoc(ref, data);
 }

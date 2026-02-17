@@ -70,13 +70,9 @@ export default function PredictionForm({
 
         const current = auth.currentUser;
 
-        const snap = await getDoc(doc(db, "users", current.uid));
-        const profile = snap.data();
-
+        // A方式 → 投稿には authorId だけ保存
         const postData = {
             authorId: current.uid,
-            authorName: profile?.name ?? "名無し",
-            authorIcon: profile?.iconUrl ?? "/profile-icons/default1.png",
             visibility: "public",
             prediction,
             bets,

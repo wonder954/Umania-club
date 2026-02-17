@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function PostPrediction({ post, race, vertical = false }: Props) {
-    if (Object.keys(post.prediction).length === 0) return null;
+    if (!post.prediction || Object.keys(post.prediction).length === 0) return null;
 
     // ★ 並び順の処理はそのまま
     const items = Object.entries(post.prediction)

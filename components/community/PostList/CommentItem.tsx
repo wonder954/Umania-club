@@ -1,30 +1,44 @@
 import { useState } from "react";
+import { User } from "firebase/auth";
 import { toggleCommentLike } from "@/lib/db";
 import CommentHeader from "./CommentHeader";
 import { Comment } from "./types";
+import PostCommentForm from "./PostCommentForm";
 
 type Props = {
     comment: Comment;
     raceId: string;
     postId: string;
-    currentUserUid?: string;
+    user: User | null;
     handleDeleteComment: (commentId: string) => void;
+
+    replyTarget: string | null;
+    setReplyTarget: (id: string | null) => void;
+    replyText: string;
+    setReplyText: (text: string) => void;
+    handleAddReply: (text: string, parentId: string) => void;
 };
 
 export default function CommentItem({
     comment,
     raceId,
     postId,
-    currentUserUid,
+    user,
     handleDeleteComment,
+
+    replyTarget,
+    setReplyTarget,
+    replyText,
+    setReplyText,
+    handleAddReply,
 }: Props) {
     const [animateLike, setAnimateLike] = useState(false);
     const [floatHearts, setFloatHearts] = useState<number[]>([]);
 
     const handleLike = () => {
-        if (!currentUserUid) return;
+        if (!user) return;
 
-        toggleCommentLike(raceId, postId, comment.id, currentUserUid);
+        toggleCommentLike(raceId, postId, comment.id, user.uid);
 
         setAnimateLike(true);
         setTimeout(() => setAnimateLike(false), 300);
@@ -41,7 +55,7 @@ export default function CommentItem({
 
             <CommentHeader
                 comment={comment}
-                currentUserUid={currentUserUid}
+                currentUserUid={user?.uid}
                 handleDeleteComment={handleDeleteComment}
             />
 
@@ -55,7 +69,7 @@ export default function CommentItem({
                     className={`flex items-center gap-1 transition ${animateLike ? "heart-pop" : ""
                         }`}
                 >
-                    <span>{comment.likes?.includes(currentUserUid ?? "") ? "❤️" : "🤍"}</span>
+                    <span>{comment.likes?.includes(user?.uid ?? "") ? "❤️" : "🤍"}</span>
                     <span>{comment.likes?.length ?? 0}</span>
                 </button>
 
@@ -65,6 +79,26 @@ export default function CommentItem({
                     </span>
                 ))}
             </div>
+
+            {/* 返信ボタン */}
+            <button
+                onClick={() => setReplyTarget(comment.id)}
+                className="text-xs text-blue-500 ml-8"
+            >
+                返信
+            </button>
+
+            {/* 返信フォーム */}
+            {replyTarget === comment.id && user && (
+                <div className="ml-10 mt-2">
+                    <PostCommentForm
+                        user={user}
+                        commentText={replyText}
+                        setCommentText={setReplyText}
+                        handleAddComment={(text) => handleAddReply(text, comment.id)}
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -1,4 +1,8 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import { Comment } from "./types";
+import { getUserProfile } from "@/lib/userCache"; // ★ キャッシュを使う
 
 type Props = {
     comment: Comment;
@@ -7,19 +11,26 @@ type Props = {
 };
 
 export default function CommentHeader({ comment, currentUserUid, handleDeleteComment }: Props) {
+    const [profile, setProfile] = useState<any>(null);
+
+    // A方式 + キャッシュ
+    useEffect(() => {
+        getUserProfile(comment.authorId).then(setProfile);
+    }, [comment.authorId]);
+
     return (
         <div className="flex items-center gap-2 mb-1">
 
             {/* アイコン */}
             <img
-                src={comment.authorIcon ?? "/profile-icons/default1.png"}
+                src={profile?.icon ?? "/profile-icons/default1.png"}
                 alt="user icon"
                 className="w-6 h-6 rounded-full object-cover border shadow-sm"
             />
 
             {/* 名前 */}
             <div className="text-xs font-medium text-gray-800">
-                {comment.authorName ?? "名無し"}
+                {profile?.name ?? "名無し"}
             </div>
 
             {/* 投稿日時 */}

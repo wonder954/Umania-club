@@ -23,4 +23,5 @@ export type Comment = {
     text: string;
     createdAt: Timestamp;
     likes?: string[];
+    parentId?: string | null;
 };

@@ -11,7 +11,7 @@ import PostBets from "./PostBets";
 import PostComment from "./PostComment";
 import PostCommentList from "./PostCommentList";
 import PostCommentForm from "./PostCommentForm";
-import { togglePostLike } from "@/lib/db";
+import { togglePostLike, addComment } from "@/lib/db";
 
 type Props = {
     post: Post;
@@ -66,6 +66,24 @@ export default function PostCardPC(props: Props) {
         setTimeout(() => {
             setFloatHearts((prev) => prev.filter((h) => h !== id));
         }, 600);
+    };
+
+    const [replyTarget, setReplyTarget] = useState<string | null>(null);
+    const [replyText, setReplyText] = useState("");
+
+    const handleAddReply = async (text: string, parentId: string) => {
+        if (!user || !race) return;
+
+        await addComment(race.id, post.id, {
+            text,
+            authorId: user.uid,
+            authorName: user.displayName,
+            authorIcon: user.photoURL,
+            parentId
+        });
+
+        setReplyText("");
+        setReplyTarget(null);
     };
 
     return (
@@ -135,10 +153,16 @@ export default function PostCardPC(props: Props) {
                 <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-lg">
                     <PostCommentList
                         comments={comments}
-                        currentUserUid={user?.uid}
+                        user={user}
                         handleDeleteComment={handleDeleteComment}
                         raceId={race.id}
                         postId={post.id}
+
+                        replyTarget={replyTarget}
+                        setReplyTarget={setReplyTarget}
+                        replyText={replyText}
+                        setReplyText={setReplyText}
+                        handleAddReply={handleAddReply}
                     />
 
                     <PostCommentForm
