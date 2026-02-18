@@ -6,7 +6,7 @@ import { usePosts } from "@/hooks/usePosts";
 import { useComments } from "@/hooks/useComments";
 import { useCommentActions } from "@/hooks/useCommentActions";
 import { judgeHit } from "@/utils/race/judge";
-import PostCard from "./PostCard";
+import PostCard from "../post/PostCard";
 import type { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
 
@@ -17,7 +17,7 @@ type Props = {
 
 export default function PostList({ raceId, race }: Props) {
     const { user } = useAuth();   // ← これを追加
-    const { posts, loading } = usePosts(raceId);
+    const { posts, loading } = usePosts(raceId, user?.uid);
     const { comments } = useComments(raceId, posts);
     const { addComment, deleteComment } = useCommentActions(raceId);
 
@@ -129,6 +129,9 @@ export default function PostList({ raceId, race }: Props) {
                         }
                         postHit={postHit}
                         renderNumbers={renderNumbers}
+
+                        // 🔥 追加：グループ名を渡す
+                        groupName={post.groupName}
                     />
                 );
             })}

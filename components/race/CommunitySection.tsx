@@ -1,6 +1,6 @@
 "use client";
 
-import PostList from "@/components/community/PostList/index";
+import PostList from "@/components/community/list/PostList";
 import type { Race } from "@/lib/races";
 import Image from "next/image";
 

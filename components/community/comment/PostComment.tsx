@@ -1,6 +1,6 @@
 
 
-import { Post } from "./types";
+import { Post } from "../post/types";
 
 type Props = {
     post: Post;

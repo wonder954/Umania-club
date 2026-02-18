@@ -18,6 +18,7 @@ import { uploadUserIcon } from "@/lib/userIcon";
 
 import { Modal } from "@/components/common/Modal";
 import { useModal } from "@/hooks/useModal";
+import Link from "next/link";
 
 export default function MyPage() {
     const { user, loading, reloadUser } = useAuth();
@@ -152,6 +153,32 @@ export default function MyPage() {
 
                     <p className="text-sm text-slate-500">メールアドレス</p>
                     <p className="font-medium">{user.email}</p>
+                </div>
+                {/* グループ管理セクション */}
+                <div className="mt-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/40">
+                    <h2 className="text-lg font-semibold text-slate-800 mb-4">
+                        グループ管理
+                    </h2>
+
+                    <p className="text-slate-600 text-sm mb-4">
+                        あなたが所属しているグループの管理や、新しいグループの作成ができます。
+                    </p>
+
+                    <div className="flex gap-3">
+                        <Link
+                            href="/groups"
+                            className="px-4 py-2 bg-white/80 text-slate-700 rounded-xl border border-white/40 shadow-sm hover:bg-white transition"
+                        >
+                            グループ一覧へ
+                        </Link>
+
+                        <Link
+                            href="/groups/create"
+                            className="px-4 py-2 bg-blue-500 text-white rounded-xl shadow-sm hover:bg-blue-600 transition"
+                        >
+                            グループを作成
+                        </Link>
+                    </div>
                 </div>
             </div>
 

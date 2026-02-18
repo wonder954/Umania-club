@@ -1,5 +1,5 @@
 import { User } from "firebase/auth";
-import { Comment } from "./types";
+import { Comment } from "../post/types";
 import CommentItem from "./CommentItem";
 
 type Props = {

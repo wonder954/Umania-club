@@ -12,6 +12,9 @@ export type Post = {
     // 公開範囲（public / group / private）
     visibility: string;
 
+    // 🔥 追加：グループ名（usePosts が付与）
+    groupName?: string | null;
+
     // 予想内容（単勝・馬連などのテキスト）
     prediction: Record<string, string>;
 
@@ -31,6 +34,7 @@ export type Post = {
     // いいねしたユーザーID一覧
     likes: string[];
 };
+
 
 export type Comment = {
     id: string;

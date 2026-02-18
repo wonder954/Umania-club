@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
-import { Comment, Post } from "@/components/community/PostList/types";
+import { Comment, Post } from "@/components/community/post/types";
 
 export function useComments(raceId: string, posts: Post[]) {
     const [comments, setComments] = useState<Record<string, Comment[]>>({});

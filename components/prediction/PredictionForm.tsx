@@ -11,6 +11,7 @@ import PredictionSuccess from "./PredictionSuccess";
 import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useUserGroups } from "@/hooks/useUserGroups";
 
 type Props = {
     race: Race;
@@ -68,12 +69,24 @@ export default function PredictionForm({
             });
         }
 
+        // 🔥 グループ選択のガード
+        if (visibilityTab === "group" && !selectedGroupId) {
+            alert("グループを選択してください");
+            return;
+        }
+
         const current = auth.currentUser;
 
-        // A方式 → 投稿には authorId だけ保存
+        let finalVisibility = "public";
+        if (visibilityTab === "group" && selectedGroupId) {
+            finalVisibility = `group:${selectedGroupId}`;
+        }
+
         const postData = {
             authorId: current.uid,
-            visibility: "public",
+            authorName: current.displayName ?? "名無し",
+            authorIcon: current.photoURL ?? "/profile-icons/default1.png",
+            visibility: finalVisibility,
             prediction,
             bets,
             comment,
@@ -101,6 +114,10 @@ export default function PredictionForm({
         setComment("");
         onReset?.();
     };
+
+    const [visibilityTab, setVisibilityTab] = useState<"public" | "group">("public");
+    const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+    const { groups } = useUserGroups(user?.uid);
 
     if (isSuccess) {
         return (
@@ -188,6 +205,61 @@ export default function PredictionForm({
                     <div className="text-right text-xs text-slate-400 mt-1">
                         {comment.length} / 150
                     </div>
+                </section>
+
+                {/* Section: Visibility (公開範囲) */}
+                <section>
+                    <h3 className="text-lg font-bold border-l-4 border-purple-400 pl-3 mb-4 text-slate-800">
+                        公開範囲
+                    </h3>
+
+                    {/* 🔥 LINE風タブ */}
+                    <div className="flex border-b mb-3">
+                        <button
+                            onClick={() => {
+                                setVisibilityTab("public");
+                                setSelectedGroupId(null);
+                            }}
+                            className={`flex-1 py-2 text-center ${visibilityTab === "public"
+                                ? "border-b-2 border-blue-500 text-blue-600 font-bold"
+                                : "text-gray-500"
+                                }`}
+                        >
+                            公開
+                        </button>
+
+                        <button
+                            onClick={() => setVisibilityTab("group")}
+                            className={`flex-1 py-2 text-center ${visibilityTab === "group"
+                                ? "border-b-2 border-blue-500 text-blue-600 font-bold"
+                                : "text-gray-500"
+                                }`}
+                        >
+                            グループ
+                        </button>
+                    </div>
+
+                    {/* 🔥 グループ一覧 */}
+                    {visibilityTab === "group" && (
+                        <div className="space-y-2 mb-4">
+                            {groups.length === 0 && (
+                                <p className="text-sm text-gray-500">参加中のグループがありません</p>
+                            )}
+
+                            {groups.map((g) => (
+                                <button
+                                    key={g.id}
+                                    onClick={() => setSelectedGroupId(g.id)}
+                                    className={`w-full text-left px-3 py-2 rounded border ${selectedGroupId === g.id
+                                        ? "border-blue-500 bg-blue-50 text-blue-600"
+                                        : "border-gray-300 text-gray-700"
+                                        }`}
+                                >
+                                    {g.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </section>
 
                 {/* Submit */}

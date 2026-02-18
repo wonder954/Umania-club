@@ -12,6 +12,7 @@ import {
     addDoc,
     deleteDoc,
     Timestamp,
+    serverTimestamp,
     updateDoc,
     arrayUnion,
     arrayRemove
@@ -41,9 +42,9 @@ export async function saveUser(user: UserProfile) {
 }
 
 export async function createPost(raceId: string, postData: any) {
+    // 1. races/{raceId}/posts に保存（投稿IDを取得）
     const postsRef = collection(db, "races", raceId, "posts");
-
-    await addDoc(postsRef, {
+    const newPostRef = await addDoc(postsRef, {
         authorId: postData.authorId,
         visibility: postData.visibility ?? "public",
         prediction: postData.prediction ?? {},
@@ -53,6 +54,26 @@ export async function createPost(raceId: string, postData: any) {
         raceName: postData.raceName,
         createdAt: Timestamp.now()
     });
+
+    const postId = newPostRef.id;
+
+    // 2. posts_all/{postId} にも保存（横断検索用）
+    const allRef = doc(db, "posts_all", postId);
+    await setDoc(allRef, {
+        id: postId,
+        authorId: postData.authorId,
+        authorName: postData.authorName,
+        authorIcon: postData.authorIcon,
+        visibility: postData.visibility ?? "public",
+        prediction: postData.prediction ?? {},
+        bets: postData.bets ?? [],
+        comment: postData.comment ?? "",
+        raceId: postData.raceId,
+        raceName: postData.raceName,
+        createdAt: Timestamp.now()
+    });
+
+    return postId;
 }
 
 export async function getRacePosts(raceId: string) {
@@ -64,8 +85,13 @@ export async function getRacePosts(raceId: string) {
 }
 
 export async function deletePost(raceId: string, postId: string) {
+    // races/{raceId}/posts/{postId}
     const postRef = doc(db, "races", raceId, "posts", postId);
     await deleteDoc(postRef);
+
+    // posts_all/{postId}
+    const allRef = doc(db, "posts_all", postId);
+    await deleteDoc(allRef);
 }
 
 export async function addComment(raceId: string, postId: string, commentData: any) {
@@ -137,4 +163,15 @@ export async function toggleCommentLike(
 export async function updateUserProfile(uid: string, data: any) {
     const ref = doc(db, "users", uid);
     await updateDoc(ref, data);
+}
+
+export async function createGroup(name: string, ownerId: string) {
+    const ref = await addDoc(collection(db, "groups"), {
+        name,
+        ownerId,
+        members: [ownerId],
+        createdAt: serverTimestamp(),
+    });
+
+    return ref.id;
 }

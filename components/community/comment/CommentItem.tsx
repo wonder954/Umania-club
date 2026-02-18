@@ -2,7 +2,7 @@ import { useState } from "react";
 import { User } from "firebase/auth";
 import { toggleCommentLike } from "@/lib/db";
 import CommentHeader from "./CommentHeader";
-import { Comment } from "./types";
+import { Comment } from "../post/types";
 import PostCommentForm from "./PostCommentForm";
 
 type Props = {

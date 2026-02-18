@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { Comment } from "./types";
-import { getUserProfile } from "@/lib/userCache"; // ★ キャッシュを使う
+import { Comment } from "@/components/community/post/types";
+import { getUserProfile } from "@/lib/userCache";
+import Link from "next/link"; // ← 追加
 
 type Props = {
     comment: Comment;
@@ -13,7 +14,7 @@ type Props = {
 export default function CommentHeader({ comment, currentUserUid, handleDeleteComment }: Props) {
     const [profile, setProfile] = useState<any>(null);
 
-    // A方式 + キャッシュ
+    // 投稿者プロフィール（キャッシュ使用）
     useEffect(() => {
         getUserProfile(comment.authorId).then(setProfile);
     }, [comment.authorId]);
@@ -21,17 +22,18 @@ export default function CommentHeader({ comment, currentUserUid, handleDeleteCom
     return (
         <div className="flex items-center gap-2 mb-1">
 
-            {/* アイコン */}
-            <img
-                src={profile?.icon ?? "/profile-icons/default1.png"}
-                alt="user icon"
-                className="w-6 h-6 rounded-full object-cover border shadow-sm"
-            />
+            {/* 🔗 アイコン＋名前をまとめてプロフィールページへ */}
+            <Link href={`/users/${comment.authorId}`} className="flex items-center gap-2">
+                <img
+                    src={profile?.icon ?? "/profile-icons/default1.png"}
+                    alt="user icon"
+                    className="w-6 h-6 rounded-full object-cover border shadow-sm"
+                />
 
-            {/* 名前 */}
-            <div className="text-xs font-medium text-gray-800">
-                {profile?.name ?? "名無し"}
-            </div>
+                <div className="text-xs font-medium text-gray-800">
+                    {profile?.name ?? "名無し"}
+                </div>
+            </Link>
 
             {/* 投稿日時 */}
             <div className="text-[10px] text-gray-400 ml-auto">
