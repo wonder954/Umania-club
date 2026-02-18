@@ -14,7 +14,22 @@ export function usePosts(raceId: string) {
         const q = query(ref, orderBy("createdAt", "desc"));
 
         const unsub = onSnapshot(q, (snap) => {
-            setPosts(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Post[]);
+            const list = snap.docs.map((d) => {
+                const data = d.data();
+
+                return {
+                    id: d.id,
+                    ...data,
+
+                    // 🔥 不足している可能性があるフィールドを補完
+                    bets: Array.isArray(data.bets) ? data.bets : [],
+                    likes: Array.isArray(data.likes) ? data.likes : [],
+                    prediction: data.prediction ?? {},
+                    comment: data.comment ?? "",
+                } as Post;
+            });
+
+            setPosts(list);
             setLoading(false);
         });
 

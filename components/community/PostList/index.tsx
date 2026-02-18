@@ -93,7 +93,7 @@ export default function PostList({ raceId, race }: Props) {
         <div className="relative w-full min-h-fit space-y-6">
             {posts.map((post) => {
                 const postHit = race?.result
-                    ? post.bets
+                    ? (post.bets ?? [])
                         .map((bet) => judgeHit(bet, race.result!))
                         .filter((r) => r.isHit)
                         .reduce(
@@ -120,7 +120,10 @@ export default function PostList({ raceId, race }: Props) {
                         setCommentText={(text) =>
                             setCommentText((prev) => ({ ...prev, [post.id]: text }))
                         }
-                        handleAddComment={(text) => addComment(post.id, text)}
+                        handleAddComment={(text) => {
+                            addComment(post.id, text);
+                            setCommentText((prev) => ({ ...prev, [post.id]: "" }));
+                        }}
                         handleDeleteComment={(commentId) =>
                             deleteComment(post.id, commentId)
                         }

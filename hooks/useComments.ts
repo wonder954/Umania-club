@@ -7,24 +7,37 @@ import { Comment, Post } from "@/components/community/PostList/types";
 
 export function useComments(raceId: string, posts: Post[]) {
     const [comments, setComments] = useState<Record<string, Comment[]>>({});
+    const postIds = posts.map((p) => p.id).join(",");
 
     useEffect(() => {
         if (posts.length === 0) return;
 
         const unsubscribes = posts.map((post) => {
+            if (!post.id) return () => { };
+
             const ref = collection(db, "races", raceId, "posts", post.id, "comments");
             const q = query(ref);
 
             return onSnapshot(q, (snap) => {
+                const list = snap.docs.map((d) => {
+                    const data = d.data();
+                    return {
+                        id: d.id,
+                        ...data,
+                        likes: Array.isArray(data.likes) ? data.likes : [],
+                        parentId: data.parentId ?? null,
+                    } as Comment;
+                });
+
                 setComments((prev) => ({
                     ...prev,
-                    [post.id]: snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Comment[],
+                    [post.id]: list,
                 }));
             });
         });
 
-        return () => unsubscribes.forEach((u) => u());
-    }, [raceId, posts.length]);
+        return () => unsubscribes.forEach((u) => u && u());
+    }, [raceId, postIds]);
 
     return { comments };
 }

@@ -31,49 +31,39 @@ export default function PostCommentList({
 }: Props) {
     if (!comments || comments.length === 0) return null;
 
-    // 親コメントと返信コメントを分離
-    const parents = comments.filter(c => !c.parentId);
-    const replies = comments.filter(c => c.parentId);
+    // parentId が null のものが root コメント
+    const rootComments = comments.filter(c => !c.parentId);
 
+    // 再帰的に子コメントを取得
     const getReplies = (parentId: string) =>
-        replies.filter(r => r.parentId === parentId);
+        comments.filter(c => c.parentId === parentId);
 
-    return (
-        <>
-            {parents.map(parent => (
-                <div key={parent.id}>
-                    <CommentItem
-                        comment={parent}
-                        raceId={raceId}
-                        postId={postId}
-                        user={user}
-                        handleDeleteComment={handleDeleteComment}
-                        replyTarget={replyTarget}
-                        setReplyTarget={setReplyTarget}
-                        replyText={replyText}
-                        setReplyText={setReplyText}
-                        handleAddReply={handleAddReply}
-                    />
+    // 再帰描画コンポーネント
+    const renderCommentTree = (comment: Comment, depth = 0) => {
+        const children = getReplies(comment.id);
 
-                    {/* 返信コメント */}
-                    {getReplies(parent.id).map(reply => (
-                        <div key={reply.id} className="ml-10">
-                            <CommentItem
-                                comment={reply}
-                                raceId={raceId}
-                                postId={postId}
-                                user={user}
-                                handleDeleteComment={handleDeleteComment}
-                                replyTarget={replyTarget}
-                                setReplyTarget={setReplyTarget}
-                                replyText={replyText}
-                                setReplyText={setReplyText}
-                                handleAddReply={handleAddReply}
-                            />
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </>
-    );
+        return (
+            <div
+                key={comment.id}
+                className={depth === 0 ? "" : depth === 1 ? "ml-10" : ""} // ★ここがポイント
+            >
+                <CommentItem
+                    comment={comment}
+                    raceId={raceId}
+                    postId={postId}
+                    user={user}
+                    handleDeleteComment={handleDeleteComment}
+                    replyTarget={replyTarget}
+                    setReplyTarget={setReplyTarget}
+                    replyText={replyText}
+                    setReplyText={setReplyText}
+                    handleAddReply={handleAddReply}
+                />
+
+                {children.map((child) => renderCommentTree(child, depth + 1))}
+            </div>
+        );
+    };
+
+    return <>{rootComments.map(c => renderCommentTree(c))}</>;
 }

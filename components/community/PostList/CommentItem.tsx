@@ -50,47 +50,61 @@ export default function CommentItem({
         }, 600);
     };
 
-    return (
-        <div className="relative bg-white p-3 rounded border border-gray-200">
+    const isLiked = comment.likes?.includes(user?.uid ?? "");
+    const isReplying = replyTarget === comment.id;
 
+    return (
+        <div className="relative bg-white px-4 py-4 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+
+            {/* ヘッダー（アイコン・名前・削除ボタン） */}
             <CommentHeader
                 comment={comment}
                 currentUserUid={user?.uid}
                 handleDeleteComment={handleDeleteComment}
             />
 
-            <p className="text-sm text-gray-800 whitespace-pre-line ml-8">
+            {/* 本文 */}
+            <p className="text-sm text-gray-700 whitespace-pre-line ml-9 mt-2 leading-relaxed">
                 {comment.text}
             </p>
 
-            <div className="mt-1 ml-8 flex items-center gap-2 text-xs text-gray-500 relative">
+            {/* いいね・返信ボタン */}
+            <div className="mt-2 ml-9 flex items-center gap-4 text-xs text-gray-400 relative">
+
+                {/* いいね */}
                 <button
                     onClick={handleLike}
-                    className={`flex items-center gap-1 transition ${animateLike ? "heart-pop" : ""
-                        }`}
+                    className={`flex items-center gap-1 transition-transform duration-150 active:scale-90 ${animateLike ? "heart-pop" : ""}`}
                 >
-                    <span>{comment.likes?.includes(user?.uid ?? "") ? "❤️" : "🤍"}</span>
-                    <span>{comment.likes?.length ?? 0}</span>
+                    <span className="text-sm">{isLiked ? "❤️" : "🤍"}</span>
+                    <span className={`font-medium tabular-nums ${isLiked ? "text-red-400" : ""}`}>
+                        {comment.likes?.length ?? 0}
+                    </span>
                 </button>
 
+                {/* 返信 */}
+                <button
+                    onClick={() => setReplyTarget(isReplying ? null : comment.id)}
+                    className={`font-medium transition-colors duration-150 ${isReplying ? "text-blue-600" : "text-gray-400 hover:text-blue-500"
+                        }`}
+                >
+                    {isReplying ? "キャンセル" : "返信"}
+                </button>
+
+                {/* 浮かぶハート */}
                 {floatHearts.map((id) => (
-                    <span key={id} className="heart-float text-red-400 absolute left-0 top-0">
+                    <span
+                        key={id}
+                        className="heart-float text-red-400 absolute left-0 top-0 pointer-events-none select-none"
+                    >
                         ❤️
                     </span>
                 ))}
             </div>
 
-            {/* 返信ボタン */}
-            <button
-                onClick={() => setReplyTarget(comment.id)}
-                className="text-xs text-blue-500 ml-8"
-            >
-                返信
-            </button>
-
             {/* 返信フォーム */}
-            {replyTarget === comment.id && user && (
-                <div className="ml-10 mt-2">
+            {isReplying && user && (
+                <div className="ml-9 mt-3 pl-4 border-l-2 border-blue-100">
                     <PostCommentForm
                         user={user}
                         commentText={replyText}
