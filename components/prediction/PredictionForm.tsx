@@ -11,12 +11,13 @@ import PredictionSuccess from "./PredictionSuccess";
 import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useUserGroups } from "@/hooks/useUserGroups";
+import { useUserGroups } from "@/hooks/useUserGroups"; import type { Mark } from "@/types/mark";
+
 
 type Props = {
     race: Race;
-    prediction: Record<string, string>;
-    setPrediction: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+    prediction: Record<string, Mark>;
+    setPrediction: React.Dispatch<React.SetStateAction<Record<string, Mark>>>;
     bets: Bet[];
     setBets: React.Dispatch<React.SetStateAction<Bet[]>>;
     comment: string;

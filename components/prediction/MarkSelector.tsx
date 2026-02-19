@@ -1,4 +1,6 @@
-const MARKS = [
+import type { Mark } from "@/types/mark";
+
+const MARKS: { label: Mark; color: string }[] = [
     { label: "◎", color: "text-red-600" },
     { label: "〇", color: "text-blue-600" }, // 入力は「〇」（漢数字）
     { label: "▲", color: "text-green-600" },
@@ -7,10 +9,10 @@ const MARKS = [
 
 // 排他制御ロジックを分離
 export function updatePrediction(
-    currentPrediction: Record<string, string>,
+    currentPrediction: Record<string, Mark>,
     targetKey: string,
-    newMark: string
-): Record<string, string> {
+    newMark: Mark
+): Record<string, Mark> {
     const newVal = { ...currentPrediction };
 
     // 1. 同じ印を押した → 解除
@@ -42,17 +44,15 @@ export function updatePrediction(
 }
 
 type Props = {
-    prediction: Record<string, string>;
+    prediction: Record<string, Mark>;
     targetKey: string;
-    onChange: (newPrediction: Record<string, string>) => void;
+    onChange: (newPrediction: Record<string, Mark>) => void;
 };
 
 export default function MarkSelector({ prediction, targetKey, onChange }: Props) {
-    let currentMark = prediction[targetKey];
-    // 互換性対応: 記号の「○」が保存されている場合は漢数字の「〇」として扱う
-    if (currentMark === "○") currentMark = "〇";
+    const currentMark = prediction[targetKey];
 
-    const handleSelect = (mark: string) => {
+    const handleSelect = (mark: Mark) => {
         const newPrediction = updatePrediction(prediction, targetKey, mark);
         onChange(newPrediction);
     };

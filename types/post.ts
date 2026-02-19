@@ -1,3 +1,5 @@
+import type { Mark } from "./mark";
+
 export interface Post {
     id: string;                 // Firestore のドキュメントID
     authorId: string;           // 投稿者UID
@@ -9,7 +11,7 @@ export interface Post {
 
     visibility: string;         // "public" or "group:{id}"
 
-    prediction: Record<string, string>; // { "馬名": "◎" } など
+    prediction: Record<string, Mark>;　// { "馬名": "◎" } など
     bets: any[];                // 買い目（型を後で細かくしてもOK）
 
     comment?: string;           // コメント（任意）

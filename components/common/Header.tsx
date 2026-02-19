@@ -31,7 +31,7 @@ export default function Header() {
             </Link>
 
             {/* 右側：ナビゲーション */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
 
                 {/* ローディング中 */}
                 {loading && (
@@ -64,17 +64,25 @@ export default function Header() {
                 {/* ログイン済み */}
                 {!loading && user && (
                     <>
-                        {/* 🔗 ナビゲーションリンク */}
-                        <nav className="flex items-center gap-4 text-slate-700 font-medium">
-                            <Link href="/groups" className="hover:opacity-70 transition">
-                                グループ一覧
-                            </Link>
-                            <Link href="/groups/create" className="hover:opacity-70 transition">
-                                グループ作成
-                            </Link>
-                        </nav>
+                        {/* 📁 グループ（スマホは短いラベル） */}
+                        <Link
+                            href="/groups"
+                            className="
+                                flex items-center gap-1
+                                px-3 py-1.5
+                                bg-white/70 backdrop-blur-sm
+                                rounded-lg shadow-sm border border-white/40
+                                text-slate-700 font-medium
+                                hover:bg-white/90 hover:shadow-md hover:-translate-y-0.5
+                                transition-all
+                            "
+                        >
+                            <span className="text-lg">📁</span>
+                            <span className="hidden sm:inline">グループ一覧</span>
+                            <span className="sm:hidden text-sm">グループ</span>
+                        </Link>
 
-                        {/* アイコン＋名前 → マイページへ */}
+                        {/* ユーザーアイコン（スマホは名前非表示） */}
                         <Link href="/mypage" className="flex items-center gap-2 group">
                             <img
                                 src={user.photoURL ?? "/default-user.png"}
@@ -87,15 +95,15 @@ export default function Header() {
                                     transition-transform
                                 "
                             />
-                            <span className="font-medium text-slate-700 group-hover:opacity-80 transition-opacity">
+                            <span className="hidden md:inline font-medium text-slate-700 group-hover:opacity-80 transition-opacity">
                                 {user.displayName}
                             </span>
                         </Link>
-
-                        {/* ログアウト */}
-                        <LogoutButton />
                     </>
                 )}
+
+                {/* ログアウトボタン（スマホはアイコンのみ） */}
+                <LogoutButton />
             </div>
         </header>
     );

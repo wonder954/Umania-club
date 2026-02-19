@@ -43,7 +43,7 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
         window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
     };
 
-    const MARK_ORDER: Record<string, number> = { "◎": 1, "○": 2, "〇": 2, "▲": 3, "△": 4 };
+    const MARK_ORDER: Record<string, number> = { "◎": 1, "〇": 2, "▲": 3, "△": 4 };
 
     const markedHorses = Object.entries(prediction)
         .map(([key, mark]) => {
@@ -111,7 +111,7 @@ export default function ShareImageGenerator({ raceName, courseText, grade, date,
                             {markedHorses.length > 0 ? (
                                 <div className={`w-full ${isCompact ? "grid grid-cols-2 gap-x-6 gap-y-6 py-6" : "flex flex-col items-center gap-y-1 py-6"}`}>
                                     {markedHorses.map((h) => {
-                                        const mark = h.mark === "○" ? "〇" : h.mark;
+                                        const mark = h.mark;
 
                                         return (
                                             <div key={h.name} className={`flex items-center ${isCompact ? "w-full" : "w-[560px]"}`}>

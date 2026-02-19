@@ -29,7 +29,6 @@ export default function PostPrediction({ post, race, vertical = false }: Props) 
             const order: Record<string, number> = {
                 "◎": 1,
                 "〇": 2,
-                "○": 2,
                 "▲": 3,
                 "△": 4,
             };
@@ -56,7 +55,7 @@ export default function PostPrediction({ post, race, vertical = false }: Props) 
                     }
                 >
                     <span className="font-bold mr-1.5 text-lg">
-                        {item.mark === "○" ? "〇" : item.mark}
+                        {item.mark}
                     </span>
 
                     {item.number && (
