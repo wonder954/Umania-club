@@ -49,8 +49,9 @@ export async function createPost(raceId: string, postData: any) {
         visibility: postData.visibility ?? "public",
         prediction: postData.prediction ?? {},
         bets: postData.bets ?? [],
+        likes: [],
         comment: postData.comment ?? "",
-        raceId: postData.raceId,
+        raceId: raceId,
         raceName: postData.raceName,
         createdAt: Timestamp.now()
     });
@@ -67,8 +68,9 @@ export async function createPost(raceId: string, postData: any) {
         visibility: postData.visibility ?? "public",
         prediction: postData.prediction ?? {},
         bets: postData.bets ?? [],
+        likes: [],
         comment: postData.comment ?? "",
-        raceId: postData.raceId,
+        raceId: raceId,
         raceName: postData.raceName,
         createdAt: Timestamp.now()
     });

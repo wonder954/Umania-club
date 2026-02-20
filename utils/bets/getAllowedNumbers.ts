@@ -1,7 +1,8 @@
 import { Race } from "@/lib/races";
+import { Mark } from "@/types/mark";
 
 export function getAllowedNumbers(
-    prediction: Record<string, string>,
+    prediction: Record<string, Mark>,
     race: Race
 ): number[] {
     return Object.keys(prediction)

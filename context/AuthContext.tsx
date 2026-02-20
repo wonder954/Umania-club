@@ -8,14 +8,18 @@ type AuthContextType = {
     user: User | null;
     loading: boolean;
     logout: () => Promise<void>;
-    reloadUser: () => Promise<void>; // ← 必須
+    reloadUser: () => Promise<void>;
+    loginGoogle: () => Promise<void>;    // 追加
+    loginAnonymous: () => Promise<void>; // 追加
 };
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
     logout: async () => { },
-    reloadUser: async () => { }, // ← 必須
+    reloadUser: async () => { },
+    loginGoogle: async () => { },
+    loginAnonymous: async () => { },
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -27,7 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(currentUser);
             setLoading(false);
         });
-
         return () => unsub();
     }, []);
 
@@ -35,22 +38,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await signOut(auth);
     };
 
-    // 🔥 これが Header 更新の鍵
-    // Helper to clone User object while keeping prototype methods
     const cloneUser = (user: User): User => {
         return Object.assign(Object.create(Object.getPrototypeOf(user)), user);
     };
 
-    // 🔥 これが Header 更新の鍵
     const reloadUser = async () => {
         if (auth.currentUser) {
             await auth.currentUser.reload();
-            setUser(cloneUser(auth.currentUser)); // ← Header が即更新される
+            setUser(cloneUser(auth.currentUser));
         }
     };
 
+    // ↓ 追加
+    const loginGoogle = async () => {
+        const { googleProvider } = await import("@/lib/firebase-auth");
+        const { signInWithPopup } = await import("firebase/auth");
+        const { saveUser } = await import("@/lib/db");
+        const { Timestamp } = await import("firebase/firestore");
+        const result = await signInWithPopup(auth, googleProvider);
+        const u = result.user;
+        await saveUser({
+            uid: u.uid,
+            name: u.displayName || "Anonymous",
+            icon: u.photoURL || "/profile-icons/default1.png",
+            provider: "google",
+            createdAt: Timestamp.now()
+        });
+    };
+
+    const loginAnonymous = async () => {
+        const { signInAnonymously } = await import("firebase/auth");
+        await signInAnonymously(auth);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, logout, reloadUser }}>
+        <AuthContext.Provider value={{ user, loading, logout, reloadUser, loginGoogle, loginAnonymous }}>
             {children}
         </AuthContext.Provider>
     );

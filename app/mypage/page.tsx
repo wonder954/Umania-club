@@ -38,14 +38,18 @@ export default function MyPage() {
     }, [user, loading, router]);
 
     useEffect(() => {
-        if (user) {
-            getUserProfile(user.uid).then((data: any) => {
-                setProfile(data);
-                setName(data.name ?? "");
-                setFavoriteHorse(data.favoriteHorse ?? "");
-            });
-        }
-    }, [user]);
+        // 認証確定 (loading=false) かつログイン済みの場合のみ fetch
+        if (loading || !user) return;
+
+        getUserProfile(user.uid).then((data: any) => {
+            if (!data) return;
+            setProfile(data);
+            setName(data.name ?? "");
+            setFavoriteHorse(data.favoriteHorse ?? "");
+        }).catch((e) => {
+            console.error("getUserProfile failed:", e);
+        });
+    }, [user, loading]);
 
     // ★ 写真を選択したとき（icon に統一）
     const handleSelectPhoto = async (url: string): Promise<void> => {

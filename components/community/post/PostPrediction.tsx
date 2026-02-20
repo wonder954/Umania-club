@@ -16,8 +16,8 @@ export default function PostPrediction({ post, race, vertical = false }: Props) 
     const items = Object.entries(post.prediction)
         .map(([key, mark]) => {
             const horse =
-                race?.horses.find((h: any) => String(h.number) === key) ||
-                race?.horses.find((h: any) => h.name === key);
+                race?.horses?.find((h: any) => String(h.number) === key) ||
+                race?.horses?.find((h: any) => h.name === key);
 
             return {
                 mark,

@@ -2,10 +2,11 @@
 
 import ShareImageGenerator from "@/components/share/ShareImageGenerator";
 import { Race } from "@/lib/races";
+import { Mark } from "@/types/mark";
 
 type Props = {
     race: Race;
-    prediction: Record<string, string>;
+    prediction: Record<string, Mark>;
     comment: string;
     onReset: () => void;
 };

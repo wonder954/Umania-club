@@ -3,12 +3,14 @@
 import MarkSelector from "@/components/prediction/MarkSelector";
 import type { Race } from "@/lib/races";
 import Image from "next/image";
+import type { Mark } from "@/types/mark";
+
 
 
 type Props = {
     race: Race;
-    prediction: Record<string, string>;
-    onPredictionChange: (prediction: Record<string, string>) => void;
+    prediction: Record<string, Mark>;
+    onPredictionChange: (prediction: Record<string, Mark>) => void;
 };
 
 export default function HorseTable({ race, prediction, onPredictionChange }: Props) {

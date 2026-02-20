@@ -12,6 +12,7 @@ export default function GroupsPage() {
     const [loadingGroups, setLoadingGroups] = useState(true);
 
     useEffect(() => {
+        if (loading) return;
         if (!user) return;
 
         const fetchGroups = async () => {
@@ -32,7 +33,7 @@ export default function GroupsPage() {
         };
 
         fetchGroups();
-    }, [user]);
+    }, [user, loading]); // ← loading を依存に追加するだけ
 
     if (loading || !user) {
         return <p className="text-center mt-20 text-slate-600">読み込み中...</p>;

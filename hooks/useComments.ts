@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { Comment, Post } from "@/components/community/post/types";
+import { useAuth } from "@/context/AuthContext"; // 追加
 
 export function useComments(raceId: string, posts: Post[]) {
     const [comments, setComments] = useState<Record<string, Comment[]>>({});
+    const { loading: authLoading } = useAuth(); // 追加
     const postIds = posts.map((p) => p.id).join(",");
 
     useEffect(() => {
         if (posts.length === 0) return;
+        if (authLoading) return; // 追加
 
         const unsubscribes = posts.map((post) => {
             if (!post.id) return () => { };
@@ -37,7 +40,7 @@ export function useComments(raceId: string, posts: Post[]) {
         });
 
         return () => unsubscribes.forEach((u) => u && u());
-    }, [raceId, postIds]);
+    }, [raceId, postIds, authLoading]); // authLoading 追加
 
     return { comments };
 }

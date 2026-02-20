@@ -4,14 +4,15 @@ import BettingForm from "./BettingForm";
 import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
 import { Race } from "@/lib/races";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase-auth";
 import PredictionSuccess from "./PredictionSuccess";
 import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useUserGroups } from "@/hooks/useUserGroups"; import type { Mark } from "@/types/mark";
+import { useUserGroups } from "@/hooks/useUserGroups";
+import type { Mark } from "@/types/mark";
 
 
 type Props = {

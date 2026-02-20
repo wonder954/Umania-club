@@ -3,13 +3,14 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { toPng } from "html-to-image";
 import { Modal } from "@/components/common/Modal";
+import { Mark } from "@/types/mark";
 
 type Props = {
     raceName: string;
     courseText: string;
     grade: string;
     date: string;
-    prediction: Record<string, string>; // marks
+    prediction: Record<string, Mark>; // marks
     horses: { number?: number | string; name: string }[];
     comment?: string;
 };

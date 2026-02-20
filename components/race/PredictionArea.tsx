@@ -6,10 +6,11 @@ import PredictionForm from "@/components/prediction/PredictionForm";
 import { Bet } from "@/types/bet";
 import type { Race } from "@/lib/races";
 import Image from "next/image";
+import type { Mark } from "@/types/mark";
 
 
 export default function PredictionArea({ race }: { race: Race }) {
-    const [prediction, setPrediction] = useState<Record<string, string>>({});
+    const [prediction, setPrediction] = useState<Record<string, Mark>>({});
     const [bets, setBets] = useState<Bet[]>([]);
     const [comment, setComment] = useState("");
 

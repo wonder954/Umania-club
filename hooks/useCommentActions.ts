@@ -1,7 +1,7 @@
 "use client";
 
 import { addComment, deleteComment as deleteCommentDb } from "@/lib/db";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 
 export function useCommentActions(raceId: string) {
     const { user } = useAuth();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { usePosts } from "@/hooks/usePosts";
 import { useComments } from "@/hooks/useComments";

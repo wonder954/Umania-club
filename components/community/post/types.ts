@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { Bet } from "@/types/bet";
+import { Mark } from "@/types/mark";
 
 export type Post = {
     id: string;
@@ -16,7 +17,7 @@ export type Post = {
     groupName?: string | null;
 
     // 予想内容（単勝・馬連などのテキスト）
-    prediction: Record<string, string>;
+    prediction: Record<string, Mark>;
 
     // 🔥 bets は絶対に配列（undefined を許さない）
     bets: Bet[];

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, query, orderBy, where, getDocs, } from "firebase/firestore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { normalizeGrade, getColorFromGrade } from "@/lib/race/racesToCalendarRaces";
 import type { Post } from "@/types/post";
@@ -24,6 +24,7 @@ export default function GroupPage() {
     useEffect(() => {
         const fetchMembers = async () => {
             if (!group?.members) return;
+            if (loading) return; // 追加
 
             const profiles: any[] = [];
 
@@ -53,23 +54,22 @@ export default function GroupPage() {
         };
 
         fetchMembers();
-    }, [group]);
+    }, [group, loading]); // loading 追加
 
     // 🔥 グループ情報を取得
     useEffect(() => {
         const fetchGroup = async () => {
+            if (!user && loading) return; // 追加
+
             const ref = doc(db, "groups", groupId as string);
             const snap = await getDoc(ref);
-
             if (snap.exists()) {
                 setGroup({ id: snap.id, ...snap.data() });
             }
-
             setLoading(false);
         };
-
         fetchGroup();
-    }, [groupId]);
+    }, [groupId, user, loading]); // user, loading 追加
 
     // 🔥 グループ投稿を取得（visibility = group:{id}）
     useEffect(() => {

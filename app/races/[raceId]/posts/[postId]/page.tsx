@@ -3,7 +3,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { usePost } from "@/hooks/usePost";
 import { useComments } from "@/hooks/useComments";
 import { useCommentActions } from "@/hooks/useCommentActions";
