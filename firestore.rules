@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 厳密チェック（get 用）
+    function isPostVisibleStrict(data, auth) {
+      return
+        data.visibility == "public"
+        || (auth != null && data.authorId == auth.uid)
+        || (
+          auth != null
+          && data.visibility.matches("^group:[A-Za-z0-9_-]+$")
+          && exists(/databases/$(database)/documents/groups/$(data.visibility.split(":")[1]))
+          && get(/databases/$(database)/documents/groups/$(data.visibility.split(":")[1])).data.members.hasAny([auth.uid])
+        );
+    }
+
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    // races
+    match /races/{raceId} {
+      allow read: if true;
+    }
+
+    // posts
+    match /races/{raceId}/posts/{postId} {
+
+      // list（クエリ）は全許可
+      allow list: if true;
+
+      // get（単一取得）は厳密チェック
+      allow get: if isPostVisibleStrict(resource.data, request.auth);
+
+      // 作成（なりすまし防止）
+      allow create: if isLoggedIn()
+                    && request.resource.data.authorId == request.auth.uid;
+
+      // 更新（投稿者本人のみ）
+      allow update: if isLoggedIn()
+                    && resource.data.authorId == request.auth.uid
+                    && request.resource.data.likes is list
+                    && request.resource.data.likes.size() <= 2000;
+
+      // 削除（投稿者本人のみ）
+      allow delete: if isLoggedIn()
+                    && resource.data.authorId == request.auth.uid;
+
+      // comments
+      match /comments/{commentId} {
+
+        // コメント一覧（list）も全許可
+        allow list: if true;
+
+        // コメント単体（get）は親投稿の可視性に従う
+        allow get: if isPostVisibleStrict(
+          get(/databases/$(database)/documents/races/$(raceId)/posts/$(postId)).data,
+          request.auth
+        );
+
+        // 作成（なりすまし防止）
+        allow create: if isLoggedIn()
+                      && request.resource.data.authorId == request.auth.uid;
+
+        // 更新（コメント作者のみ）
+        allow update: if isLoggedIn()
+                      && resource.data.authorId == request.auth.uid
+                      && request.resource.data.likes is list
+                      && request.resource.data.likes.size() <= 2000;
+
+        // 削除（コメント作者のみ）
+        allow delete: if isLoggedIn()
+                      && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+    // groups
+    match /groups/{groupId} {
+
+      // 読み取りはログイン済みならOK
+      allow read: if isLoggedIn();
+
+      // 書き込みは owner のみ
+      allow write: if isLoggedIn()
+                   && request.auth.uid == resource.data.ownerId;
+
+      match /users/{userId} {
+        allow read: if true;
+
+        // 本人のみ create/update
+        allow create, update: if request.auth != null
+                              && request.auth.uid == userId;
+      }
+    }
+
+    match /users/{userId} {
+      // 読み取りは誰でも OK（プロフィール公開）
+      allow read: if true;
+
+      // 書き込みは本人のみ
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // その他は拒否
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -24,44 +24,40 @@ export function useUserGroups(userId?: string) {
     const { loading: authLoading, user } = useAuth();
 
     useEffect(() => {
-        // 認証確定まで待つ
         if (authLoading) return;
-
-        // 未ログイン or userId 未指定の場合は空を返す
         if (!user || !userId) {
             setGroups([]);
             setLoading(false);
             return;
         }
 
-        // getDocs → onSnapshot に変更
-        // これにより Firestore SDK が auth token の更新を自動的に処理し、
-        // token 伝達タイミングによる permission-denied を回避できる
-        const q = query(
-            collection(db, "groups"),
-            where("members", "array-contains", userId)
-        );
+        let unsub: (() => void) | null = null;
 
-        const unsub = onSnapshot(
-            q,
-            (snap) => {
-                setGroups(
-                    snap.docs.map((d) => ({
+        user.getIdToken(true).then(() => {
+            const q = query(
+                collection(db, "groups"),
+                where("members", "array-contains", userId)
+            );
+
+            unsub = onSnapshot(
+                q,
+                (snap) => {
+                    setGroups(snap.docs.map((d) => ({
                         id: d.id,
                         ...(d.data() as Omit<Group, "id">),
-                    }))
-                );
-                setLoading(false);
-            },
-            (error) => {
-                // permission-denied はログのみ（未ログイン時の競合を防ぐ）
-                console.warn("useUserGroups onSnapshot error:", error);
-                setGroups([]);
-                setLoading(false);
-            }
-        );
+                    })));
+                    setLoading(false);
+                },
+                (error) => {
+                    console.warn("useUserGroups onSnapshot error:", error);
+                    setGroups([]);
+                    setLoading(false);
+                }
+            );
+        });
 
-        return () => unsub();
+        return () => { unsub?.() };
+
     }, [userId, authLoading, user]);
 
     return { groups, loading };

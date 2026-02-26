@@ -1,4 +1,7 @@
+"use client";
+
 import { User } from "firebase/auth";
+import { signInWithGoogle } from "@/lib/auth";
 
 type Props = {
     user: User | null;
@@ -13,14 +16,37 @@ export default function PostCommentForm({
     setCommentText,
     handleAddComment,
 }: Props) {
+
+    // -----------------------------
+    // 未ログイン時の UI（安全設計）
+    // -----------------------------
     if (!user) {
         return (
-            <p className="text-xs text-slate-500 text-center mt-3">
-                コメントするにはログインが必要です
-            </p>
+            <div className="mt-3 text-center">
+                <p className="text-xs text-slate-500 mb-2">
+                    コメントするにはログインが必要です
+                </p>
+
+                <button
+                    onClick={signInWithGoogle}
+                    className="
+            px-4 py-2 
+            bg-blue-500 text-white 
+            rounded-xl text-sm font-semibold 
+            shadow-sm 
+            hover:bg-blue-600 
+            transition
+          "
+                >
+                    ログインしてコメントする
+                </button>
+            </div>
         );
     }
 
+    // -----------------------------
+    // ログイン済みのコメントフォーム
+    // -----------------------------
     return (
         <div className="flex gap-2 mt-3">
             <input
@@ -29,15 +55,15 @@ export default function PostCommentForm({
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="コメントを入力..."
                 className="
-                    flex-1 px-3 py-2 
-                    bg-white/70 backdrop-blur-sm
-                    border border-white/40 
-                    rounded-xl text-sm 
-                    text-slate-800
-                    focus:outline-none focus:ring-2 focus:ring-blue-300
-                    shadow-sm
-                "
-                onKeyPress={(e) => {
+          flex-1 px-3 py-2 
+          bg-white/70 backdrop-blur-sm
+          border border-white/40 
+          rounded-xl text-sm 
+          text-slate-800
+          focus:outline-none focus:ring-2 focus:ring-blue-300
+          shadow-sm
+        "
+                onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         handleAddComment(commentText);
                     }
@@ -47,13 +73,13 @@ export default function PostCommentForm({
             <button
                 onClick={() => handleAddComment(commentText)}
                 className="
-                    px-4 py-2 
-                    bg-blue-500/80 text-white 
-                    rounded-xl text-sm font-semibold 
-                    shadow-sm 
-                    hover:bg-blue-500/90 
-                    transition
-                "
+          px-4 py-2 
+          bg-blue-500/80 text-white 
+          rounded-xl text-sm font-semibold 
+          shadow-sm 
+          hover:bg-blue-500/90 
+          transition
+        "
             >
                 送信
             </button>

@@ -12,7 +12,9 @@ import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useUserGroups } from "@/hooks/useUserGroups";
+import { signInWithGoogle } from "@/lib/auth";
 import type { Mark } from "@/types/mark";
+
 
 
 type Props = {
@@ -266,28 +268,23 @@ export default function PredictionForm({
 
                 {/* Submit */}
                 <div className="pt-4 border-t border-white/40">
-                    <button
-                        onClick={handleSubmit}
-                        disabled={isSubmitting || !hasMarks}
-                        className={`
-        w-full py-4 rounded-xl font-bold text-lg shadow-sm transition
-        ${isSubmitting || !hasMarks
-                                ? "bg-slate-300 cursor-not-allowed text-white"
-                                : "bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 transform hover:-translate-y-1"
-                            }
-    `}
-                    >
-                        {isSubmitting ? "送信中..." : "予想を投稿する"}
-                    </button>
-
-
-                    {!user && (
-                        <p className="text-center text-xs text-slate-500 mt-2">
-                            ※投稿すると自動的にゲストログインします
-                        </p>
+                    {user ? (
+                        <button
+                            onClick={handleSubmit}
+                            disabled={isSubmitting || !hasMarks}
+                            className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
+                        >
+                            {isSubmitting ? "送信中..." : "予想を投稿する"}
+                        </button>
+                    ) : (
+                        <button
+                            onClick={signInWithGoogle}
+                            className="w-full py-4 rounded-xl font-bold text-lg bg-blue-500 text-white"
+                        >
+                            ログインして投稿する
+                        </button>
                     )}
                 </div>
-
             </div>
         </div>
     );

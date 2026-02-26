@@ -25,70 +25,49 @@ export function usePosts(raceId: string, userId?: string) {
     const { groups, loading: groupsLoading } = useUserGroups(userId);
     const allowedGroupIds = useMemo(() => groups.map((g) => g.id), [groups]);
 
-    // グループ名キャッシュ（N+1 防止）
     const groupNameCache = useRef<Map<string, string>>(new Map());
 
-    // ── onSnapshot ──────────────────────────────────────────────────────────
-    // 【重要】Firestoreルール isPostVisible は per-document 評価。
-    // コレクションのリストクエリで visibility が "group:xxx" のドキュメントが含まれると、
-    // ルール内の get() 呼び出しが拒否され permission-denied になる。
-    //
-    // 解決策: クエリを2つに分ける:
-    //   1. visibility == "public" （未ログイン・ログイン済み共通）
-    //   2. authorId == user.uid   （自分の投稿、ログイン済みのみ）
-    // これにより group: visibility のドキュメントに対するルールの get() を回避する。
-    // ──────────────────────────────────────────────────────────────────────
     useEffect(() => {
         if (authLoading) return;
 
-        const ref = collection(db, "posts_all");
+        const ref = collection(db, "races", raceId, "posts");
 
-        // ── 未ログイン: public のみ ──
+        // ────────────────────────────────
+        // 未ログイン → where を使わない（重要）
+        // ────────────────────────────────
         if (!user) {
-            const q = query(
-                ref,
-                where("raceId", "==", raceId),
-                where("visibility", "==", "public"),
-                orderBy("createdAt", "desc")
-            );
+            const q = query(ref, orderBy("createdAt", "desc"));
 
             const unsub = onSnapshot(
                 q,
                 (snap) => {
-                    const list = snap.docs.map((d) => {
-                        const data = d.data();
-                        return {
-                            id: d.id,
-                            ...data,
-                            bets: Array.isArray(data.bets) ? data.bets : [],
-                            likes: Array.isArray(data.likes) ? data.likes : [],
-                            prediction: data.prediction ?? {},
-                            comment: data.comment ?? "",
-                            visibility: data.visibility ?? "public",
-                            groupName: null,
-                        } as Post;
-                    });
+                    const list = snap.docs
+                        .map((d) => ({ id: d.id, ...d.data() } as Post))
+                        .filter((p) => p.visibility === "public"); // ← クライアント側で public のみ
+
                     setRawPosts(list);
                     setLoading(false);
                 },
                 (error) => {
-                    console.error("usePosts onSnapshot error (unauthenticated):", error);
+                    console.error("usePosts (unauthenticated) error:", error);
                     setLoading(false);
                 }
             );
+
             return () => unsub();
         }
 
-        // ── ログイン済み: public投稿 + 自分の投稿 の2クエリ ──
+        // ────────────────────────────────
+        // ログイン済み → public + 自分の投稿
+        // ────────────────────────────────
         const qPublic = query(
             ref,
-            where("raceId", "==", raceId),
             where("visibility", "==", "public"),
             orderBy("createdAt", "desc")
         );
+
         const qOwn = query(
             ref,
-            where("raceId", "==", raceId),
             where("authorId", "==", user.uid),
             orderBy("createdAt", "desc")
         );
@@ -101,26 +80,25 @@ export function usePosts(raceId: string, userId?: string) {
             return {
                 id: d.id,
                 ...data,
-                bets: Array.isArray(data.bets) ? data.bets : [],
-                likes: Array.isArray(data.likes) ? data.likes : [],
-                prediction: data.prediction ?? {},
-                comment: data.comment ?? "",
-                visibility: data.visibility ?? "public",
-                groupName: null,
             } as Post;
         };
 
         const mergeAndUpdate = async (pub: Post[], own: Post[]) => {
-            // 重複除去（id をキーに Map で管理）
             const map = new Map<string, Post>();
             for (const p of [...pub, ...own]) map.set(p.id, p);
 
-            // グループ名を補完
             const merged = await Promise.all(
                 Array.from(map.values()).map(async (post) => {
                     let groupName: string | null = null;
+
                     if (post.visibility?.startsWith("group:")) {
                         const groupId = post.visibility.replace("group:", "");
+
+                        // 未ログインならスキップ
+                        if (!user) {
+                            return { ...post, groupName: null };
+                        }
+
                         if (groupNameCache.current.has(groupId)) {
                             groupName = groupNameCache.current.get(groupId) ?? null;
                         } else {
@@ -135,14 +113,14 @@ export function usePosts(raceId: string, userId?: string) {
                             }
                         }
                     }
+
                     return { ...post, groupName };
                 })
             );
 
-            // createdAt 降順ソート
             merged.sort((a, b) => {
-                const aTime = (a as Record<string, { seconds?: number }>).createdAt?.seconds ?? 0;
-                const bTime = (b as Record<string, { seconds?: number }>).createdAt?.seconds ?? 0;
+                const aTime = (a as any).createdAt?.seconds ?? 0;
+                const bTime = (b as any).createdAt?.seconds ?? 0;
                 return bTime - aTime;
             });
 
@@ -157,7 +135,7 @@ export function usePosts(raceId: string, userId?: string) {
                 mergeAndUpdate(publicPosts, ownPosts);
             },
             (error) => {
-                console.error("usePosts public onSnapshot error:", error);
+                console.error("usePosts public error:", error);
                 setLoading(false);
             }
         );
@@ -169,7 +147,7 @@ export function usePosts(raceId: string, userId?: string) {
                 mergeAndUpdate(publicPosts, ownPosts);
             },
             (error) => {
-                console.error("usePosts own onSnapshot error:", error);
+                console.error("usePosts own error:", error);
                 setLoading(false);
             }
         );
@@ -178,21 +156,17 @@ export function usePosts(raceId: string, userId?: string) {
             unsubPublic();
             unsubOwn();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [raceId, authLoading, user]);
 
-    // ── クライアント側フィルタリング ────────────────────────────────────────
+    // ────────────────────────────────
+    // クライアント側フィルタリング
+    // ────────────────────────────────
     const posts = useMemo(() => {
-        if (!user) {
-            // 未ログイン: public のみクエリ済み
-            return rawPosts;
-        }
+        if (!user) return rawPosts;
 
         if (groupsLoading) {
-            // グループ情報ロード中: public + 自分の投稿のみ
             return rawPosts.filter((post) => {
-                const v = post.visibility;
-                if (v === "public") return true;
+                if (post.visibility === "public") return true;
                 if (post.authorId === user.uid) return true;
                 return false;
             });

@@ -71,41 +71,58 @@ export default function GroupPage() {
         fetchGroup();
     }, [groupId, user, loading]); // user, loading 追加
 
-    // 🔥 グループ投稿を取得（visibility = group:{id}）
+    // 🔥 グループ投稿を取得（posts_all 廃止版）
     useEffect(() => {
         const fetchGroupPosts = async () => {
             if (!groupId) return;
 
-            const q = query(
-                collection(db, "posts_all"),
-                where("visibility", "==", `group:${groupId}`),
-                orderBy("createdAt", "desc")
-            );
+            // races コレクション全体を取得
+            const racesSnap = await getDocs(collection(db, "races"));
 
-            const snap = await getDocs(q);
+            const allPosts: Post[] = [];
 
-            const list: Post[] = snap.docs.map((d) => {
-                const data = d.data();
+            for (const raceDoc of racesSnap.docs) {
+                const raceId = raceDoc.id;
 
-                return {
-                    id: d.id,
-                    authorId: data.authorId,
-                    authorName: data.authorName ?? "名無し",
-                    authorIcon: data.authorIcon ?? "/profile-icons/default1.png",
+                const postsRef = collection(db, "races", raceId, "posts");
+                const q = query(
+                    postsRef,
+                    where("visibility", "==", `group:${groupId}`),
+                    orderBy("createdAt", "desc")
+                );
 
-                    raceId: data.raceId,
-                    raceName: data.raceName,
+                const snap = await getDocs(q);
 
-                    visibility: data.visibility,
-                    prediction: data.prediction ?? {},
-                    bets: data.bets ?? [],
+                snap.forEach((d) => {
+                    const data = d.data();
 
-                    comment: data.comment ?? "",
-                    createdAt: data.createdAt,
-                };
+                    allPosts.push({
+                        id: d.id,
+                        authorId: data.authorId,
+                        authorName: data.authorName ?? "名無し",
+                        authorIcon: data.authorIcon ?? "/profile-icons/default1.png",
+
+                        raceId: data.raceId,
+                        raceName: data.raceName,
+
+                        visibility: data.visibility,
+                        prediction: data.prediction ?? {},
+                        bets: data.bets ?? [],
+
+                        comment: data.comment ?? "",
+                        createdAt: data.createdAt,
+                    });
+                });
+            }
+
+            // createdAt 降順ソート
+            allPosts.sort((a, b) => {
+                const aTime = (a as any).createdAt?.seconds ?? 0;
+                const bTime = (b as any).createdAt?.seconds ?? 0;
+                return bTime - aTime;
             });
 
-            setPosts(list);
+            setPosts(allPosts);
         };
 
         fetchGroupPosts();

@@ -1,10 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { User } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { signInWithGoogle } from "@/lib/auth";
 
 type Props = {
-    user: User;
+    user: User | null; // ← 未ログインも受け取れるように変更
     onSubmit: (text: string, visibility: string) => void;
 };
 
@@ -12,26 +15,58 @@ export default function PostForm({ user, onSubmit }: Props) {
     const [text, setText] = useState("");
     const [visibility, setVisibility] = useState("public");
     const [groups, setGroups] = useState<any[]>([]);
+    const [loadingGroups, setLoadingGroups] = useState(false);
 
+    // -----------------------------
+    // ログイン済みのときだけグループ取得
+    // -----------------------------
     useEffect(() => {
+        if (!user) return; // 未ログインなら何もしない
+
         const fetchGroups = async () => {
+            setLoadingGroups(true);
             const q = query(
                 collection(db, "groups"),
                 where("members", "array-contains", user.uid)
             );
             const snap = await getDocs(q);
             setGroups(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setLoadingGroups(false);
         };
 
         fetchGroups();
-    }, [user.uid]);
+    }, [user]);
 
+    // -----------------------------
+    // 投稿処理
+    // -----------------------------
     const handleSubmit = () => {
         if (!text.trim()) return;
         onSubmit(text, visibility);
         setText("");
     };
 
+    // -----------------------------
+    // 未ログイン時の UI（安全設計）
+    // -----------------------------
+    if (!user) {
+        return (
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p className="text-gray-700 mb-3">投稿するにはログインが必要です</p>
+
+                <button
+                    onClick={signInWithGoogle}
+                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition font-bold"
+                >
+                    ログインして投稿する
+                </button>
+            </div>
+        );
+    }
+
+    // -----------------------------
+    // ログイン済みの投稿フォーム
+    // -----------------------------
     return (
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
             <textarea
@@ -51,17 +86,22 @@ export default function PostForm({ user, onSubmit }: Props) {
                 >
                     <option value="public">全体公開</option>
 
-                    {groups.map((g) => (
-                        <option key={g.id} value={`group:${g.id}`}>
-                            グループ限定：{g.name}
-                        </option>
-                    ))}
+                    {loadingGroups && (
+                        <option disabled>読み込み中...</option>
+                    )}
+
+                    {!loadingGroups &&
+                        groups.map((g) => (
+                            <option key={g.id} value={`group:${g.id}`}>
+                                グループ限定：{g.name}
+                            </option>
+                        ))}
                 </select>
             </div>
 
             <button
                 onClick={handleSubmit}
-                className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition font-bold"
             >
                 投稿する
             </button>

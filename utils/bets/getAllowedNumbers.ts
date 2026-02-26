@@ -5,7 +5,7 @@ export function getAllowedNumbers(
     prediction: Record<string, Mark>,
     race: Race
 ): number[] {
-    return Object.keys(prediction)
+    return Object.keys(prediction)!
         .map(name => {
             const horse = race.horses.find(h => h.name === name);
             return horse?.number ? Number(horse.number) : null;

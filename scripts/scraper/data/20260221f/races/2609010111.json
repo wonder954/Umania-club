@@ -1,0 +1,213 @@
+{
+  "raceId": "2609010111",
+  "info": {
+    "date": "2026-02-21",
+    "place": "阪神",
+    "title": "阪急杯",
+    "grade": "GIII",
+    "surface": "芝",
+    "distance": "1400m",
+    "direction": "右",
+    "weightType": "別定",
+    "placeDetail": "1回阪神1日",
+    "raceNumber": "11R"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ソンシ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "川田 将雅",
+      "weight": 57,
+      "odds": 5.4,
+      "popular": 3
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "レイベリング",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "武 豊",
+      "weight": 57,
+      "odds": 23.7,
+      "popular": 8
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "スリールミニョン",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "永島 まなみ",
+      "weight": 55,
+      "odds": 31.3,
+      "popular": 11
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "ナムラアトム",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "菱田 裕二",
+      "weight": 57,
+      "odds": 32.4,
+      "popular": 12
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ドロップオブライト",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "松若 風馬",
+      "weight": 55,
+      "odds": 11.4,
+      "popular": 5
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ララマセラシオン",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "佐々木 大輔",
+      "weight": 57,
+      "odds": 26.8,
+      "popular": 9
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "アサカラキング",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "北村 友一",
+      "weight": 57,
+      "odds": 15.9,
+      "popular": 7
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ディアナザール",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "団野 大成",
+      "weight": 57,
+      "odds": 4.3,
+      "popular": 1
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "マイネルチケット",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "横山 武史",
+      "weight": 57,
+      "odds": 5,
+      "popular": 2
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "グレイイングリーン",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "鮫島 克駿",
+      "weight": 57,
+      "odds": 27.4,
+      "popular": 10
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "ダディーズビビッド",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "池添 謙一",
+      "weight": 57,
+      "odds": 94.3,
+      "popular": 17
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "アルテヴェローチェ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "国分 優作",
+      "weight": 57,
+      "odds": 96.1,
+      "popular": 18
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "ヤンキーバローズ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "岩田 望来",
+      "weight": 57,
+      "odds": 7.5,
+      "popular": 4
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "マサノカナリア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "横山 典弘",
+      "weight": 55,
+      "odds": 43.1,
+      "popular": 14
+    },
+    {
+      "frame": 7,
+      "number": 15,
+      "name": "グロリアラウス",
+      "jockey": "幸 英明",
+      "weight": 57,
+      "odds": 39.4,
+      "popular": 13
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "メイショウチタン",
+      "sex": "牡",
+      "age": 9,
+      "jockey": "松山 弘平",
+      "weight": 57,
+      "odds": 83.6,
+      "popular": 16
+    },
+    {
+      "frame": 8,
+      "number": 17,
+      "name": "メイショウソラフネ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "高杉 吏麒",
+      "weight": 57,
+      "odds": 80.4,
+      "popular": 15
+    },
+    {
+      "frame": 8,
+      "number": 18,
+      "name": "カンチェンジュンガ",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "坂井 瑠星",
+      "weight": 58,
+      "odds": 12.1,
+      "popular": 6
+    }
+  ]
+}

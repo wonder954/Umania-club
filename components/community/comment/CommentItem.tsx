@@ -73,14 +73,26 @@ export default function CommentItem({
 
                 {/* いいね */}
                 <button
-                    onClick={handleLike}
-                    className={`flex items-center gap-1 transition-transform duration-150 active:scale-90 ${animateLike ? "heart-pop" : ""}`}
+                    onClick={user ? handleLike : undefined}
+                    disabled={!user}
+                    className={`
+    flex items-center gap-1 transition-transform duration-150 
+    ${!user ? "opacity-40 cursor-not-allowed" : "active:scale-90"}
+    ${animateLike ? "heart-pop" : ""}
+  `}
                 >
                     <span className="text-sm">{isLiked ? "❤️" : "🤍"}</span>
                     <span className={`font-medium tabular-nums ${isLiked ? "text-red-400" : ""}`}>
                         {comment.likes?.length ?? 0}
                     </span>
                 </button>
+
+                {/* 未ログイン時の案内 */}
+                {!user && (
+                    <p className="text-xs text-slate-400 ml-9 mt-1">
+                        ※いいねするにはログインが必要です
+                    </p>
+                )}
 
                 {/* 返信 */}
                 <button
