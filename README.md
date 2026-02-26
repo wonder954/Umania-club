@@ -6,6 +6,7 @@ Built with Next.js, Firebase, and ❤️
 cd scripts/scraper
 npx tsx run-weekly.ts    # 月〜木
 npx tsx run-friday.ts    # 金曜
+firebase deploy --only firestore:rules
 
 ## Features
 - SNSシェア画像生成
@@ -36,3 +37,8 @@ B. 招待リンクページ（invite page）を作る
 C. 投稿フォームに「グループ限定」を追加する
 D. 投稿一覧でグループ投稿をフィルタリングする
 E. 投稿詳細に「LINE共有」ボタンを追加する
+
+かなりここ苦労しました
+firebaseのルールの権限の部分だよね
+
+グループの投稿表示がない。デフォルトアイコン、名無し問題。招待リンクページの参加ボタンが押せない。

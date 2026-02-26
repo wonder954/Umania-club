@@ -10,7 +10,7 @@ export default function GroupCreatePage() {
     const { user } = useAuth();  // ← これが重要！
 
     const [name, setName] = useState("");
-    const [createdGroup, setCreatedGroup] = useState<null | { id: string; inviteCode: string }>(null);
+    const [createdGroup, setCreatedGroup] = useState<null | { id: string }>(null);
     const [loading, setLoading] = useState(false);
 
     const handleCreate = async () => {
@@ -29,11 +29,10 @@ export default function GroupCreatePage() {
             name,
             ownerId: user.uid,
             members: [user.uid],
-            inviteCode,
             createdAt: serverTimestamp(),
         });
 
-        setCreatedGroup({ id: docRef.id, inviteCode });
+        setCreatedGroup({ id: docRef.id });
         setLoading(false);
     };
 
@@ -61,13 +60,21 @@ export default function GroupCreatePage() {
             {createdGroup && (
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <p className="font-medium">グループが作成されました！</p>
-                    <p className="text-sm mt-2">招待コード:</p>
-                    <p className="text-lg font-bold tracking-widest">{createdGroup.inviteCode}</p>
-
                     <p className="text-sm mt-3">招待リンク:</p>
                     <p className="text-blue-600 break-all">
-                        {`${window.location.origin}/invite/${createdGroup.inviteCode}`}
+                        {`${window.location.origin}/invite/${createdGroup.id}`}
                     </p>
+
+                    <button
+                        onClick={() => {
+                            const text = `グループに参加してね！\n招待リンク: ${window.location.origin}/invite/${createdGroup.id}`;
+                            const encoded = encodeURIComponent(text);
+                            window.location.href = `https://line.me/R/msg/text/?${encoded}`;
+                        }}
+                        className="mt-4 w-full bg-green-500 text-white py-2 rounded-lg"
+                    >
+                        LINEで共有する
+                    </button>
                 </div>
             )}
         </div>

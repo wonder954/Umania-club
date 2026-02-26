@@ -2,7 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 厳密チェック（get 用）
+    // ============================================================
+    // 共通関数
+    // ============================================================
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
     function isPostVisibleStrict(data, auth) {
       return
         data.visibility == "public"
@@ -15,22 +21,22 @@ service cloud.firestore {
         );
     }
 
-    function isLoggedIn() {
-      return request.auth != null;
-    }
-
+    // ============================================================
     // races
+    // ============================================================
     match /races/{raceId} {
       allow read: if true;
     }
 
-    // posts
+    // ============================================================
+    // posts（通常アクセス）
+    // ============================================================
     match /races/{raceId}/posts/{postId} {
 
-      // list（クエリ）は全許可
-      allow list: if true;
+      // list（クエリ）はログイン済みならOK
+      allow list: if request.auth != null;
 
-      // get（単一取得）は厳密チェック
+      // get（単体取得）は厳密チェック
       allow get: if isPostVisibleStrict(resource.data, request.auth);
 
       // 作成（なりすまし防止）
@@ -47,10 +53,12 @@ service cloud.firestore {
       allow delete: if isLoggedIn()
                     && resource.data.authorId == request.auth.uid;
 
+      // ------------------------------------------------------------
       // comments
+      // ------------------------------------------------------------
       match /comments/{commentId} {
 
-        // コメント一覧（list）も全許可
+        // コメント一覧（list）は全許可
         allow list: if true;
 
         // コメント単体（get）は親投稿の可視性に従う
@@ -75,34 +83,38 @@ service cloud.firestore {
       }
     }
 
+    // ============================================================
     // groups
+    // ============================================================
     match /groups/{groupId} {
 
       // 読み取りはログイン済みならOK
       allow read: if isLoggedIn();
 
-      // 書き込みは owner のみ
-      allow write: if isLoggedIn()
-                   && request.auth.uid == resource.data.ownerId;
+      // 作成（create）は ownerId をチェック
+      allow create: if isLoggedIn()
+                    && request.resource.data.ownerId == request.auth.uid;
 
-      match /users/{userId} {
-        allow read: if true;
+      // 更新（update）は既存データの ownerId をチェック
+      allow update: if isLoggedIn()
+                    && resource.data.ownerId == request.auth.uid;
 
-        // 本人のみ create/update
-        allow create, update: if request.auth != null
-                              && request.auth.uid == userId;
-      }
+      // 削除も同様
+      allow delete: if isLoggedIn()
+                    && resource.data.ownerId == request.auth.uid;
     }
 
+    // ============================================================
+    // users
+    // ============================================================
     match /users/{userId} {
-      // 読み取りは誰でも OK（プロフィール公開）
       allow read: if true;
-
-      // 書き込みは本人のみ
       allow write: if request.auth != null && request.auth.uid == userId;
     }
 
+    // ============================================================
     // その他は拒否
+    // ============================================================
     match /{document=**} {
       allow read, write: if false;
     }

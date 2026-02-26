@@ -43,15 +43,22 @@ export async function saveUser(user: UserProfile) {
 
 export async function createPost(raceId: string, postData: any) {
     const postsRef = collection(db, "races", raceId, "posts");
+
     const newPostRef = await addDoc(postsRef, {
         authorId: postData.authorId,
+        authorName: postData.authorName,     // ★ 追加
+        authorIcon: postData.authorIcon,     // ★ 追加
+
         visibility: postData.visibility ?? "public",
         prediction: postData.prediction ?? {},
         bets: postData.bets ?? [],
         likes: [],
-        comment: postData.comment ?? "",
+
+        comment: postData.comment ?? "",     // ★ コメントはここに入る
+
         raceId: raceId,
         raceName: postData.raceName,
+
         createdAt: serverTimestamp()
     });
 

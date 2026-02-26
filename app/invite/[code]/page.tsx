@@ -4,71 +4,61 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, updateDoc, doc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 export default function InvitePage() {
-    const { code } = useParams();
+    const { code } = useParams(); // code = groupId
     const router = useRouter();
-    const { user, loginAnonymous } = useAuth();
+    const { user } = useAuth();
 
     const [loading, setLoading] = useState(true);
     const [group, setGroup] = useState<any>(null);
     const [error, setError] = useState("");
 
-    // 🔥 招待コードからグループを検索
+    const groupId = Array.isArray(code) ? code[0] : code;
+
+    // 🔥 groupId から直接グループを取得
     useEffect(() => {
         const fetchGroup = async () => {
-            if (!code) return;
+            if (!groupId) return;
 
-            const q = query(
-                collection(db, "groups"),
-                where("inviteCode", "==", code)
-            );
+            const ref = doc(db, "groups", groupId);
+            const snap = await getDoc(ref);
 
-            const snap = await getDocs(q);
-
-            if (snap.empty) {
-                setError("招待コードが無効です。");
+            if (!snap.exists()) {
+                setError("招待リンクが無効です。");
                 setLoading(false);
                 return;
             }
 
-            const g = { id: snap.docs[0].id, ...snap.docs[0].data() };
-            setGroup(g);
+            setGroup({ id: snap.id, ...snap.data() });
             setLoading(false);
         };
 
         fetchGroup();
-    }, [code]);
+    }, [groupId]);
 
-    // 🔥 グループに参加
+    // 🔥 グループに参加（ログイン必須）
     const handleJoin = async () => {
         if (!user) {
-            await loginAnonymous();
+            alert("参加するにはログインが必要です。");
+            return;
         }
-
-        const currentUser = user;
-        if (!currentUser || !group) return;
 
         const ref = doc(db, "groups", group.id);
 
         await updateDoc(ref, {
-            members: arrayUnion(currentUser.uid),
+            members: arrayUnion(user.uid),
         });
 
         alert("グループに参加しました！");
-        router.push(`/groups/${group.id}`); // ← ここが重要
+        router.push(`/groups/${group.id}`);
     };
 
-    if (loading) {
-        return <div className="p-6 text-center">読み込み中...</div>;
-    }
+    if (loading) return <div className="p-6 text-center">読み込み中...</div>;
+    if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
 
-    if (error) {
-        return <div className="p-6 text-center text-red-500">{error}</div>;
-    }
-
-    const isMember = group.members?.includes(user?.uid);
+    const isMember = user ? group.members?.includes(user.uid) : false;
 
     return (
         <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-md">
@@ -78,11 +68,19 @@ export default function InvitePage() {
                 グループ名：<span className="font-semibold">{group.name}</span>
             </p>
 
-            {isMember ? (
+            {!user && (
+                <p className="mt-4 text-red-500 font-medium">
+                    参加するにはログインしてください。
+                </p>
+            )}
+
+            {user && isMember && (
                 <p className="mt-4 text-green-600 font-medium">
                     あなたはすでにこのグループのメンバーです。
                 </p>
-            ) : (
+            )}
+
+            {user && !isMember && (
                 <button
                     onClick={handleJoin}
                     className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
