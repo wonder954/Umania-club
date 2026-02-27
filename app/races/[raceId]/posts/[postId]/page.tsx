@@ -1,7 +1,6 @@
-// app/races/[raceId]/posts/[postId]/page.tsx
-
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { usePost } from "@/hooks/usePost";
@@ -9,33 +8,63 @@ import { useComments } from "@/hooks/useComments";
 import { useCommentActions } from "@/hooks/useCommentActions";
 import PostCard from "@/components/community/post/PostCard";
 import { judgeHit } from "@/utils/race/judge";
-import { useRace } from "@/hooks/useRace"; // race を取得する hook がある前提
+import { useRace } from "@/hooks/useRace";
 
 export default function PostDetailPage() {
-    const { raceId, postId } = useParams() as { raceId: string; postId: string };
+    const raw = useParams();
+
+    const raceId = Array.isArray(raw.raceId)
+        ? raw.raceId[0]
+        : String(raw.raceId);
+
+    const postId = Array.isArray(raw.postId)
+        ? raw.postId[0]
+        : String(raw.postId);
+
     const { user } = useAuth();
 
-    // 投稿 1 件を取得
-    const { post, loading } = usePost(raceId, postId);
-
-    // レース情報（PostCard に必要）
-    const { race } = useRace(raceId);
-
-    // コメント一覧
+    const { post, loading: postLoading } = usePost(raceId, postId);
+    const { race, loading: raceLoading } = useRace(raceId);
     const { comments } = useComments(raceId, post ? [post] : []);
-
-    // コメント追加・削除
     const { addComment, deleteComment } = useCommentActions(raceId);
 
-    if (loading || !post) {
+    const [expandedBets, setExpandedBets] = useState(new Set<string>());
+    const [showComments, setShowComments] = useState(new Set<string>([postId]));
+    const [commentText, setCommentText] = useState("");
+
+    const toggleBets = (id: string) => {
+        setExpandedBets(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    const toggleComments = (id: string) => {
+        setShowComments(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    // 🔥 パターンAでは race が null になるのは「データが壊れている」状態
+    if (postLoading || raceLoading) {
         return <p className="text-center text-gray-500 py-10">読み込み中...</p>;
     }
 
-    // 的中判定（PostList と同じロジック）
-    const postHit = race?.result
+    if (!post) {
+        return <p className="text-center text-red-500 py-10">投稿が見つかりません</p>;
+    }
+
+    if (!race) {
+        return <p className="text-center text-red-500 py-10">レース情報が存在しません</p>;
+    }
+
+    const postHit = race.result
         ? (post.bets ?? [])
-            .map((bet) => judgeHit(bet, race.result!))
-            .filter((r) => r.isHit)
+            .map(bet => judgeHit(bet, race.result!))
+            .filter(r => r.isHit)
             .reduce(
                 (acc, r) => ({
                     isHit: true,
@@ -52,14 +81,19 @@ export default function PostDetailPage() {
                 race={race}
                 user={user}
                 comments={comments[post.id] || []}
-                expandedBets={new Set()}
-                toggleBets={() => { }}
-                showComments={new Set([post.id])} // 詳細ページではコメントを常に開く
-                toggleComments={() => { }}
-                commentText={""}
-                setCommentText={() => { }}
+
+                expandedBets={expandedBets}
+                toggleBets={toggleBets}
+
+                showComments={showComments}
+                toggleComments={toggleComments}
+
+                commentText={commentText}
+                setCommentText={setCommentText}
+
                 handleAddComment={(text) => addComment(post.id, text)}
                 handleDeleteComment={(commentId) => deleteComment(post.id, commentId)}
+
                 postHit={postHit}
                 renderNumbers={() => ""}
                 groupName={post.groupName}

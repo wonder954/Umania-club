@@ -7,11 +7,11 @@ import BetCard from "@/components/common/BetCard";
 
 type Props = {
     post: Post;
-    race?: Race;
+    race: Race;
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race?: Race) => string;
+    renderNumbers: (bet: Bet, race: Race) => string;
     vertical?: boolean;
 };
 
@@ -45,7 +45,7 @@ export default function PostBets({
                     }
     `}
             >
-                {race?.result ? (
+                {race.result ? (
                     postHit.isHit ? (
                         <>🎯 的中！（払戻 {(postHit.payout ?? 0).toLocaleString()}円）</>
                     ) : (

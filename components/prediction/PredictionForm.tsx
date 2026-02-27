@@ -62,40 +62,37 @@ export default function PredictionForm({
 
     const handleSubmit = async () => {
         if (!user) {
-            await loginAnonymous();
-            await new Promise((resolve) => {
-                const unsub = onAuthStateChanged(auth, (u) => {
-                    if (u) {
-                        unsub();
-                        resolve(null);
-                    }
-                });
-            });
-        }
-
-        // 🔥 グループ選択のガード
-        if (visibilityTab === "group" && !selectedGroupId) {
-            alert("グループを選択してください");
+            alert("投稿にはログインが必要です");
             return;
         }
 
-        const current = auth.currentUser;
-
-        let finalVisibility = "public";
-        if (visibilityTab === "group" && selectedGroupId) {
-            finalVisibility = `group:${selectedGroupId}`;
+        // グループ投稿のガード
+        if (visibilityTab === "group") {
+            if (!user) {
+                alert("グループ投稿にはログインが必要です");
+                return;
+            }
+            if (!selectedGroupId) {
+                alert("グループを選択してください");
+                return;
+            }
         }
 
+        const finalVisibility =
+            visibilityTab === "group"
+                ? `group:${selectedGroupId}`
+                : "public";
+
         const postData = {
-            authorId: current.uid,
-            authorName: current.displayName ?? "名無し",
-            authorIcon: current.photoURL ?? "/profile-icons/default1.png",
+            authorId: user.uid,
+            authorName: user.displayName ?? "名無し",
+            authorIcon: user.photoURL ?? "/profile-icons/default1.png",
             visibility: finalVisibility,
             prediction,
             bets,
             comment,
             raceId: race.id,
-            raceName: race.name
+            raceName: race.name,
         };
 
         setIsSubmitting(true);
@@ -104,8 +101,8 @@ export default function PredictionForm({
             setIsSuccess(true);
             onPostSuccess?.();
         } catch (e) {
-            console.error(e);
-            alert("投稿に失敗しました");
+            console.error("投稿エラー:", e);
+            alert("投稿に失敗しました（権限エラー）");
         } finally {
             setIsSubmitting(false);
         }

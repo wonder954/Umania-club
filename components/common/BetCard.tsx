@@ -5,13 +5,13 @@ import { formatBetStructure } from "@/utils/bets/format";
 
 type Props = {
     bet: Bet;
-    race?: Race;
+    race: Race;
     showHit?: boolean;
 };
 
 export default function BetCard({ bet, race, showHit = false }: Props) {
     const structure = formatBetStructure(bet);
-    const hitInfo = showHit && race?.result ? judgeHit(bet, race.result) : null;
+    const hitInfo = showHit && race.result ? judgeHit(bet, race.result) : null;
 
     return (
         <div

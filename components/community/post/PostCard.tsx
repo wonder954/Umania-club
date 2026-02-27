@@ -9,7 +9,7 @@ import PostCardMobile from "./PostCardMobile";
 
 type Props = {
     post: Post;
-    race?: Race;
+    race: Race;
     user: User | null;
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
@@ -21,7 +21,7 @@ type Props = {
     handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race?: Race) => string;
+    renderNumbers: (bet: Bet, race: Race) => string;
 
     // 🔥 追加：グループ名
     groupName?: string | null;

@@ -42,27 +42,37 @@ export async function saveUser(user: UserProfile) {
 }
 
 export async function createPost(raceId: string, postData: any) {
-    const postsRef = collection(db, "races", raceId, "posts");
+    // races/{raceId} が存在しない場合のみ最低限の情報を作成
+    const raceRef = doc(db, "races", raceId);
+    const raceSnap = await getDoc(raceRef);
 
-    const newPostRef = await addDoc(postsRef, {
+    if (!raceSnap.exists()) {
+        await setDoc(raceRef, {
+            raceId,
+            raceName: postData.raceName,
+            createdAt: serverTimestamp(),
+        });
+    }
+
+    // 投稿ドキュメント ID を先に作る
+    const postRef = doc(collection(db, "races", raceId, "posts"));
+
+    // visibility を含む全データを一度に書き込む
+    await setDoc(postRef, {
         authorId: postData.authorId,
-        authorName: postData.authorName,     // ★ 追加
-        authorIcon: postData.authorIcon,     // ★ 追加
-
+        authorName: postData.authorName,
+        authorIcon: postData.authorIcon,
         visibility: postData.visibility ?? "public",
         prediction: postData.prediction ?? {},
         bets: postData.bets ?? [],
         likes: [],
-
-        comment: postData.comment ?? "",     // ★ コメントはここに入る
-
-        raceId: raceId,
+        comment: postData.comment ?? "",
+        raceId,
         raceName: postData.raceName,
-
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
     });
 
-    return newPostRef.id;
+    return postRef.id;
 }
 
 export async function getRacePosts(raceId: string) {

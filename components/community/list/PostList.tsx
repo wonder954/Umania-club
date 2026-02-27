@@ -12,11 +12,11 @@ import type { Race } from "@/lib/races";
 
 type Props = {
     raceId: string;
-    race?: Race;
+    race: Race; // ← 必須に変更
 };
 
 export default function PostList({ raceId, race }: Props) {
-    const { user } = useAuth();   // ← これを追加
+    const { user } = useAuth();
     const { posts, loading } = usePosts(raceId, user?.uid);
     const { comments } = useComments(raceId, posts);
     const { addComment, deleteComment } = useCommentActions(raceId);
@@ -41,10 +41,11 @@ export default function PostList({ raceId, race }: Props) {
         });
     };
 
-    const renderNumbers = (bet: Bet, race?: Race): string => {
+    // race は必ず存在する前提なので race?: Race → race: Race に変更
+    const renderNumbers = (bet: Bet, race: Race): string => {
         const { type, mode, numbers, formation } = bet;
 
-        if ((type === "単勝" || type === "複勝") && race) {
+        if (type === "単勝" || type === "複勝") {
             return numbers
                 .map((num) => {
                     const horse = race.horses.find((h) => h.number === num);
@@ -92,7 +93,7 @@ export default function PostList({ raceId, race }: Props) {
     return (
         <div className="relative w-full min-h-fit space-y-6">
             {posts.map((post) => {
-                const postHit = race?.result
+                const postHit = race.result
                     ? (post.bets ?? [])
                         .map((bet) => judgeHit(bet, race.result!))
                         .filter((r) => r.isHit)
@@ -109,7 +110,7 @@ export default function PostList({ raceId, race }: Props) {
                     <PostCard
                         key={post.id}
                         post={post}
-                        race={race}
+                        race={race} // ← Race が必ず渡る
                         user={user}
                         comments={comments[post.id] || []}
                         expandedBets={expandedBets}
@@ -129,8 +130,6 @@ export default function PostList({ raceId, race }: Props) {
                         }
                         postHit={postHit}
                         renderNumbers={renderNumbers}
-
-                        // 🔥 追加：グループ名を渡す
                         groupName={post.groupName}
                     />
                 );

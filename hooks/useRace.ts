@@ -5,17 +5,16 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import type { Race } from "@/lib/races";
 
-/**
- * races/{raceId} は Firestore Rules で `allow read: if true` なので認証不要。
- * authLoading ガードは削除し、raceId フォーマットチェックのみ行う。
- */
 export function useRace(raceId: string) {
-    const [race, setRace] = useState<Race | undefined>(undefined);
+    const [race, setRace] = useState<Race | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // raceId が空、または 10桁数字でない場合はスキップ（権限エラーの根本原因）
-        if (!raceId || !/^\d{10}$/.test(raceId)) {
+        const id = String(raceId);
+
+        // raceId が 10桁数字でない場合は無効
+        if (!/^\d{10}$/.test(id)) {
+            setRace(null);
             setLoading(false);
             return;
         }
@@ -24,7 +23,7 @@ export function useRace(raceId: string) {
 
         const fetchRace = async () => {
             try {
-                const ref = doc(db, "races", raceId);
+                const ref = doc(db, "races", id);
                 const snap = await getDoc(ref);
 
                 if (cancelled) return;
@@ -32,12 +31,14 @@ export function useRace(raceId: string) {
                 if (snap.exists()) {
                     setRace(snap.data() as Race);
                 } else {
-                    setRace(undefined);
+                    // パターンAでは race が存在しないのは異常
+                    console.warn(`Race ${id} が存在しません`);
+                    setRace(null);
                 }
             } catch (e) {
                 if (!cancelled) {
                     console.warn("useRace fetch failed:", e);
-                    setRace(undefined);
+                    setRace(null);
                 }
             } finally {
                 if (!cancelled) setLoading(false);

@@ -17,7 +17,7 @@ export default function InvitePage() {
 
     const groupId = Array.isArray(code) ? code[0] : code;
 
-    // 🔥 groupId から直接グループを取得
+    // グループ情報取得
     useEffect(() => {
         const fetchGroup = async () => {
             if (!groupId) return;
@@ -38,7 +38,7 @@ export default function InvitePage() {
         fetchGroup();
     }, [groupId]);
 
-    // 🔥 グループに参加（ログイン必須）
+    // グループ参加
     const handleJoin = async () => {
         if (!user) {
             alert("参加するにはログインが必要です。");
@@ -55,39 +55,66 @@ export default function InvitePage() {
         router.push(`/groups/${group.id}`);
     };
 
-    if (loading) return <div className="p-6 text-center">読み込み中...</div>;
-    if (error) return <div className="p-6 text-center text-red-500">{error}</div>;
+    if (loading) {
+        return (
+            <div className="p-6 text-center text-slate-600">
+                読み込み中...
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-md mx-auto mt-24 bg-white/70 backdrop-blur-md p-10 rounded-3xl shadow-sm border border-white/60 text-center space-y-4">
+                <p className="text-slate-700 font-medium">{error}</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="w-full bg-blue-500/90 text-white py-3 rounded-xl shadow-sm hover:bg-blue-600 transition font-semibold"
+                >
+                    ホームへ戻る
+                </button>
+            </div>
+        );
+    }
 
     const isMember = user ? group.members?.includes(user.uid) : false;
 
     return (
-        <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-md">
-            <h1 className="text-xl font-bold mb-4">グループに参加</h1>
+        <div className="flex justify-center">
+            <div className="max-w-md w-full mt-20 bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-sm border border-white/60 space-y-6">
 
-            <p className="text-gray-700">
-                グループ名：<span className="font-semibold">{group.name}</span>
-            </p>
+                <h1 className="text-2xl font-bold text-slate-800 text-center">
+                    グループに参加
+                </h1>
 
-            {!user && (
-                <p className="mt-4 text-red-500 font-medium">
-                    参加するにはログインしてください。
+                <p className="text-slate-700 text-center">
+                    グループ名：<span className="font-semibold">{group.name}</span>
                 </p>
-            )}
 
-            {user && isMember && (
-                <p className="mt-4 text-green-600 font-medium">
-                    あなたはすでにこのグループのメンバーです。
-                </p>
-            )}
+                {!user && (
+                    <p className="mt-4 text-red-500 font-medium text-center">
+                        参加するにはログインしてください。
+                    </p>
+                )}
 
-            {user && !isMember && (
-                <button
-                    onClick={handleJoin}
-                    className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
-                >
-                    このグループに参加する
-                </button>
-            )}
+                {user && isMember && (
+                    <p className="mt-4 text-green-600 font-medium text-center">
+                        あなたはすでにこのグループのメンバーです。
+                    </p>
+                )}
+
+                {user && !isMember && (
+                    <button
+                        onClick={handleJoin}
+                        className="
+                            w-full bg-blue-500/90 text-white py-3 rounded-xl
+                            shadow-sm hover:bg-blue-600 transition font-semibold
+                        "
+                    >
+                        このグループに参加する
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
