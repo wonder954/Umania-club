@@ -20,7 +20,7 @@ import { BettingSelector } from "@/components/prediction/selectors/BettingSelect
 import { BetList } from "@/components/prediction/components/BetList";
 
 interface BettingFormProps {
-    horses: { number?: number | string; name: string }[];
+    horses: { number: number | null; name: string }[];
     bets: Bet[];
     onChange: (bets: Bet[]) => void;
     allowedNumbers?: number[];

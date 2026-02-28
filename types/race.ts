@@ -5,72 +5,75 @@
 
 // レース基本情報
 export type RaceInfo = {
-    date: string;           // "2026-01-24"
-    place: string;          // "中山"
-    placeDetail?: string;   // "1回中山8日"
-    title: string;          // "アメリカジョッキークラブカップ"
-    grade: string;          // "GI" | "GII" | "GIII"
-    raceNumber?: string;    // "11R"
-    surface?: string;       // "芝" | "ダート"
-    distance?: string;      // 2200
-    direction?: string;     // "右" | "左"
-    courseDetail?: string;  // "外" | "内"
-    weightType?: string;    // "別定" | "定量" | "ハンデ"
+    date: string;                 // "2026-01-24"
+    place: string | null;         // "中山"（regist で未取得のことがある）
+    placeDetail?: string | null;  // "1回中山8日"
+    title: string;                // "アメリカジョッキークラブカップ"
+    grade: string | null;         // "GI" | "GII" | "GIII" | null
+    raceNumber?: string | null;   // "11R"
+    surface?: string | null;      // "芝" | "ダート"
+    distance?: string | null;     // "2200"
+    direction?: string | null;    // "右" | "左"
+    courseDetail?: string | null; // "外" | "内"
+    weightType?: string | null;   // "別定" | "定量" | "ハンデ"
 };
 
 // 出馬表エントリ
 export type Entry = {
-    number: number | null;  // 馬番（regist では null）
-    frame: number | null;   // 枠番（regist では null）
-    name: string;           // 馬名
-    sex?: string;           // "牡" | "牝" | "セ"
-    age?: number;           // 4
-    weight?: number;        // 斤量 57.0
-    jockey?: string;        // 騎手名
-    odds?: number;          // 単勝オッズ
-    popular?: number;       // 人気
+    number: number | null;
+    frame: number | null;
+    name: string;
+
+    sex?: string | null;
+    age?: number | null;
+    weight?: number | string | null;
+    jockey?: string | null;
+    odds?: number | null;
+    popular?: number | null;
 };
 
 // 着順データ
 export type RaceOrder = {
-    rank: number;           // 着順
-    frame: number;          // 枠番
-    number: number;         // 馬番
-    name: string;           // 馬名
-    time: string;           // タイム "1:58.1"
-    margin: string;         // 着差 "-" | "クビ" | "1/2"
-    jockey: string;         // 騎手名
-    weight: string;         // 斤量 "54.0"
-    popular: number;        // 人気
-    odds: number;           // オッズ
+    rank: number;
+    frame: number;
+    number: number;
+    name: string;
+
+    time?: string | null;
+    margin?: string | null;
+
+    jockey?: string | null;
+    weight?: string | number | null;
+    popular?: number | null;
+    odds?: number | null;
 };
 
 // 払戻金アイテム
 export type PayoutItem = {
-    numbers: number[];      // 組番号 [16, 17]
-    amount: number;         // 払戻金額 4470
-    popular: number;        // 人気
+    numbers: number[];
+    amount: number;
+    popular: number;
 };
 
 // 払戻金全体
 export type Payout = {
-    win: PayoutItem[];      // 単勝
-    place: PayoutItem[];    // 複勝
-    bracket?: PayoutItem[]; // 枠連（ない場合あり）
-    quinella: PayoutItem[]; // 馬連
-    wide: PayoutItem[];     // ワイド
-    exacta: PayoutItem[];   // 馬単
-    trio: PayoutItem[];     // 3連複
-    trifecta: PayoutItem[]; // 3連単
+    win?: PayoutItem[];
+    place?: PayoutItem[];
+    bracket?: PayoutItem[];
+    quinella?: PayoutItem[];
+    wide?: PayoutItem[];
+    exacta?: PayoutItem[];
+    trio?: PayoutItem[];
+    trifecta?: PayoutItem[];
 };
 
 // レース結果
 export type RaceResult = {
     order: RaceOrder[];
     payout: Payout;
-};
+} | null;
 
-// 完全なレースデータ
+// JSON 保存用
 export type RaceData = {
     raceId: string;
     info: RaceInfo;
@@ -78,26 +81,36 @@ export type RaceData = {
     result?: RaceResult;
 };
 
-// 重賞一覧アイテム（fetchWeeklyRacesYahoo の戻り値）
+// ===============================
+// 今週の重賞一覧（detailUrl を持つ）
+// ===============================
 export type RaceListItem = {
     raceId: string;
     title: string;
-    grade: string;
-    detailUrl: string;
-    surface?: string;
-    direction?: string;
-    courseDetail?: string;
-    distance?: string;
-    weightType?: string;
-    date?: string;
+    grade: string | null;
+    detailUrl: string;          // ← 今週は detailUrl
+    surface?: string | null;
+    direction?: string | null;
+    courseDetail?: string | null;
+    distance?: string | null;
+    weightType?: string | null;
+    date?: string | null;
 };
 
+// ===============================
+// 先週の重賞一覧（resultUrl を持つ）
+// ===============================
+export type LastWeekRaceItem = {
+    raceId: string;
+    title: string;
+    grade: string | null;
+    resultUrl: string;          // ← 先週は resultUrl
+};
 
 export type CalendarRace = {
     id: string;
     name: string;
     grade: "G1" | "G2" | "G3" | "JG1" | "JG2" | "JG3" | "OP" | string;
     date: string;
-    color?: string; // UI 用
+    color?: string;
 };
-

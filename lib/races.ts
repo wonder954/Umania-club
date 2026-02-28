@@ -8,27 +8,96 @@ import type { RaceData, Entry } from "@/types/race";
 // 型定義
 // -----------------------------
 export type Race = {
-    id: string;
-    name: string;
-    date: string;
-    place?: string;
-    raceNumber?: string;
+    id: string;                 // raceId
+    name: string;               // レース名
+    date: string;               // "2026-02-21"
+
+    place: string | null;       // "東京"（regist で未取得のことがある）
+    raceNumber: string | null;  // "11R"（regist で未取得のことがある）
+    grade: string | null;       // "GIII" など
+    placeDetail?: string | null;
+
     course: {
-        surface: string;
-        distance: string;
-        direction: string;
+        surface: string | null;     // 芝 / ダート（未取得のことがある）
+        distance: string | null;    // "3400m"（未取得のことがある）
+        direction: string | null;   // 左 / 右（未取得のことがある）
         courseDetail?: string | null;
     };
-    grade?: string;
-    weightType?: string;
-    horses: Array<{
-        number?: number | string;
+
+    weightType?: string | null;
+
+    /** 出馬表（entries） */
+    horses: {
+        frame: number | null;       // 枠番（null の場合あり）
+        number: number | null;      // 馬番（null の場合あり）
         name: string;
-        jockey?: string;
-        weight?: number | string;
-        frame?: number | string;
-    }>;
-    result: any;
+        jockey?: string | null;
+        weight?: string | number | null;
+        odds?: number | null;
+        popular?: number | null;
+    }[];
+
+    /** 結果（確定後のみ） */
+    result: {
+        order: {
+            rank: number;             // 着順
+            frame: number;
+            number: number;
+            name: string;
+            time?: string | null;
+            margin?: string | null;
+            jockey?: string | null;
+            weight?: string | number | null;
+            popular?: number | null;
+            odds?: number | null;
+        }[];
+
+        payout: {
+            win?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            place?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            quinella?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            wide?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            exacta?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            trio?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            trifecta?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+            bracket?: {
+                numbers: number[];
+                amount: number;
+                popular: number;
+            }[];
+        };
+    } | null;
+
+    createdAt?: any;
+    updatedAt?: any;
 };
 
 // -----------------------------
@@ -104,26 +173,48 @@ async function loadRaceFromFolder(raceId: string, folderName: string): Promise<R
 function convertToRace(data: RaceData): Race {
     return {
         id: data.raceId,
-        name: data.info.title,
+        name: data.info.title.trim(),
         date: data.info.date,
         place: data.info.place,
-        raceNumber: data.info.raceNumber,
+        raceNumber: data.info.raceNumber ?? null,
+        grade: data.info.grade ?? null,
+        placeDetail: data.info.placeDetail ?? null,
+        weightType: data.info.weightType ?? null,
+
         course: {
-            surface: data.info.surface || "",
-            distance: data.info.distance || "",
-            direction: data.info.direction || "",
-            courseDetail: data.info.courseDetail,
+            surface: data.info.surface ?? null,
+            distance: data.info.distance ?? null,
+            direction: data.info.direction ?? null,
+            courseDetail: data.info.courseDetail ?? null,
         },
-        grade: data.info.grade,
-        weightType: data.info.weightType,
-        horses: (data.entries || []).map(e => ({
-            number: e.number ?? undefined,
+
+        horses: (data.entries || data.result?.order || []).map((e: any) => ({
+            frame: e.frame ?? null,
+            number: e.number ?? null,
             name: e.name,
-            jockey: e.jockey,
-            weight: e.weight,
-            frame: e.frame ?? undefined,
+            jockey: e.jockey ?? null,
+            weight: e.weight ?? null,
+            odds: e.odds ?? null,
+            popular: e.popular ?? null,
         })),
-        result: data.result || null,
+
+        result: data.result
+            ? {
+                order: data.result.order.map((o) => ({
+                    rank: o.rank,
+                    frame: o.frame,
+                    number: o.number,
+                    name: o.name,
+                    time: o.time ?? null,
+                    margin: o.margin ?? null,
+                    jockey: o.jockey ?? null,
+                    weight: o.weight ?? null,
+                    popular: o.popular ?? null,
+                    odds: o.odds ?? null,
+                })),
+                payout: data.result.payout,
+            }
+            : null,
     };
 }
 

@@ -274,18 +274,21 @@ export default function RaceResultSection({ result }: Props) {
                                     {/* オッズ（元の色を薄く） */}
                                     <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
                                         <span className="text-slate-500 text-right">オッズ:</span>
+
                                         <span
                                             className={`
-                            px-2 py-0.5 rounded-full text-xs font-mono font-bold
-                            ${horse.odds >= 100
-                                                    ? "bg-red-100/60 text-red-700"
-                                                    : horse.odds > 10
-                                                        ? "bg-blue-100/60 text-blue-700"
-                                                        : "bg-green-100/60 text-green-700"
+      px-2 py-0.5 rounded-full text-xs font-mono font-bold
+      ${horse.odds != null
+                                                    ? horse.odds >= 100
+                                                        ? "bg-red-100/60 text-red-700"
+                                                        : horse.odds > 10
+                                                            ? "bg-blue-100/60 text-blue-700"
+                                                            : "bg-green-100/60 text-green-700"
+                                                    : "bg-slate-100/60 text-slate-500"
                                                 }
-                        `}
+    `}
                                         >
-                                            {horse.odds}倍
+                                            {horse.odds != null ? `${horse.odds}倍` : "-"}
                                         </span>
                                     </div>
 
@@ -293,23 +296,30 @@ export default function RaceResultSection({ result }: Props) {
                                     <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
                                         <span className="text-slate-500 text-right">着差:</span>
                                         <span className="font-medium text-right text-slate-700">
-                                            {horse.margin}
+                                            {horse.margin ?? "-"}
                                         </span>
                                     </div>
 
                                     {/* 人気（元の色を薄く） */}
                                     <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
                                         <span className="text-slate-500 text-right">人気:</span>
+
                                         <span
                                             className={`
-                            px-2 py-0.5 rounded-full text-xs font-bold text-right
-                            ${horse.popular === 1 ? "bg-red-100/60 text-red-700" : ""}
-                            ${horse.popular === 2 ? "bg-blue-100/60 text-blue-700" : ""}
-                            ${horse.popular === 3 ? "bg-green-100/60 text-green-700" : ""}
-                            ${horse.popular > 3 ? "bg-slate-100/60 text-slate-700" : ""}
-                        `}
+      px-2 py-0.5 rounded-full text-xs font-bold text-right
+      ${horse.popular === 1
+                                                    ? "bg-red-100/60 text-red-700"
+                                                    : horse.popular === 2
+                                                        ? "bg-blue-100/60 text-blue-700"
+                                                        : horse.popular === 3
+                                                            ? "bg-green-100/60 text-green-700"
+                                                            : horse.popular != null
+                                                                ? "bg-slate-100/60 text-slate-700"
+                                                                : "bg-slate-100/60 text-slate-400"
+                                                }
+    `}
                                         >
-                                            {horse.popular}人気
+                                            {horse.popular != null ? `${horse.popular}人気` : "-"}
                                         </span>
                                     </div>
 

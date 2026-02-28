@@ -44,7 +44,10 @@ export default function PredictionSuccess({
                     grade={race.grade || ""}
                     date={race.date || ""}
                     prediction={prediction}
-                    horses={race.horses}
+                    horses={race.horses.map(h => ({
+                        number: h.number ?? "",
+                        name: h.name
+                    }))}
                     comment={comment}
                 />
 

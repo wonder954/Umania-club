@@ -3,9 +3,9 @@ import { formatDateWithWeekday } from "@/lib/date";
 import Link from "next/link";
 import Image from "next/image";
 
-import PredictionArea from "@/components/race/PredictionArea";
-import CommunitySection from "@/components/race/CommunitySection";
-import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
+import RaceResultSection from "@/components/race/RaceResultSection";
+import PayoutSection from "@/components/race/PayoutSection";
+import CommunityResultSection from "@/components/race/CommunityResultSection";
 import type { Race } from "@/lib/races";
 
 type Props = {
@@ -15,19 +15,13 @@ type Props = {
 async function getRaceFromFirestore(raceId: string): Promise<Race | null> {
     const snap = await adminDb.collection("races").doc(raceId).get();
     if (!snap.exists) return null;
-
-    const data = snap.data();
-
-    // Firestore Timestamp を含む全てをプレーン化
-    const plain = JSON.parse(JSON.stringify(data));
-
-    return plain as Race;
+    return snap.data() as Race;
 }
 
-
-export default async function RacePage({ params }: Props) {
+export default async function ResultPage({ params }: Props) {
     const race = await getRaceFromFirestore(params.raceId);
 
+    // レースが存在しない
     if (!race) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-transparent">
@@ -48,29 +42,38 @@ export default async function RacePage({ params }: Props) {
         );
     }
 
-    const gradeBorderColor: Record<string, string> = {
-        GI: "border-yellow-400",
-        GII: "border-pink-400",
-        GIII: "border-green-400",
-    };
-
-
+    // 結果がまだ無い
+    if (!race.result) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-transparent">
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-8 text-center max-w-md border border-white/40">
+                    <div className="text-6xl mb-4">⏳</div>
+                    <h1 className="text-2xl font-bold text-slate-800 mb-2">結果はまだありません</h1>
+                    <p className="text-slate-600 mb-6">
+                        レース結果が登録されていません。
+                    </p>
+                    <Link
+                        href={`/races/${params.raceId}`}
+                        className="inline-block bg-white/80 backdrop-blur-sm text-slate-700 px-6 py-3 rounded-xl shadow-sm hover:shadow-md border border-white/40 transition"
+                    >
+                        レースページへ戻る
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen pb-20 bg-transparent">
-
-            {/* Race Info Card */}
+            {/* レース情報カード */}
             <section
                 className={`
                     bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-6
-                    border-l-8 ${gradeBorderColor[race.grade || ""] || "border-white/40"}
                     border border-white/40
                     w-full max-w-4xl mx-auto mt-6
                 `}
             >
                 <div className="flex flex-col gap-4">
-
-                    {/* 1行目：ロゴ + 日付 */}
                     <div className="flex items-center justify-between">
                         <Image
                             src="/umania-club logo.png"
@@ -84,7 +87,6 @@ export default async function RacePage({ params }: Props) {
                         </span>
                     </div>
 
-                    {/* 2行目：場所 + R + レース名 */}
                     <div className="flex items-start gap-2">
                         <div className="leading-tight text-lg font-bold text-slate-800 min-w-[42px]">
                             <div>{race.place}</div>
@@ -112,7 +114,6 @@ export default async function RacePage({ params }: Props) {
                         </div>
                     </div>
 
-                    {/* 3行目：コース情報 */}
                     <p className="text-slate-600 font-medium ml-1">
                         {race.course.surface} {race.course.distance}
                         {race.course.direction &&
@@ -121,31 +122,10 @@ export default async function RacePage({ params }: Props) {
                 </div>
             </section>
 
-            {/* みんなの予想へボタン */}
-            <div className="max-w-4xl mx-auto mt-4 px-4">
-                <ScrollToPostsButton />
-            </div>
-
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-
-                {/* 予想セクション */}
-                {!race.result ? (
-                    <>
-                        <PredictionArea race={race} />
-                        <CommunitySection race={race} />
-                    </>
-                ) : (
-                    <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-xl p-6 mb-8 text-center shadow-sm">
-                        <h3 className="text-lg font-bold text-slate-800 mb-2">レース終了</h3>
-                        <p className="text-slate-600 mb-4">このレースは終了しました。</p>
-                        <Link
-                            href={`/races/${params.raceId}/result`}
-                            className="text-blue-600 underline font-medium"
-                        >
-                            → 結果ページを見る
-                        </Link>
-                    </div>
-                )}
+                <RaceResultSection result={race.result} />
+                <PayoutSection payout={race.result.payout} />
+                <CommunityResultSection race={race} />
             </main>
         </div>
     );

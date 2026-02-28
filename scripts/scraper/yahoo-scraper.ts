@@ -5,6 +5,21 @@ import type { RaceListItem, Entry, RaceResult, RaceOrder, Payout, PayoutItem, Ra
 // 共通ヘルパー
 // ============================================
 
+export type WeeklyRace = {
+    raceId: string;
+    title: string;
+    grade: string | null;
+    date: string;
+    detailUrl: string;
+    surface?: string;
+    distance?: string;
+    direction?: string;
+    courseDetail?: string;
+    weightType?: string;
+};
+
+
+
 /**
  * ブラウザとページを作成
  */
