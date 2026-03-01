@@ -147,7 +147,6 @@ async function main() {
             // 🔥 undefined が含まれていないか確認
             console.log("Firestore保存データ:", JSON.stringify(data, null, 2));
 
-            await saveRaceToFirestore(data);
             // Firestore 保存
             await saveRaceToFirestore({
                 id: race.raceId,

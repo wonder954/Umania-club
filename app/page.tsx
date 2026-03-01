@@ -152,7 +152,7 @@ export default async function Home() {
                     <div className="grid gap-6">
                         {lastWeekRaces.length > 0 ? (
                             lastWeekRaces.map((race) => (
-                                <Link key={race.id} href={`/races/${race.id}`}>
+                                <Link key={race.id} href={`/races/${race.id}/result`}>
                                     <RaceCard race={race} variant="past" />
                                 </Link>
                             ))

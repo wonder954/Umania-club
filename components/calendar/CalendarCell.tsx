@@ -95,6 +95,16 @@ export function CalendarCell({
                 {allRaces.map((race) => {
                     const isRaceId = /^\d{10}$/.test(race.id);
 
+                    // 今日の日付（YYYY-MM-DD）
+                    const todayStr = new Date().toISOString().slice(0, 10);
+
+                    // dateStr が今日より前なら過去レース
+                    const isPast = dateStr ? dateStr < todayStr : false;
+
+                    const href = isPast
+                        ? `/races/${race.id}/result`
+                        : `/races/${race.id}`;
+
                     const badge = (
                         <span
                             className={`px-1 py-0.5 rounded text-[10px] font-bold ${race.color} ${!isRaceId ? "opacity-50" : ""
@@ -107,7 +117,7 @@ export function CalendarCell({
                     return isRaceId ? (
                         <Link
                             key={race.id}
-                            href={`/races/${race.id}`}
+                            href={href}
                             onClick={(e) => e.stopPropagation()}
                         >
                             {badge}

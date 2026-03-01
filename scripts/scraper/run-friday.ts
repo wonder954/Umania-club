@@ -9,6 +9,7 @@
  * 
  * 保存先:
  * scripts/scraper/data/{yyyymmdd}f/races/{raceId}.json
+ * ＋ Firestore の races コレクション
  * 
  * 実行方法:
  * npx tsx run-friday.ts
@@ -17,6 +18,16 @@
 import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from './yahoo-scraper';
 import { saveRaceData, generateFolderName } from './utils/saveRaceData';
 import type { RaceInfo } from '../../types/race';
+
+import { adminDb } from './firebase-admin';
+
+// Firestore 保存関数（weekly と同じ）
+async function saveRaceToFirestore(race: any) {
+    await adminDb
+        .collection('races')
+        .doc(race.id)
+        .set(race, { merge: true });
+}
 
 async function main() {
     console.log('='.repeat(60));
@@ -75,7 +86,7 @@ async function main() {
             if (denmaInfo.placeDetail) info.placeDetail = denmaInfo.placeDetail;
             if (denmaInfo.raceNumber) info.raceNumber = denmaInfo.raceNumber;
 
-            // フォルダ指定で保存（entries は上書き、result は既存を保持）
+            // JSON 保存（entries は上書き、result は既存を保持）
             saveRaceData(race.raceId, {
                 raceId: race.raceId,
                 info,
@@ -93,6 +104,39 @@ async function main() {
             } else {
                 console.log(`  ⚠️ 馬番未確定（枠順抽選前）`);
             }
+
+            // 🔥 Firestore に保存
+            const firestoreData = {
+                id: race.raceId,
+                name: info.title ?? null,
+                date: info.date ?? null,
+                place: info.place ?? null,
+                raceNumber: info.raceNumber ?? null,
+                grade: info.grade ?? null,
+                placeDetail: info.placeDetail ?? null,
+                course: {
+                    surface: info.surface ?? null,
+                    distance: info.distance ? Number(info.distance) : null,
+                    direction: info.direction ?? null,
+                    courseDetail: info.courseDetail ?? null
+                },
+                weightType: info.weightType ?? null,
+                horses: entries.map(e => ({
+                    frame: e.frame ?? null,
+                    number: e.number ?? null,
+                    name: e.name ?? null,
+                    jockey: e.jockey ?? null,
+                    weight: e.weight ?? null,
+                    odds: e.odds ?? null,
+                    popular: e.popular ?? null
+                })),
+                result: null
+            };
+
+            console.log('  Firestore保存データ:', JSON.stringify(firestoreData, null, 2));
+
+            await saveRaceToFirestore(firestoreData);
+            console.log('  🔄 Firestore に出馬表を保存しました');
 
             successCount++;
 

@@ -50,22 +50,24 @@ export default function PayoutSection({ payout }: Props) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         {/* 単勝 */}
-                        {payout.win?.length > 0 && (
-                            <PayoutCard label="単勝" items={payout.win} color="green" />
+                        {(payout.win ?? []).length > 0 && (
+                            <PayoutCard label="単勝" items={payout.win ?? []} color="green" />
                         )}
 
+
                         {/* 複勝 */}
-                        {payout.place?.length > 0 && (
-                            <PayoutCard label="複勝" items={payout.place} color="blue" />
+                        {(payout.place ?? []).length > 0 && (
+                            <PayoutCard label="複勝" items={payout.place ?? []} color="blue" />
                         )}
+
 
                         {/* 折りたたみ部分 */}
                         {showMore &&
                             (Object.keys(payoutLabels) as Array<keyof Payout>)
                                 .filter((key) => key !== "win" && key !== "place")
                                 .map((key) => {
-                                    const items = payout[key];
-                                    if (!items?.length) return null;
+                                    const items = payout[key] ?? [];
+                                    if (items.length === 0) return null;
 
                                     return (
                                         <PayoutCard

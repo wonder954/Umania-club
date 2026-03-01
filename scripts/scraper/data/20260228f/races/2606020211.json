@@ -1,0 +1,163 @@
+{
+  "raceId": "2606020211",
+  "info": {
+    "date": "2026-03-01",
+    "place": "中山",
+    "title": "中山記念",
+    "grade": "GII",
+    "surface": "芝",
+    "distance": "1800m",
+    "direction": "右",
+    "weightType": "別定",
+    "placeDetail": "2回中山2日",
+    "raceNumber": "11R"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "セイウンハーデス",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "幸 英明",
+      "weight": 57,
+      "odds": 3.8,
+      "popular": 1
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "オニャンコポン",
+      "jockey": "菅原 明良",
+      "weight": 57,
+      "odds": 38.4,
+      "popular": 8
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "マジックサンズ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "横山 和生",
+      "weight": 56,
+      "odds": 14,
+      "popular": 6
+    },
+    {
+      "frame": 3,
+      "number": 4,
+      "name": "スパークリシャール",
+      "jockey": "柴田 善臣",
+      "weight": 57,
+      "odds": 168.2,
+      "popular": 14
+    },
+    {
+      "frame": 4,
+      "number": 5,
+      "name": "レーベンスティール",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "戸崎 圭太",
+      "weight": 58,
+      "odds": 4.5,
+      "popular": 3
+    },
+    {
+      "frame": 4,
+      "number": 6,
+      "name": "チェルヴィニア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "C.ルメール",
+      "weight": 55,
+      "odds": 6.5,
+      "popular": 4
+    },
+    {
+      "frame": 5,
+      "number": 7,
+      "name": "マイネルモーント",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "石川 裕紀人",
+      "weight": 57,
+      "odds": 59,
+      "popular": 10
+    },
+    {
+      "frame": 5,
+      "number": 8,
+      "name": "ショウナンマグマ",
+      "jockey": "吉田 豊",
+      "weight": 57,
+      "odds": 43.8,
+      "popular": 9
+    },
+    {
+      "frame": 6,
+      "number": 9,
+      "name": "カラマティアノス",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "津村 明秀",
+      "weight": 56,
+      "odds": 7.1,
+      "popular": 5
+    },
+    {
+      "frame": 6,
+      "number": 10,
+      "name": "エコロヴァルツ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "横山 武史",
+      "weight": 57,
+      "odds": 4.2,
+      "popular": 2
+    },
+    {
+      "frame": 7,
+      "number": 11,
+      "name": "サイルーン",
+      "jockey": "佐々木 大輔",
+      "weight": 57,
+      "odds": 100.2,
+      "popular": 12
+    },
+    {
+      "frame": 7,
+      "number": 12,
+      "name": "サンストックトン",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "松岡 正海",
+      "weight": 57,
+      "odds": 121.5,
+      "popular": 13
+    },
+    {
+      "frame": 8,
+      "number": 13,
+      "name": "ニシノエージェント",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "三浦 皇成",
+      "weight": 56,
+      "odds": 60.2,
+      "popular": 11
+    },
+    {
+      "frame": 8,
+      "number": 14,
+      "name": "シャンパンカラー",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "岩田 康誠",
+      "weight": 58,
+      "odds": 15.5,
+      "popular": 7
+    }
+  ]
+}

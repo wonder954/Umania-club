@@ -63,14 +63,19 @@ export function RaceCalendarSection({
             <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
                 {selectedRaces.map(race => {
                     const isRaceId = /^\d{10}$/.test(race.id);
+                    const isPast = "result" in race && race.result; // ← ここが重要
+
+                    const link = isPast
+                        ? `/races/${race.id}/result`
+                        : `/races/${race.id}`;
 
                     return isRaceId ? (
                         <Link
                             key={race.id}
-                            href={`/races/${race.id}`}
+                            href={link}
                             className="block mb-4 hover:opacity-90 transition-opacity"
                         >
-                            <RaceCard race={race} />
+                            <RaceCard race={race} variant={isPast ? "past" : "upcoming"} />
                         </Link>
                     ) : (
                         <div key={race.id} className="mb-4">
