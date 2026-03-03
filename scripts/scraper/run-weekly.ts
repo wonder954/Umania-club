@@ -13,6 +13,7 @@ import {
 import {
     saveRaceData,
     loadRaceData,
+    loadPreviousWeekEntries,
     generateFolderName,
     getLatestFolderByType
 } from "./utils/saveRaceData";
@@ -26,6 +27,7 @@ import type {
 import { mergeRaceId } from "./mergeRaceId";
 
 import { adminDb } from "./firebase-admin";
+import { createSearchKey, cleanTitle } from "@/utils/race/raceNameUtils";
 
 
 // 投稿データ（仮）
@@ -41,6 +43,11 @@ async function getPredictions(raceId: string): Promise<Prediction[]> {
 }
 
 // Firestore 保存関数
+function normalizeDistance(raw: any): number | null {
+    if (!raw) return null;
+    const num = parseInt(String(raw).replace(/m/i, "").trim(), 10);
+    return Number.isFinite(num) ? num : null;
+}
 async function saveRaceToFirestore(race: any) {
     await adminDb
         .collection("races")
@@ -85,7 +92,7 @@ async function main() {
                 title: race.title,
                 grade: race.grade ?? null,
                 surface: race.surface ?? null,
-                distance: race.distance ?? null,
+                distance: normalizeDistance(race.distance),
                 direction: race.direction ?? null,
                 courseDetail: race.courseDetail ?? null,
                 weightType: race.weightType ?? null,
@@ -104,7 +111,8 @@ async function main() {
             info.place = registInfo.place ?? null;
             info.placeDetail = registInfo.placeDetail ?? null;
             info.raceNumber = registInfo.raceNumber ?? null;
-            info.distance = registInfo.distance?.replace("m", "") ?? null;
+            info.distance = normalizeDistance(registInfo.distance);
+
 
             // JSON 保存
             saveRaceData(
@@ -127,7 +135,7 @@ async function main() {
                 placeDetail: info.placeDetail ?? null,
                 course: {
                     surface: info.surface ?? null,
-                    distance: info.distance ? Number(info.distance) : null,
+                    distance: info.distance,
                     direction: info.direction ?? null,
                     courseDetail: info.courseDetail ?? null
                 },
@@ -150,15 +158,17 @@ async function main() {
             // Firestore 保存
             await saveRaceToFirestore({
                 id: race.raceId,
-                name: info.title,
+                name: cleanTitle(info.title),
                 date: info.date,
+                year: Number(info.date.slice(0, 4)),
+                searchKey: createSearchKey(info.date, info.title),
                 place: info.place ?? null,
                 raceNumber: info.raceNumber ?? null,
                 grade: info.grade ?? null,
                 placeDetail: info.placeDetail ?? null,
                 course: {
                     surface: info.surface ?? null,
-                    distance: info.distance ? Number(info.distance) : null,
+                    distance: normalizeDistance(info.distance),
                     direction: info.direction ?? null,
                     courseDetail: info.courseDetail ?? null
                 },
@@ -209,7 +219,15 @@ async function main() {
 
             const targetFolder = lastWeekFolder || folderName;
 
-            // JSON 保存
+            // まず既存データを読む（出馬表で保存した entries など）
+            const existingRaceData = loadRaceData(race.raceId, targetFolder);
+
+            const previousEntries =
+                existingRaceData?.entries ??
+                loadPreviousWeekEntries(race.raceId) ??
+                [];
+
+            // JSON 保存（結果＋既存 entries をマージ）
             saveRaceData(
                 race.raceId,
                 {
@@ -221,12 +239,13 @@ async function main() {
                         grade: race.grade ?? null,
                         raceNumber: info.raceNumber ?? null,
                         placeDetail: info.placeDetail ?? null,
-                        distance: info.distance ?? null,
+                        distance: normalizeDistance(info.distance),
                         surface: info.surface ?? null,
                         direction: info.direction ?? null,
                         courseDetail: info.courseDetail ?? null,
                         weightType: info.weightType ?? null
                     },
+                    entries: previousEntries,
                     result
                 },
                 targetFolder
@@ -234,39 +253,42 @@ async function main() {
 
             console.log(`  ✅ 結果保存完了（フォルダ: ${targetFolder}）`);
 
-            // Firestore 保存用 raceData を読み込み
-            const raceData = loadRaceData(race.raceId, targetFolder);
-            if (!raceData) {
+            // 保存後の最新版を読み込み
+            const updatedRaceData = loadRaceData(race.raceId, targetFolder);
+            if (!updatedRaceData) {
                 console.log("  ⚠️ Firestore 保存スキップ（raceData が null）");
                 continue;
             }
 
-            await saveRaceToFirestore({
+            const safeRace = {
                 id: race.raceId,
-                name: raceData.info.title,
-                date: raceData.info.date,
-                place: raceData.info.place,
-                raceNumber: raceData.info.raceNumber,
-                grade: raceData.info.grade,
-                placeDetail: raceData.info.placeDetail,
+                name: cleanTitle(updatedRaceData.info.title) ?? null,
+                date: updatedRaceData.info.date ?? null,
+                year: Number(updatedRaceData.info.date.slice(0, 4)),
+                searchKey: createSearchKey(updatedRaceData.info.date, updatedRaceData.info.title),
+                place: updatedRaceData.info.place ?? null,
+                raceNumber: updatedRaceData.info.raceNumber ?? null,
+                grade: updatedRaceData.info.grade ?? null,
+                placeDetail: updatedRaceData.info.placeDetail ?? null,
                 course: {
-                    surface: raceData.info.surface,
-                    distance: raceData.info.distance ? Number(raceData.info.distance) : null,
-                    direction: raceData.info.direction,
-                    courseDetail: raceData.info.courseDetail
+                    surface: updatedRaceData.info.surface ?? null,
+                    distance: normalizeDistance(updatedRaceData.info.distance) ?? null,
+                    direction: updatedRaceData.info.direction ?? null,
+                    courseDetail: updatedRaceData.info.courseDetail ?? null
                 },
-                weightType: raceData.info.weightType,
-                horses: raceData.entries?.map(e => ({
-                    frame: e.frame,
-                    number: e.number,
-                    name: e.name,
+                weightType: updatedRaceData.info.weightType ?? null,
+                horses: (updatedRaceData.entries ?? []).map(e => ({
+                    frame: e.frame ?? null,
+                    number: e.number ?? null,
+                    name: e.name ?? null,
                     jockey: e.jockey ?? null,
                     weight: e.weight ?? null,
                     odds: e.odds ?? null,
                     popular: e.popular ?? null
-                })) ?? [],
-                result: raceData.result ?? null
-            });
+                })),
+                result: updatedRaceData.result ?? null
+            };
+            await saveRaceToFirestore(safeRace);
 
             console.log("  🔄 Firestore に結果を保存しました");
             lastWeekSuccess++;

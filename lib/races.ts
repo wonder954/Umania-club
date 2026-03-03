@@ -19,7 +19,7 @@ export type Race = {
 
     course: {
         surface: string | null;     // 芝 / ダート（未取得のことがある）
-        distance: string | null;    // "3400m"（未取得のことがある）
+        distance: number | null;    // "3400m"（未取得のことがある）
         direction: string | null;   // 左 / 右（未取得のことがある）
         courseDetail?: string | null;
     };
@@ -98,6 +98,7 @@ export type Race = {
 
     createdAt?: any;
     updatedAt?: any;
+    searchKey?: string | null;
 };
 
 // -----------------------------
@@ -215,6 +216,7 @@ function convertToRace(data: RaceData): Race {
                 payout: data.result.payout,
             }
             : null,
+        searchKey: data.searchKey ?? null,
     };
 }
 

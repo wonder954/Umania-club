@@ -5,7 +5,7 @@ import { Select } from "@/components/common/Select";
 import { useRaceSearch } from "@/hooks/useRaceSearch";
 import type { Race } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
-import { getColorFromGrade } from "@/lib/race/racesToCalendarRaces";
+import { getColorFromGrade } from "@/utils/race/raceGradeUtils";
 
 type Props = {
     races: Race[];
@@ -15,8 +15,10 @@ export default function RaceSearchForm({ races }: Props) {
     const {
         selectedYear,
         selectedMonth,
+        keyword,
         setSelectedYear,
         setSelectedMonth,
+        setKeyword,
         filteredRaces,
         years,
         months,
@@ -36,6 +38,20 @@ export default function RaceSearchForm({ races }: Props) {
                 過去のレースを検索
             </h2>
 
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="レース名・日付で検索（例: 弥生賞 / 2026）"
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    className="
+            w-full px-4 py-2 rounded-xl
+            border border-slate-300/40
+            bg-white/70 backdrop-blur-sm
+            focus:outline-none focus:ring-2 focus:ring-blue-300/40
+        "
+                />
+            </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
                 <Select
                     label="年"
@@ -57,7 +73,7 @@ export default function RaceSearchForm({ races }: Props) {
             </div>
 
             {/* レース一覧表示 */}
-            {selectedMonth && (
+            {filteredRaces.length > 0 && (
                 <div className="mt-4">
                     <label className="block text-sm font-semibold text-slate-700 mb-2">
                         レース一覧 ({filteredRaces.length}件)

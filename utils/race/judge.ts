@@ -4,7 +4,17 @@ import { calculatePayout } from "./payout";
 import type { Bet } from "@/types/bet";
 import type { RaceResult } from "@/types/race";
 
-export function judgeHit(bet: Bet, result: RaceResult) {
+export function judgeHit(bet: Bet, result: RaceResult | null) {
+    // 結果がない（未開催 or データなし）
+    if (!result || !result.order || result.order.length === 0) {
+        return {
+            isHit: false,
+            hitTickets: [],
+            payout: 0,
+            totalPoints: bet.points ?? 0
+        };
+    }
+
     // 着順を馬番だけの配列に変換
     const order = result.order.map(o => o.number);
 
@@ -26,8 +36,8 @@ export function judgeHit(bet: Bet, result: RaceResult) {
         };
     }
 
-    // 払戻金計算
-    const payout = calculatePayout(hitTickets, result.payout);
+    // 払戻金計算（result.payout も null の可能性があるので ?? {}）
+    const payout = calculatePayout(hitTickets, result.payout ?? {});
 
     return {
         isHit: true,

@@ -334,17 +334,19 @@ export async function fetchRaceResult(url: string): Promise<{ info: Partial<Race
                 document.querySelectorAll('.hr-predictRaceInfo__status .hr-predictRaceInfo__text')
             ).map(el => el.textContent?.trim() || '');
 
-            let distance: string | undefined;
+            let distance: number | undefined;
             let surface: string | undefined;
             let direction: string | undefined;
 
-            // "芝・右 2000m" のようなテキストを探す
             for (const text of statusTexts) {
                 const match = text.match(/(芝|ダート)[・･]?(右|左|外|内|直線)?[・･]?(外|内)?\s*(\d{3,4})m/);
                 if (match) {
                     surface = match[1];
                     direction = match[2] || undefined;
-                    distance = `${match[4]}m`;
+
+                    // ★ ここを修正：string → number
+                    distance = Number(match[4]);
+
                     break;
                 }
             }

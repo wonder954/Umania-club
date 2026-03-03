@@ -1,29 +1,29 @@
-import { adminDb } from "@/scripts/scraper/firebase-admin";
-import { formatDateWithWeekday } from "@/lib/date";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 import Link from "next/link";
-import Image from "next/image";
 
 import PredictionArea from "@/components/race/PredictionArea";
 import CommunitySection from "@/components/race/CommunitySection";
 import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
 import type { Race } from "@/lib/races";
+import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
 
 type Props = {
     params: { raceId: string };
 };
 
 async function getRaceFromFirestore(raceId: string): Promise<Race | null> {
-    const snap = await adminDb.collection("races").doc(raceId).get();
-    if (!snap.exists) return null;
+    const ref = doc(db, "races", raceId);
+    const snap = await getDoc(ref);
 
-    const data = snap.data();
+    if (!snap.exists()) return null;
 
     // Firestore Timestamp を含む全てをプレーン化
-    const plain = JSON.parse(JSON.stringify(data));
+    const plain = JSON.parse(JSON.stringify(snap.data()));
 
     return plain as Race;
 }
-
 
 export default async function RacePage({ params }: Props) {
     const race = await getRaceFromFirestore(params.raceId);
@@ -48,78 +48,10 @@ export default async function RacePage({ params }: Props) {
         );
     }
 
-    const gradeBorderColor: Record<string, string> = {
-        GI: "border-yellow-400",
-        GII: "border-pink-400",
-        GIII: "border-green-400",
-    };
-
-
-
     return (
         <div className="min-h-screen pb-20 bg-transparent">
-
             {/* Race Info Card */}
-            <section
-                className={`
-                    bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-6
-                    border-l-8 ${gradeBorderColor[race.grade || ""] || "border-white/40"}
-                    border border-white/40
-                    w-full max-w-4xl mx-auto mt-6
-                `}
-            >
-                <div className="flex flex-col gap-4">
-
-                    {/* 1行目：ロゴ + 日付 */}
-                    <div className="flex items-center justify-between">
-                        <Image
-                            src="/umania-club logo.png"
-                            alt="Umania-club"
-                            width={120}
-                            height={40}
-                            className="h-8 w-auto object-contain"
-                        />
-                        <span className="text-slate-600 text-sm font-medium">
-                            {formatDateWithWeekday(race.date)}
-                        </span>
-                    </div>
-
-                    {/* 2行目：場所 + R + レース名 */}
-                    <div className="flex items-start gap-2">
-                        <div className="leading-tight text-lg font-bold text-slate-800 min-w-[42px]">
-                            <div>{race.place}</div>
-                            <div>{race.raceNumber}</div>
-                        </div>
-
-                        <div className="flex items-center gap-1 flex-wrap">
-                            <h1 className="text-3xl font-extrabold text-slate-900 break-words">
-                                {race.name}
-                            </h1>
-
-                            <span
-                                className={`
-                                    text-3xl font-extrabold px-2 py-1 rounded
-                                    ${race.grade === "GI"
-                                        ? "bg-yellow-100 text-yellow-800"
-                                        : race.grade === "GII"
-                                            ? "bg-pink-100 text-pink-800"
-                                            : "bg-green-100 text-green-800"
-                                    }
-                                `}
-                            >
-                                {race.grade}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* 3行目：コース情報 */}
-                    <p className="text-slate-600 font-medium ml-1">
-                        {race.course.surface} {race.course.distance}
-                        {race.course.direction &&
-                            `（${race.course.direction}${race.course.courseDetail || ""}）`}
-                    </p>
-                </div>
-            </section>
+            <RaceHeaderCard race={race} />
 
             {/* みんなの予想へボタン */}
             <div className="max-w-4xl mx-auto mt-4 px-4">
@@ -127,7 +59,6 @@ export default async function RacePage({ params }: Props) {
             </div>
 
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-
                 {/* 予想セクション */}
                 {!race.result ? (
                     <>

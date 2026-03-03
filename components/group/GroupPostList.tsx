@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { normalizeGrade, getColorFromGrade } from "@/lib/race/racesToCalendarRaces";
+import { normalizeGrade, getColorFromGrade } from "@/utils/race/raceGradeUtils";
 import type { Post } from "@/types/post";
 
 type Props = {

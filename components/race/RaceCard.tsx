@@ -1,7 +1,7 @@
 import { formatDateWithWeekday } from "@/lib/date";
 import type { CalendarRace } from "@/types/race";
 import type { Race } from "@/lib/races";
-import { getColorFromGrade } from "@/lib/race/racesToCalendarRaces";
+import { getColorFromGrade } from "@/utils/race/raceGradeUtils";
 
 type Props = {
     race: CalendarRace | Race;

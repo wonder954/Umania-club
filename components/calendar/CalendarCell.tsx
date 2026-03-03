@@ -1,6 +1,5 @@
-import { shortenRaceName } from "./raceAbbr";
+import { shortenRaceName } from "@/utils/race/raceNameUtils";
 import type { CalendarRace } from "@/types/race";
-import { gradeRaces2026 } from "@/lib/grades2026";
 import Link from "next/link";
 
 type Props = {
@@ -14,43 +13,6 @@ type Props = {
     onClick?: () => void;
 };
 
-/**
- * レース名の正規化（比較用）
- */
-function normalizeRaceName(name: string): string {
-    return name
-        .replace(/\s+/g, "")
-        .replace(/ステークス|S$/g, "")
-        .trim();
-}
-
-/**
- * グレード → Tailwind クラス（JRA公式カラー）
- */
-function getGradeClass(grade?: string): string {
-    if (!grade) return "bg-gray-200 text-gray-800";
-
-    const normalized = grade
-        .replace(/[ⅠⅡⅢ]/g, (m) => {
-            if (m === "Ⅰ") return "I";
-            if (m === "Ⅱ") return "II";
-            if (m === "Ⅲ") return "III";
-            return m;
-        })
-        .toUpperCase();
-
-    if (normalized.includes("I") && !normalized.includes("II") && !normalized.includes("III")) {
-        return "bg-blue-500 text-white";  // GI
-    }
-    if (normalized.includes("II") && !normalized.includes("III")) {
-        return "bg-red-500 text-white";  // GII
-    }
-    if (normalized.includes("III")) {
-        return "bg-green-500 text-white";  // GIII
-    }
-
-    return "bg-gray-200 text-gray-800";  // その他
-}
 
 export function CalendarCell({
     day,

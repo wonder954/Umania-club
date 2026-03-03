@@ -3,6 +3,9 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { cleanTitle } from "@/utils/race/raceNameUtils";
+import { normalizeGrade } from "@/utils/race/raceGradeUtils";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -24,60 +27,6 @@ type YahooRace = {
 };
 
 // ===============================
-// グレード正規化
-// ===============================
-function normalizeGrade(g: string): string {
-    if (!g) return "";
-
-    // まず全角を半角に統一
-    let normalized = g
-        .replace(/[ⅠⅡⅢ]/g, (match) => {
-            if (match === 'Ⅰ') return 'I';
-            if (match === 'Ⅱ') return 'II';
-            if (match === 'Ⅲ') return 'III';
-            return match;
-        })
-        .replace(/[ⅰⅱⅲ]/g, (match) => {
-            if (match === 'ⅰ') return 'I';
-            if (match === 'ⅱ') return 'II';
-            if (match === 'ⅲ') return 'III';
-            return match;
-        })
-        .replace(/[ⅠⅡⅢⅣⅤ]/g, (match) => {
-            const map: Record<string, string> = {
-                'Ⅰ': 'I',
-                'Ⅱ': 'II',
-                'Ⅲ': 'III',
-            };
-            return map[match] || match;
-        })
-        .replace(/・/g, "")
-        .toUpperCase();
-
-    // "GI", "GII", "GIII" などを "I", "II", "III" に統一
-    normalized = normalized
-        .replace(/^G/, "")
-        .replace(/^JP/, "")  // 地方競馬用
-        .trim();
-
-    return normalized;
-}
-
-// ===============================
-// タイトル正規化
-// ===============================
-function cleanTitle(title: string): string {
-    if (!title) return "";
-
-    return title
-        .replace(/\s+/g, "")                    // 改行・空白除去
-        .replace(/GIII|GII|GI|G3|G2|G1/gi, "") // グレード表記除去
-        .replace(/[（(].*?[）)]/g, "")          // カッコ内除去(全角・半角両対応)
-        .replace(/ステークス|S$/g, "")          // ステークス除去
-        .trim();
-}
-
-// ===============================
 // マッチングロジック
 // ===============================
 function matchRaceId(jraRace: JraRace, yahooList: YahooRace[]): string | undefined {
@@ -86,30 +35,19 @@ function matchRaceId(jraRace: JraRace, yahooList: YahooRace[]): string | undefin
     const jDate = jraRace.date;
 
     console.log(`\n🔍 マッチング試行: ${jraRace.name} (${jDate}, ${jGrade})`);
-    console.log(`   正規化後: "${jName}"`);
 
     for (const y of yahooList) {
+        if (y.date !== jDate) continue;
+
         const yName = cleanTitle(y.title);
         const yGrade = normalizeGrade(y.grade);
 
-        // デバッグ出力
-        if (y.date === jDate) {
-            console.log(`   候補: ${y.title} (${y.date}, ${yGrade}) → "${yName}"`);
-        }
-
-        // マッチング条件
-        const dateMatch = y.date === jDate;
-        const gradeMatch = yGrade === jGrade;
-
-        // タイトルマッチング（複数パターン）
         const titleMatch =
-            yName === jName ||                          // 完全一致
-            yName.includes(jName) ||                    // Yahoo側が長い
-            jName.includes(yName) ||                    // JRA側が長い
-            (jName.length >= 3 && yName.length >= 3 &&  // 前方3文字一致
-                jName.slice(0, 3) === yName.slice(0, 3));
+            jName === yName ||
+            jName.includes(yName) ||
+            yName.includes(jName);
 
-        if (dateMatch && gradeMatch && titleMatch) {
+        if (titleMatch && jGrade === yGrade) {
             console.log(`   ✅ マッチ成功: ${y.raceId}`);
             return y.raceId;
         }
@@ -131,24 +69,20 @@ export async function mergeRaceId(): Promise<number> {
     const dataDir = path.join(__dirname, "data");
     const weekFolders = fs.readdirSync(dataDir).filter(f => f.endsWith("w"));
 
-    console.log(`📁 対象フォルダ: ${weekFolders.join(", ")}`);
-
     let yahooList: YahooRace[] = [];
 
     for (const week of weekFolders) {
         const racesDir = path.join(dataDir, week, "races");
         if (!fs.existsSync(racesDir)) continue;
 
-        const files = fs.readdirSync(racesDir);
-        for (const file of files) {
-            if (!file.endsWith('.json')) continue;
+        for (const file of fs.readdirSync(racesDir)) {
+            if (!file.endsWith(".json")) continue;
 
             const raceId = file.replace(".json", "");
             const filePath = path.join(racesDir, file);
 
             try {
                 const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
                 yahooList.push({
                     raceId,
                     date: data.info.date,
@@ -156,12 +90,10 @@ export async function mergeRaceId(): Promise<number> {
                     grade: data.info.grade,
                 });
             } catch (error) {
-                console.error(`⚠️  ファイル読み込みエラー: ${file}`, error);
+                console.error(`⚠️ ファイル読み込みエラー: ${file}`, error);
             }
         }
     }
-
-    console.log(`📄 Yahoo! レースデータ件数: ${yahooList.length}`);
 
     let updated = 0;
     let notFound = 0;
@@ -173,7 +105,7 @@ export async function mergeRaceId(): Promise<number> {
             updated++;
         } else {
             notFound++;
-            console.warn(`⚠️  マッチ失敗: ${race.name} (${race.date}, ${race.grade})`);
+            console.warn(`⚠️ マッチ失敗: ${race.name} (${race.date}, ${race.grade})`);
         }
     }
 

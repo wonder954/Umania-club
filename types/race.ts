@@ -12,7 +12,7 @@ export type RaceInfo = {
     grade: string | null;         // "GI" | "GII" | "GIII" | null
     raceNumber?: string | null;   // "11R"
     surface?: string | null;      // "芝" | "ダート"
-    distance?: string | null;     // "2200"
+    distance?: number | null;     // "2200"
     direction?: string | null;    // "右" | "左"
     courseDetail?: string | null; // "外" | "内"
     weightType?: string | null;   // "別定" | "定量" | "ハンデ"

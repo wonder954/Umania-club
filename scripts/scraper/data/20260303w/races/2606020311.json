@@ -1,0 +1,108 @@
+{
+  "raceId": "2606020311",
+  "info": {
+    "date": "2026-03-07",
+    "place": "中山",
+    "title": "ローレル競馬場賞中山牝馬ステークス",
+    "grade": "GIII",
+    "surface": "芝",
+    "distance": null,
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "ハンデ",
+    "raceNumber": "11R",
+    "placeDetail": "2回中山3日"
+  },
+  "entries": [
+    {
+      "frame": null,
+      "number": null,
+      "name": "アンゴラブラック"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "アンリーロード"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "エセルフリーダ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "エリカエクスプレス"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "クリノメイ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ケリフレッドアスク"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ステレンボッシュ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "テリオスララ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ニシノティアモ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "パラディレーヌ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ビヨンドザヴァレー"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "フィールシンパシー"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "フレミングフープ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ボンドガール"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ポルカリズム"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "レディーヴァリュー"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "レーゼドラマ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ヴァルキリーバース"
+    }
+  ]
+}
