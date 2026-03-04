@@ -94,7 +94,7 @@ export type RaceListItem = {
     surface?: string | null;
     direction?: string | null;
     courseDetail?: string | null;
-    distance?: string | null;
+    distance?: number | null;
     weightType?: string | null;
     date?: string | null;
 };

@@ -12,7 +12,7 @@ export type WeeklyRace = {
     date: string;
     detailUrl: string;
     surface?: string;
-    distance?: string;
+    distance?: number;
     direction?: string;
     courseDetail?: string;
     weightType?: string;
@@ -42,18 +42,17 @@ async function createBrowserPage(): Promise<{ browser: Browser; page: Page }> {
  */
 async function extractRaceInfo(page: Page): Promise<Partial<RaceInfo>> {
     return await page.evaluate(() => {
-        const number = document
-            .querySelector('.hr-predictRaceInfo__raceNumber')
-            ?.textContent?.trim() || null;
+        const number =
+            document.querySelector('.hr-predictRaceInfo__raceNumber')
+                ?.textContent?.trim() || null;
 
         const dateTexts = Array.from(
             document.querySelectorAll('.hr-predictRaceInfo__date .hr-predictRaceInfo__text')
-        ).map(el => (el as HTMLElement).textContent?.trim() || '');
+        ).map(el => el.textContent?.trim() || '');
 
-        const dateRaw = dateTexts[0] || null; // "2026年1月24日(土)"
-        const placeRaw = dateTexts[1] || null; // "1回小倉1日"
+        const dateRaw = dateTexts[0] || null;
+        const placeRaw = dateTexts[1] || null;
 
-        // 日付を YYYY-MM-DD に変換
         let date = '';
         if (dateRaw) {
             const m = dateRaw.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
@@ -62,11 +61,40 @@ async function extractRaceInfo(page: Page): Promise<Partial<RaceInfo>> {
             }
         }
 
-        // 場所を抽出
         let place = '';
         if (placeRaw) {
             const m = placeRaw.match(/回(.+?)\d/);
             place = m ? m[1] : '';
+        }
+
+        // ★ コース情報（距離・芝/ダート・右/左）を取得
+        const statusTexts = Array.from(
+            document.querySelectorAll('.hr-predictRaceInfo__status .hr-predictRaceInfo__text')
+        ).map(el => el.textContent?.trim() || "");
+
+        let surface: string | null = null;
+        let direction: string | null = null;
+        let courseDetail: string | null = null;
+        let distance: number | null = null;
+        let weightType: string | null = null;
+
+        for (const text of statusTexts) {
+            // 芝・右 2000m
+            const courseMatch = text.match(
+                /(芝|ダート)[・･]?\s*(右|左|外|内|直線)?\s*(外|内)?\s*(\d{3,4})m/
+            );
+            if (courseMatch) {
+                surface = courseMatch[1] || null;
+                direction = courseMatch[2] || null;
+                courseDetail = courseMatch[3] || null;
+                distance = courseMatch ? Number(courseMatch[4]) : null;
+            }
+
+            // 馬齢 / 別定 / 定量 / ハンデ
+            const weightMatch = text.match(/(馬齢|別定|定量|ハンデ)/);
+            if (weightMatch) {
+                weightType = weightMatch[1];
+            }
         }
 
         return {
@@ -74,6 +102,11 @@ async function extractRaceInfo(page: Page): Promise<Partial<RaceInfo>> {
             date,
             place,
             placeDetail: placeRaw || undefined,
+            surface,
+            direction,
+            courseDetail,
+            distance,
+            weightType,
         };
     });
 }
@@ -114,7 +147,7 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 surface: string | null;
                 direction: string | null;
                 courseDetail: string | null;
-                distance: string | undefined;
+                distance: number | null;
                 weightType: string | null;
             }> = [];
 
@@ -138,15 +171,15 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 const raceId = raceIdMatch ? raceIdMatch[1] : '';
 
                 // コース情報を解析
-                const courseMatch = status.match(/(芝|ダート)[・･]?(右|左|外|内|直線)?[・･]?(外|内)?\s*(\d{3,4})m/);
+                const courseMatch = status.match(
+                    /(芝|ダート)[・･]?\s*(右|左|外|内|直線)?\s*(外|内)?\s*(\d{3,4})m/
+                );
                 const surface = courseMatch?.[1] || null;
                 const direction = courseMatch?.[2] || null;
                 const courseDetail = courseMatch?.[3] || null;
 
                 // 距離を "2200m" の形式で抽出
-                const distance = courseMatch ? `${courseMatch[4]}m` : undefined;
-
-                // 斤量タイプ
+                const distance = courseMatch ? Number(courseMatch[4]) : null;                // 斤量タイプ
                 const weightMatch = status.match(/(定量|別定|ハンデ|馬齢)/);
                 const weightType = weightMatch?.[1] || null;
 

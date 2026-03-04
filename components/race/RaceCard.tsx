@@ -2,7 +2,7 @@ import { formatDateWithWeekday } from "@/lib/date";
 import type { CalendarRace } from "@/types/race";
 import type { Race } from "@/lib/races";
 import { getGradeStyle, type GradeStyle } from "@/utils/race/raceGradeUtils";
-import { cleanRaceName } from "@/components/race/RaceHeaderCard";
+import { formatRaceName } from "@/utils/race";
 
 type Props = {
     race: CalendarRace | Race;
@@ -56,7 +56,7 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
             </div>
 
             <h2 className="text-2xl font-bold mb-1 text-slate-800">
-                {cleanRaceName(race.raceName ?? race.name)}
+                {formatRaceName(race.raceName ?? race.name)}
             </h2>
 
             <p className="text-slate-600 text-sm">

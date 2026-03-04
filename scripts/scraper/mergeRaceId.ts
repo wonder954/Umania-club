@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { cleanTitle } from "@/utils/race/raceNameUtils";
+import { cleanTitle } from "@/utils/race/normalize";
 import { normalizeGrade } from "@/utils/race/raceGradeUtils";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,7 +30,7 @@ type YahooRace = {
 // マッチングロジック
 // ===============================
 function matchRaceId(jraRace: JraRace, yahooList: YahooRace[]): string | undefined {
-    const jName = cleanTitle(jraRace.name);
+    const jName = cleanTitle(jraRace.name);        // ★ 検索用の正規化
     const jGrade = normalizeGrade(jraRace.grade);
     const jDate = jraRace.date;
 
@@ -39,7 +39,7 @@ function matchRaceId(jraRace: JraRace, yahooList: YahooRace[]): string | undefin
     for (const y of yahooList) {
         if (y.date !== jDate) continue;
 
-        const yName = cleanTitle(y.title);
+        const yName = cleanTitle(y.title);           // ★ 検索用の正規化
         const yGrade = normalizeGrade(y.grade);
 
         const titleMatch =

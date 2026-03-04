@@ -4,15 +4,11 @@ import type { Race } from "@/lib/races";
 import type { CalendarRace } from "@/types/race";
 import type { GradeRace } from "@/lib/grades2026";
 
-import { cleanTitle } from "@/utils/race/raceNameUtils";
+import { cleanTitle } from "@/utils/race/normalize";          // ★ 検索用
 import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
-import { removeGradeSuffix } from "@/utils/race/raceNameUtils";
+import { removeGradeSuffix } from "@/utils/race/displayName"; // ★ 表示用
 
-
-/**
- * レース名と日付で同一レースか判定
- * cleanTitle による正規化で揺れを吸収
- */
+/** レース名と日付で同一レースか判定（検索用の正規化） */
 function isSameRace(name1: string, name2: string, date1: string, date2: string): boolean {
     if (date1 !== date2) return false;
 
@@ -22,9 +18,7 @@ function isSameRace(name1: string, name2: string, date1: string, date2: string):
     return n1 === n2 || n1.includes(n2) || n2.includes(n1);
 }
 
-/**
- * Race[] + JRAデータ → CalendarRace[] に変換（重複除去）
- */
+/** Race[] + JRAデータ → CalendarRace[] に変換（重複除去） */
 export function racesToCalendarRaces(
     races: Race[],
     jraData: GradeRace[] = []
@@ -42,11 +36,11 @@ export function racesToCalendarRaces(
         calendarRaces.push({
             id: r.id,
             name: r.name,
-            raceName: r.raceName,
+            raceName: r.raceName || removeGradeSuffix(r.name), // ★ 安全に表示用へ
             date: r.date,
             grade,
             color: getGradeStyle(grade),
-            isWeak: false, // ← 濃い色
+            isWeak: false,
         });
     }
 
@@ -63,11 +57,11 @@ export function racesToCalendarRaces(
             calendarRaces.push({
                 id: jraRace.id,
                 name: jraRace.name,
-                raceName: removeGradeSuffix(jraRace.name),
+                raceName: removeGradeSuffix(jraRace.name), // ★ 表示用
                 date: jraRace.date,
                 grade,
                 color: getGradeStyle(grade),
-                isWeak: true, // ← 濃い色
+                isWeak: true,
             });
         }
     }
@@ -75,9 +69,7 @@ export function racesToCalendarRaces(
     return calendarRaces;
 }
 
-/**
- * 日付ごとにグループ化
- */
+/** 日付ごとにグループ化 */
 export function groupByDate(races: CalendarRace[]): Record<string, CalendarRace[]> {
     const map: Record<string, CalendarRace[]> = {};
 

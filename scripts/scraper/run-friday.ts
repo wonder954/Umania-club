@@ -1,126 +1,106 @@
-/**
- * 金曜に実行するスクリプト
- * 
- * 処理内容:
- * 1. 重賞レース一覧を取得
- * 2. 各レースについて:
- *    - denma ページから出馬表（馬番あり）を取得して上書き保存
- *    - result は既存を保持
- * 
- * 保存先:
- * scripts/scraper/data/{yyyymmdd}f/races/{raceId}.json
- * ＋ Firestore の races コレクション
- * 
- * 実行方法:
- * npx tsx run-friday.ts
- */
+// Yahoo! 競馬 金曜スクレイピング（確定出馬表版）
 
-import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from './yahoo-scraper';
-import { saveRaceData, generateFolderName } from './utils/saveRaceData';
-import type { RaceInfo } from '../../types/race';
+import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper";
+import { saveRaceData, generateFolderName } from "./utils/saveRaceData";
+import type { RaceInfo } from "../../types/race";
+import { adminDb } from "./firebase-admin";
+import { cleanTitle, createSearchKey } from "@/utils/race";
 
-import { adminDb } from './firebase-admin';
-
-// Firestore 保存関数（weekly と同じ）
 async function saveRaceToFirestore(race: any) {
-    await adminDb
-        .collection('races')
-        .doc(race.id)
-        .set(race, { merge: true });
+    await adminDb.collection("races").doc(race.id).set(race, { merge: true });
 }
 
 async function main() {
-    console.log('='.repeat(60));
-    console.log('Yahoo! 競馬 金曜スクレイピング（確定出馬表版）');
-    console.log('='.repeat(60));
-    console.log('');
+    console.log("=".repeat(60));
+    console.log("Yahoo! 競馬 金曜スクレイピング（確定出馬表版）");
+    console.log("=".repeat(60));
+    console.log("");
 
-    // 今日の日付でフォルダ名を生成
-    const folderName = generateFolderName('f');
-    console.log(`📁 保存先フォルダ: ${folderName}`);
-    console.log('');
+    const folderName = generateFolderName("f");
+    console.log(`📁 保存先フォルダ: ${folderName}\n`);
 
-    // 1. 重賞一覧を取得
-    console.log('[1/2] 重賞レース一覧を取得中...');
+    console.log("[1/2] 重賞レース一覧を取得中...");
     const races = await fetchWeeklyRacesYahoo();
-    console.log(`  → ${races.length} 件のレースを検出`);
-    console.log('');
+    console.log(`  → ${races.length} 件のレースを検出\n`);
 
     let successCount = 0;
     let errorCount = 0;
 
-    // 2. 各レースを処理
-    console.log('[2/2] 確定出馬表を取得中...');
-    console.log('');
+    console.log("[2/2] 確定出馬表を取得中...\n");
 
     for (const race of races) {
-        console.log('-'.repeat(40));
+        console.log("-".repeat(40));
         console.log(`[${race.raceId}] ${race.title} (${race.grade})`);
 
         try {
-            // レース情報を構築
+            // 一覧ページの情報を初期値にする（weekly と統一）
             const info: RaceInfo = {
-                date: race.date || '',
-                place: '',
+                date: race.date ?? "",
+                place: null,
                 title: race.title,
-                grade: race.grade,
-                surface: race.surface || undefined,
-                distance: race.distance || undefined,
-                direction: race.direction || undefined,
-                courseDetail: race.courseDetail || undefined,
-                weightType: race.weightType || undefined,
+                grade: race.grade ?? null,
+                surface: race.surface ?? null,
+                distance: race.distance ?? null, // number | null
+                direction: race.direction ?? null,
+                courseDetail: race.courseDetail ?? null,
+                weightType: race.weightType ?? null,
+                raceNumber: null,
+                placeDetail: null
             };
 
-            // denma ページから出馬表（確定版）を取得
-            const denmaUrl = race.detailUrl.includes('/race/denma/')
+            const denmaUrl = race.detailUrl.includes("/race/denma/")
                 ? race.detailUrl
-                : race.detailUrl.replace('/race/index/', '/race/denma/');
+                : race.detailUrl.replace("/race/index/", "/race/denma/");
 
-            console.log(`  📋 出馬表（確定版）を取得中...`);
-
+            console.log("  📋 出馬表（確定版）を取得中...");
             const { info: denmaInfo, entries } = await fetchRaceEntriesDenma(denmaUrl);
 
-            // info をマージ
-            if (denmaInfo.date) info.date = denmaInfo.date;
-            if (denmaInfo.place) info.place = denmaInfo.place;
-            if (denmaInfo.placeDetail) info.placeDetail = denmaInfo.placeDetail;
-            if (denmaInfo.raceNumber) info.raceNumber = denmaInfo.raceNumber;
+            // denma 情報をマージ（weekly と同じ戦略）
+            info.date = denmaInfo.date ?? info.date;
+            info.place = denmaInfo.place ?? info.place;
+            info.placeDetail = denmaInfo.placeDetail ?? info.placeDetail;
+            info.raceNumber = denmaInfo.raceNumber ?? info.raceNumber;
 
-            // JSON 保存（entries は上書き、result は既存を保持）
-            saveRaceData(race.raceId, {
-                raceId: race.raceId,
-                info,
-                entries,
-            }, folderName, {
-                skipIfExists: { result: true },
-            });
+            if (denmaInfo.surface) info.surface = denmaInfo.surface;
+            if (denmaInfo.direction) info.direction = denmaInfo.direction;
+            if (denmaInfo.courseDetail) info.courseDetail = denmaInfo.courseDetail;
+            if (denmaInfo.weightType) info.weightType = denmaInfo.weightType;
+
+            if (denmaInfo.distance !== null && denmaInfo.distance !== undefined) {
+                info.distance = denmaInfo.distance; // number
+            }
+
+            // JSON 保存（entries は上書き、result は保持）
+            saveRaceData(
+                race.raceId,
+                { raceId: race.raceId, info, entries },
+                folderName,
+                { skipIfExists: { result: true } }
+            );
 
             console.log(`  ✅ 出馬表保存完了（${entries.length} 頭）`);
 
-            // 馬番の有無をチェック
             const hasNumbers = entries.some(e => e.number !== null);
-            if (hasNumbers) {
-                console.log(`  📌 馬番確定済み`);
-            } else {
-                console.log(`  ⚠️ 馬番未確定（枠順抽選前）`);
-            }
+            console.log(hasNumbers ? "  📌 馬番確定済み" : "  ⚠️ 馬番未確定");
 
-            // 🔥 Firestore に保存
+            // Firestore 保存（weekly と完全統一）
             const firestoreData = {
                 id: race.raceId,
-                name: info.title ?? null,
-                date: info.date ?? null,
-                place: info.place ?? null,
-                raceNumber: info.raceNumber ?? null,
-                grade: info.grade ?? null,
-                placeDetail: info.placeDetail ?? null,
+                name: cleanTitle(info.title),
+                date: info.date,
+                year: Number(info.date.slice(0, 4)),
+                searchKey: createSearchKey(info.date, info.title),
+                place: info.place,
+                raceNumber: info.raceNumber,
+                grade: info.grade,
+                placeDetail: info.placeDetail,
                 course: {
-                    surface: info.surface ?? null,
-                    distance: info.distance ? Number(info.distance) : null,
-                    direction: info.direction ?? null,
-                    courseDetail: info.courseDetail ?? null
+                    surface: info.surface,
+                    distance: info.distance, // number
+                    direction: info.direction,
+                    courseDetail: info.courseDetail
                 },
-                weightType: info.weightType ?? null,
+                weightType: info.weightType,
                 horses: entries.map(e => ({
                     frame: e.frame ?? null,
                     number: e.number ?? null,
@@ -133,30 +113,26 @@ async function main() {
                 result: null
             };
 
-            console.log('  Firestore保存データ:', JSON.stringify(firestoreData, null, 2));
+            console.log("  Firestore保存データ:", JSON.stringify(firestoreData, null, 2));
 
             await saveRaceToFirestore(firestoreData);
-            console.log('  🔄 Firestore に出馬表を保存しました');
+            console.log("  🔄 Firestore に出馬表を保存しました");
 
             successCount++;
 
         } catch (error) {
-            console.error(`  ❌ エラー:`, error);
+            console.error("  ❌ エラー:", error);
             errorCount++;
-            continue;
         }
     }
 
-    // 3. サマリー
-    console.log('');
-    console.log('='.repeat(60));
-    console.log('処理完了');
-    console.log('-'.repeat(40));
+    console.log("\n" + "=".repeat(60));
+    console.log("処理完了");
+    console.log("-".repeat(40));
     console.log(`📁 保存先: ${folderName}`);
-    console.log('-'.repeat(40));
     console.log(`  成功: ${successCount} 件`);
     console.log(`  エラー: ${errorCount} 件`);
-    console.log('='.repeat(60));
+    console.log("=".repeat(60));
 }
 
 main().catch(console.error);

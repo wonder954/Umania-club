@@ -1,8 +1,6 @@
-import { shortenRaceName } from "@/utils/race/raceNameUtils";
+import { shortenRaceName, formatRaceName } from "@/utils/race";
 import type { CalendarRace } from "@/types/race";
 import Link from "next/link";
-import { cleanRaceName } from "@/components/race/RaceHeaderCard";
-
 
 type Props = {
     day: number | null;
@@ -85,7 +83,7 @@ export function CalendarCell({
                 hover:opacity-80
             `}
                         >
-                            {shortenRaceName(cleanRaceName(race.raceName ?? race.name))}
+                            {shortenRaceName(formatRaceName(race.raceName ?? race.name))}
                         </span>
                     );
 

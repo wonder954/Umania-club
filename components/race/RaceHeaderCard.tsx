@@ -2,13 +2,8 @@ import Image from "next/image";
 import { formatDateWithWeekday } from "@/lib/date";
 import type { Race } from "@/lib/races";
 import { getGradeStyle } from "@/utils/race/raceGradeUtils";
-import { removeGradeSuffix } from "@/utils/race/raceNameUtils";
+import { formatRaceName } from "@/utils/race";
 
-export function cleanRaceName(name: string): string {
-    return removeGradeSuffix(
-        name.replace(/\s+(GI|GII|GIII)$/i, "").trim()
-    );
-}
 
 function parseDistance(raw: any): number | null {
     if (!raw) return null;
@@ -55,7 +50,8 @@ export function RaceHeaderCard({ race }: { race: Race }) {
 
                     <div className="flex items-center gap-1 flex-wrap">
                         <h1 className="text-3xl font-extrabold text-slate-900 break-words">
-                            {cleanRaceName(race.raceName ?? race.name)}
+                            {formatRaceName(race.raceName ?? race.name)}
+
                         </h1>
 
                         <span

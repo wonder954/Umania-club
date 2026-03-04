@@ -6,7 +6,7 @@ import { useRaceSearch } from "@/hooks/useRaceSearch";
 import type { Race } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
 import { getGradeStyle } from "@/utils/race/raceGradeUtils";
-import { cleanRaceName } from "@/components/race/RaceHeaderCard";
+import { formatRaceName } from "@/utils/race";
 
 type Props = {
     races: Race[];
@@ -117,7 +117,7 @@ export default function RaceSearchForm({ races }: Props) {
                                                     {formatDateWithWeekday(race.date)} {race.place}
                                                 </span>
                                                 <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors">
-                                                    {cleanRaceName(race.raceName ?? race.name)}
+                                                    {formatRaceName(race.raceName ?? race.name)}
                                                 </span>
                                             </div>
 
