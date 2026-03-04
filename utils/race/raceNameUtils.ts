@@ -51,6 +51,13 @@ export function normalizeRaceName(name: string): string {
         .trim();
 }
 
+/** GⅠ/GⅡ/GⅢ をレース名から除去 */
+export function removeGradeSuffix(name: string): string {
+    return name
+        .replace(/\s*(G[ⅠⅡⅢ]|GI|GII|GIII)$/i, "")
+        .trim();
+}
+
 /**
  * cleanTitle
  * 略称化 → 正規化 をまとめた検索用タイトル

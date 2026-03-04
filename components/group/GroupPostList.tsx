@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { normalizeGrade, getColorFromGrade } from "@/utils/race/raceGradeUtils";
+import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
 import type { Post } from "@/types/post";
 
 type Props = {
@@ -23,7 +23,7 @@ export default function GroupPostList({ posts }: Props) {
             <div className="space-y-4">
                 {posts.map((post) => {
                     const grade = normalizeGrade(extractGradeFromRaceName(post.raceName));
-                    const colorClass = getColorFromGrade(grade);
+                    const colorClass = getGradeStyle(grade);
 
                     return (
                         <Link key={post.id} href={`/races/${post.raceId}/posts/${post.id}`}>

@@ -1,6 +1,8 @@
 import { shortenRaceName } from "@/utils/race/raceNameUtils";
 import type { CalendarRace } from "@/types/race";
 import Link from "next/link";
+import { cleanRaceName } from "@/components/race/RaceHeaderCard";
+
 
 type Props = {
     day: number | null;
@@ -57,22 +59,33 @@ export function CalendarCell({
                 {allRaces.map((race) => {
                     const isRaceId = /^\d{10}$/.test(race.id);
 
-                    // 今日の日付（YYYY-MM-DD）
                     const todayStr = new Date().toISOString().slice(0, 10);
-
-                    // dateStr が今日より前なら過去レース
                     const isPast = dateStr ? dateStr < todayStr : false;
 
                     const href = isPast
                         ? `/races/${race.id}/result`
                         : `/races/${race.id}`;
 
+                    // ★ GradeStyle を取得
+                    const style = race.color;
+
+                    // ★ デバッグ
+                    console.log("race:", race.name, "bg:", style.bg, "text:", style.text, "weak:", race.isWeak);
+
+
+                    // ★ 薄い色にするかどうか（変数名を変更）
+                    const raceBg = race.isWeak ? `${style.bg}/50` : style.bg;
+                    const raceText = race.isWeak ? `${style.text}/90` : style.text;
+
                     const badge = (
                         <span
-                            className={`px-1 py-0.5 rounded text-[10px] font-bold ${race.color} ${!isRaceId ? "opacity-50" : ""
-                                } hover:opacity-80`}
+                            className={`
+                px-1 py-0.5 rounded text-[10px] font-bold
+                ${raceBg} ${raceText}
+                hover:opacity-80
+            `}
                         >
-                            {shortenRaceName(race.name)}
+                            {shortenRaceName(cleanRaceName(race.raceName ?? race.name))}
                         </span>
                     );
 

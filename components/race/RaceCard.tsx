@@ -1,7 +1,8 @@
 import { formatDateWithWeekday } from "@/lib/date";
 import type { CalendarRace } from "@/types/race";
 import type { Race } from "@/lib/races";
-import { getColorFromGrade } from "@/utils/race/raceGradeUtils";
+import { getGradeStyle, type GradeStyle } from "@/utils/race/raceGradeUtils";
+import { cleanRaceName } from "@/components/race/RaceHeaderCard";
 
 type Props = {
     race: CalendarRace | Race;
@@ -13,11 +14,13 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
 
     const detail = (race as any).course ? (race as Race) : null;
 
-    const colorClass =
-        (race as CalendarRace).color ?? getColorFromGrade(race.grade ?? "OP");
+    // ★ CalendarRace.color は GradeStyle に統一されている前提
+    const style: GradeStyle =
+        (race as CalendarRace).color ??
+        getGradeStyle(race.grade ?? "OP");
 
-    const bgClass = colorClass.split(" ").find((c: string) => c.startsWith("bg-"));
-    const borderClass = bgClass?.replace("bg-", "border-") || "border-blue-400";
+    const bgClass = style.bg;
+    const borderClass = style.border;
 
     return (
         <div
@@ -34,10 +37,10 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                     <span
                         className={`
                             text-xs font-semibold px-2.5 py-0.5 rounded 
-                            ${colorClass ?? "bg-blue-100 text-blue-800"}
+                            ${style.bg} ${style.text}
                         `}
                     >
-                        {race.grade || "OP"}
+                        {style.label}
                     </span>
 
                     {detail && (
@@ -52,12 +55,14 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                 </span>
             </div>
 
-            <h2 className="text-2xl font-bold mb-1 text-slate-800">{race.name}</h2>
+            <h2 className="text-2xl font-bold mb-1 text-slate-800">
+                {cleanRaceName(race.raceName ?? race.name)}
+            </h2>
 
             <p className="text-slate-600 text-sm">
                 {detail ? (
                     <>
-                        {detail.course.surface} {detail.course.distance}
+                        {detail.course.surface} {detail.course.distance}m
                         {detail.weightType ? ` / ${detail.weightType}` : ""}
                         {detail.course.courseDetail ? ` / ${detail.course.courseDetail}` : ""}
                     </>

@@ -14,23 +14,52 @@ export function normalizeGrade(grade: string): string {
         .replace(/III/g, "3")
         .replace(/II/g, "2")
         .replace(/(?<![I0-9])I(?![I0-9])/g, "1")
-        .replace(/\s+/g, "")
-        .replace(/G1/, "G1")
-        .replace(/G2/, "G2")
-        .replace(/G3/, "G3");
+        .replace(/\s+/g, "");
 }
 
 /**
- * グレード → Tailwind カラー
+ * グレードの UI スタイル
  */
-export function getColorFromGrade(grade: string): string {
-    const g = normalizeGrade(grade);
+export type GradeStyle = {
+    label: string;   // 表示名（G1 / JG1 など）
+    bg: string;      // 背景色
+    text: string;    // 文字色
+    border: string;  // 枠線色
+};
 
-    if (g === "G1" || g === "1") return "bg-blue-500 text-white";
-    if (g === "G2" || g === "2") return "bg-red-500 text-white";
-    if (g === "G3" || g === "3") return "bg-green-500 text-white";
+/**
+ * グレード → Tailwind カラー
+ * JRA（G1/G2/G3）＋ 障害（JG1/JG2/JG3）
+ */
+const gradeMap: Record<string, GradeStyle> = {
+    G1: { label: "G1", bg: "bg-blue-500", text: "text-white", border: "border-blue-500" },
+    G2: { label: "G2", bg: "bg-red-500", text: "text-white", border: "border-red-500" },
+    G3: { label: "G3", bg: "bg-green-500", text: "text-white", border: "border-green-500" },
 
-    if (g.includes("JG")) return "bg-amber-500 text-white";
+    JG1: { label: "JG1", bg: "bg-amber-600", text: "text-white", border: "border-amber-600" },
+    JG2: { label: "JG2", bg: "bg-amber-500", text: "text-white", border: "border-amber-500" },
+    JG3: { label: "JG3", bg: "bg-amber-400", text: "text-white", border: "border-amber-400" },
 
-    return "bg-gray-200 text-gray-800";
+    OP: { label: "OP", bg: "bg-gray-300", text: "text-gray-800", border: "border-gray-300" },
+};
+
+/**
+ * グレードに応じたスタイルを返す
+ */
+export function getGradeStyle(rawGrade: string | null | undefined): GradeStyle {
+    if (!rawGrade) return gradeMap["OP"];
+
+    const g = normalizeGrade(rawGrade);
+
+    // JG1/JG2/JG3
+    if (g.startsWith("JG")) {
+        return gradeMap[g] ?? gradeMap["OP"];
+    }
+
+    // G1/G2/G3
+    if (["G1", "G2", "G3"].includes(g)) {
+        return gradeMap[g];
+    }
+
+    return gradeMap["OP"];
 }

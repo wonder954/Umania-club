@@ -1,15 +1,13 @@
 import Image from "next/image";
 import { formatDateWithWeekday } from "@/lib/date";
 import type { Race } from "@/lib/races";
+import { getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { removeGradeSuffix } from "@/utils/race/raceNameUtils";
 
-const gradeBorderColor: Record<string, string> = {
-    GI: "border-yellow-400",
-    GII: "border-pink-400",
-    GIII: "border-green-400",
-};
-
-function cleanRaceName(name: string) {
-    return name.replace(/\s+(GI|GII|GIII)$/i, "").trim();
+export function cleanRaceName(name: string): string {
+    return removeGradeSuffix(
+        name.replace(/\s+(GI|GII|GIII)$/i, "").trim()
+    );
 }
 
 function parseDistance(raw: any): number | null {
@@ -20,17 +18,14 @@ function parseDistance(raw: any): number | null {
 }
 
 export function RaceHeaderCard({ race }: { race: Race }) {
-    const borderColor =
-        gradeBorderColor[race.grade ?? "OP"] ?? "border-white/40";
-
-    // ★ JSX の外で距離を計算
+    const style = getGradeStyle(race.grade ?? "OP");
     const distance = parseDistance(race.course.distance);
 
     return (
         <section
             className={`
         bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm p-6
-        border-l-8 ${borderColor}
+        border-l-8 ${style.border}
         border border-white/40
         w-full max-w-4xl mx-auto mt-6
       `}
@@ -60,18 +55,13 @@ export function RaceHeaderCard({ race }: { race: Race }) {
 
                     <div className="flex items-center gap-1 flex-wrap">
                         <h1 className="text-3xl font-extrabold text-slate-900 break-words">
-                            {cleanRaceName(race.name)}
+                            {cleanRaceName(race.raceName ?? race.name)}
                         </h1>
 
                         <span
                             className={`
                 text-3xl font-extrabold px-2 py-1 rounded
-                ${race.grade === "GI"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : race.grade === "GII"
-                                        ? "bg-pink-100 text-pink-800"
-                                        : "bg-green-100 text-green-800"
-                                }
+                ${style.bg} ${style.text}
               `}
                         >
                             {race.grade}
@@ -84,7 +74,7 @@ export function RaceHeaderCard({ race }: { race: Race }) {
                     {race.course.surface}{" "}
                     {distance ? `${distance}m` : "距離不明"}
                     {race.course.direction &&
-                        `（${race.course.direction}${race.course.courseDetail || ""}）`}
+                        `（${race.course.direction}${race.course.courseDetail ? ` ${race.course.courseDetail}` : ""}）`}
                 </p>
             </div>
         </section>

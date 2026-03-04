@@ -5,7 +5,8 @@ import { Select } from "@/components/common/Select";
 import { useRaceSearch } from "@/hooks/useRaceSearch";
 import type { Race } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
-import { getColorFromGrade } from "@/utils/race/raceGradeUtils";
+import { getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { cleanRaceName } from "@/components/race/RaceHeaderCard";
 
 type Props = {
     races: Race[];
@@ -94,54 +95,40 @@ export default function RaceSearchForm({ races }: Props) {
                         ) : (
                             <div className="space-y-2">
                                 {filteredRaces.map((race) => {
-                                    const colorClass = getColorFromGrade(race.grade ?? "OP");
-
-                                    // グレード色を薄くする
-                                    const gradeColor = colorClass
-                                        .replace("bg-", "bg-")
-                                        .replace("text-", "text-")
-                                        + "/80";
-
-                                    // 枠線色も薄く
-                                    const bgClass = colorClass
-                                        .split(" ")
-                                        .find((c: string) => c.startsWith("bg-"));
-                                    const borderClass = bgClass
-                                        ? bgClass.replace("bg-", "border-") + "/60"
-                                        : "border-slate-300/40";
+                                    const style = getGradeStyle(race.grade);
 
                                     return (
                                         <Link
                                             key={race.id}
                                             href={`/races/${race.id}`}
                                             className={`
-                                                block w-full text-left px-4 py-3 
-                                                bg-white/70 backdrop-blur-sm 
-                                                hover:bg-white/90 
-                                                border-l-4 ${borderClass}
-                                                border border-white/40 
-                                                rounded-xl shadow-sm 
-                                                transition-all hover:shadow-md 
-                                                flex justify-between items-center group
-                                            `}
+                block w-full text-left px-4 py-3 
+                bg-white/70 backdrop-blur-sm 
+                hover:bg-white/90 
+                border-l-4 ${style.border}/60
+                border border-white/40 
+                rounded-xl shadow-sm 
+                transition-all hover:shadow-md 
+                flex justify-between items-center group
+            `}
                                         >
                                             <div className="flex flex-col">
                                                 <span className="text-xs text-slate-500 mb-0.5">
                                                     {formatDateWithWeekday(race.date)} {race.place}
                                                 </span>
                                                 <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors">
-                                                    {race.name}
+                                                    {cleanRaceName(race.raceName ?? race.name)}
                                                 </span>
                                             </div>
 
                                             {race.grade && (
                                                 <span
                                                     className={`
-                                                        text-xs font-bold px-2.5 py-1 rounded 
-                                                        ${gradeColor}
-                                                    `}
+                        text-xs font-bold px-2.5 py-1 rounded 
+                        ${style.bg}/80 ${style.text}
+                    `}
                                                 >
-                                                    {race.grade}
+                                                    {style.label}
                                                 </span>
                                             )}
                                         </Link>

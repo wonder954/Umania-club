@@ -5,7 +5,9 @@ import type { CalendarRace } from "@/types/race";
 import type { GradeRace } from "@/lib/grades2026";
 
 import { cleanTitle } from "@/utils/race/raceNameUtils";
-import { normalizeGrade, getColorFromGrade } from "@/utils/race/raceGradeUtils";
+import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { removeGradeSuffix } from "@/utils/race/raceNameUtils";
+
 
 /**
  * レース名と日付で同一レースか判定
@@ -40,9 +42,11 @@ export function racesToCalendarRaces(
         calendarRaces.push({
             id: r.id,
             name: r.name,
+            raceName: r.raceName,
             date: r.date,
             grade,
-            color: getColorFromGrade(grade),
+            color: getGradeStyle(grade),
+            isWeak: false, // ← 濃い色
         });
     }
 
@@ -59,9 +63,11 @@ export function racesToCalendarRaces(
             calendarRaces.push({
                 id: jraRace.id,
                 name: jraRace.name,
+                raceName: removeGradeSuffix(jraRace.name),
                 date: jraRace.date,
                 grade,
-                color: getColorFromGrade(grade),
+                color: getGradeStyle(grade),
+                isWeak: true, // ← 濃い色
             });
         }
     }

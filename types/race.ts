@@ -3,6 +3,8 @@
  * Yahoo! 競馬スクレイピング用
  */
 
+import type { GradeStyle } from "@/utils/race/raceGradeUtils";
+
 // レース基本情報
 export type RaceInfo = {
     date: string;                 // "2026-01-24"
@@ -110,7 +112,9 @@ export type LastWeekRaceItem = {
 export type CalendarRace = {
     id: string;
     name: string;
+    raceName?: string;     // GII を除いた純粋なレース名
     grade: "G1" | "G2" | "G3" | "JG1" | "JG2" | "JG3" | "OP" | string;
     date: string;
-    color?: string;
+    color: GradeStyle;     // ← string を廃止して GradeStyle に統一
+    isWeak?: boolean;      // ← 薄い色にするかどうか
 };
