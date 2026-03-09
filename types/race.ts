@@ -3,7 +3,6 @@
  * Yahoo! 競馬スクレイピング用
  */
 
-import type { GradeStyle } from "@/utils/race/raceGradeUtils";
 
 // レース基本情報
 export type RaceInfo = {
@@ -107,6 +106,16 @@ export type LastWeekRaceItem = {
     title: string;
     grade: string | null;
     resultUrl: string;          // ← 先週は resultUrl
+};
+
+// ===============================
+// GradeStyle（UI 依存を排除した scripts 用）
+// ===============================
+export type GradeStyle = {
+    label: string;
+    bg: string;
+    text: string;
+    border: string;
 };
 
 export type CalendarRace = {

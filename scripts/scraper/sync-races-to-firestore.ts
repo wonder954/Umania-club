@@ -2,7 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper";
+import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper/index";
 import { convertToRacesObject } from "@/scripts/scraper/data-converter";
 import { firebaseConfig } from "../../lib/firebase";
 

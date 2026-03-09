@@ -1,4 +1,4 @@
-import data from "../scripts/scraper/data/2026_grades_merged.json";
+import data from "../scripts/data/2026_grades_merged.json";
 
 export type GradeRace = {
     id: string;

@@ -1,10 +1,10 @@
-// scripts/scraper/mergeRaceId.ts
+// scripts/mergeRaceId.ts
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { cleanTitle } from "@/utils/race/normalize";
-import { normalizeGrade } from "@/utils/race/raceGradeUtils";
+import { cleanTitle } from "../utils/race/normalize";
+import { normalizeGrade } from "../utils/race/raceGradeUtils";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,10 +1,10 @@
 // Yahoo! 競馬 金曜スクレイピング（確定出馬表版）
 
-import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper";
-import { saveRaceData, generateFolderName } from "./utils/saveRaceData";
+import { fetchWeeklyRacesYahoo, fetchRaceEntriesDenma } from "./yahoo-scraper/index";
+import { saveRaceData, generateFolderName } from "../utils/saveRaceData";
 import type { RaceInfo } from "../../types/race";
 import { adminDb } from "./firebase-admin";
-import { cleanTitle, createSearchKey } from "@/utils/race";
+import { cleanTitle, createSearchKey } from "@/utils/race/normalize";
 
 async function saveRaceToFirestore(race: any) {
     await adminDb.collection("races").doc(race.id).set(race, { merge: true });
