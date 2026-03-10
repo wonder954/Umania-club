@@ -9,19 +9,40 @@ module.exports = {
     ],
 
     safelist: [
-        // G1〜G3 の色
-        "bg-red-500",
-        "bg-blue-500",
-        "bg-green-500",
-        "bg-amber-500",
-        "text-white",
+        // G1〜G3
+        "bg-blue-900",
+        "bg-red-700",
+        "bg-green-700",
 
-        // isWeak（薄い色）
-        "bg-red-500/50",
-        "bg-blue-500/50",
-        "bg-green-500/50",
-        "bg-amber-500/50",
+        // JG1〜JG3
+        "bg-amber-700",
+        "bg-amber-600",
+        "bg-amber-500",
+
+        // OP
+        "bg-gray-300",
+        "text-gray-800",
+
+        // text
+        "text-white",
         "text-white/90",
+
+        // border
+        "border-blue-900",
+        "border-red-700",
+        "border-green-700",
+        "border-amber-700",
+        "border-amber-600",
+        "border-amber-500",
+        "border-gray-300",
+
+        // isWeak 用（必要なら）
+        "bg-blue-900/50",
+        "bg-red-700/50",
+        "bg-green-700/50",
+        "bg-amber-700/50",
+        "bg-amber-600/50",
+        "bg-amber-500/50",
     ],
 
     theme: {

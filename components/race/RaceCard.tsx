@@ -1,8 +1,9 @@
 import { formatDateWithWeekday } from "@/lib/date";
 import type { CalendarRace } from "@/types/race";
 import type { Race } from "@/lib/races";
-import { getGradeStyle, type GradeStyle } from "@/utils/race/raceGradeUtils";
+import { getGradeStyle, normalizeGrade, type GradeStyle } from "@/utils/race/raceGradeUtils";
 import { formatRaceName } from "@/utils/race";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
 type Props = {
     race: CalendarRace | Race;
@@ -15,12 +16,15 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
     const detail = (race as any).course ? (race as Race) : null;
 
     // ★ CalendarRace.color は GradeStyle に統一されている前提
-    const style: GradeStyle =
-        (race as CalendarRace).color ??
-        getGradeStyle(race.grade ?? "OP");
+    const style = getGradeStyleUI(race.grade ?? "OP");
 
     const bgClass = style.bg;
     const borderClass = style.border;
+
+    console.log("GRADE RAW:", race.grade);
+    console.log("GRADE NORMALIZED:", normalizeGrade(race.grade ?? "OP"));
+    console.log("STYLE:", getGradeStyleUI(race.grade ?? "OP"));
+
 
     return (
         <div
@@ -34,12 +38,7 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
         >
             <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
-                    <span
-                        className={`
-                            text-xs font-semibold px-2.5 py-0.5 rounded 
-                            ${style.bg} ${style.text}
-                        `}
-                    >
+                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded ${style.bg} ${style.text}`}>
                         {style.label}
                     </span>
 

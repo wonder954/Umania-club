@@ -1,6 +1,8 @@
 import { shortenRaceName, formatRaceName } from "@/utils/race";
 import type { CalendarRace } from "@/types/race";
 import Link from "next/link";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
+
 
 type Props = {
     day: number | null;
@@ -65,7 +67,7 @@ export function CalendarCell({
                         : `/races/${race.id}`;
 
                     // ★ GradeStyle を取得
-                    const style = race.color;
+                    const style = getGradeStyleUI(race.grade ?? "OP");
 
                     // ★ デバッグ
                     console.log("race:", race.name, "bg:", style.bg, "text:", style.text, "weak:", race.isWeak);

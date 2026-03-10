@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { formatDateWithWeekday } from "@/lib/date";
 import type { Race } from "@/lib/races";
-import { getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
 
@@ -13,7 +13,7 @@ function parseDistance(raw: any): number | null {
 }
 
 export function RaceHeaderCard({ race }: { race: Race }) {
-    const style = getGradeStyle(race.grade ?? "OP");
+    const style = getGradeStyleUI(race.grade ?? "OP");
     const distance = parseDistance(race.course.distance);
 
     return (
@@ -56,9 +56,10 @@ export function RaceHeaderCard({ race }: { race: Race }) {
 
                         <span
                             className={`
-                text-3xl font-extrabold px-2 py-1 rounded
-                ${style.bg} ${style.text}
-              `}
+    text-2xl font-bold px-2.5 py-1 rounded-lg
+    ${style.bg} ${style.text}
+    shadow-sm
+  `}
                         >
                             {race.grade}
                         </span>

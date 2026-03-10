@@ -1,9 +1,7 @@
 import { createBrowserPage } from './helpers';
+import { normalizeGrade } from '../../utils/raceGradeUtils';
 
-/**
- * Yahoo!競馬トップから「前回のレース情報」を取得
- * 先週の重賞レース一覧を返す
- */
+/** Yahoo!競馬トップから「前回のレース情報」を取得 */
 export async function fetchLastWeekRacesYahoo(): Promise<Array<{
     raceId: string;
     title: string;
@@ -21,7 +19,8 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
 
         console.log('Extracting last week race list...');
 
-        const races = await page.evaluate(() => {
+        // ★ evaluate 内では rawGrade を返すだけ
+        const rawRaces = await page.evaluate(() => {
             const results: Array<{
                 raceId: string;
                 title: string;
@@ -29,14 +28,11 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
                 resultUrl: string;
             }> = [];
 
-            // 「前回のレース情報」セクションを探す
             const sections = Array.from(document.querySelectorAll('.hr-modCommon02'));
 
             for (const section of sections) {
                 const heading = section.querySelector('h3');
-                if (!heading || !heading.textContent?.includes('前回のレース情報')) {
-                    continue;
-                }
+                if (!heading || !heading.textContent?.includes('前回のレース情報')) continue;
 
                 const rows = section.querySelectorAll('.hr-tableLeft__data');
 
@@ -48,14 +44,10 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
                     const title = link.textContent?.trim() || '';
 
                     const label = row.querySelector('.hr-label');
-                    const labelText = label?.textContent?.trim() || '';
-
-                    // GI, GII, GIII のみ対象
-                    if (!['GI', 'GII', 'GIII'].includes(labelText)) return;
+                    const rawGrade = label?.textContent?.trim() || '';
 
                     const raceIdMatch = href.match(/(\d{10})$/);
                     const raceId = raceIdMatch ? raceIdMatch[1] : '';
-
                     if (!raceId) return;
 
                     const resultUrl = href.replace('/race/index/', '/race/result/');
@@ -63,7 +55,7 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
                     results.push({
                         raceId,
                         title,
-                        grade: labelText,
+                        grade: rawGrade, // ★ 正規化は外でやる
                         resultUrl,
                     });
                 });
@@ -71,6 +63,14 @@ export async function fetchLastWeekRacesYahoo(): Promise<Array<{
 
             return results;
         });
+
+        // ★ Node 側で正規化 & フィルタ
+        const races = rawRaces
+            .map(r => ({
+                ...r,
+                grade: normalizeGrade(r.grade),
+            }))
+            .filter(r => ['G1', 'G2', 'G3', 'JG1', 'JG2', 'JG3'].includes(r.grade));
 
         console.log(`Found ${races.length} last week races`);
         return races;

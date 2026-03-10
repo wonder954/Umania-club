@@ -1,9 +1,4 @@
-// utils\race\raceGradeUtils.ts
-
-/**
- * グレード表記の正規化
- * GⅢ → G3、J・GⅢ → JG3 など
- */
+/** グレード表記の正規化 */
 export function normalizeGrade(grade: string): string {
     return grade
         .toUpperCase()
@@ -17,9 +12,6 @@ export function normalizeGrade(grade: string): string {
         .replace(/\s+/g, "");
 }
 
-/**
- * scripts 用 GradeStyle（UI 依存なし）
- */
 export type GradeStyle = {
     label: string;
     bg: string;
@@ -27,10 +19,6 @@ export type GradeStyle = {
     border: string;
 };
 
-/**
- * scripts 用のシンプルなグレードマップ
- * （Tailwind ではなく、プレーンな色コード）
- */
 const gradeMap: Record<string, GradeStyle> = {
     G1: { label: "G1", bg: "#1e40af", text: "#ffffff", border: "#1e40af" },
     G2: { label: "G2", bg: "#b91c1c", text: "#ffffff", border: "#b91c1c" },
@@ -43,9 +31,6 @@ const gradeMap: Record<string, GradeStyle> = {
     OP: { label: "OP", bg: "#d1d5db", text: "#1f2937", border: "#d1d5db" },
 };
 
-/**
- * グレードに応じたスタイルを返す（scripts 用）
- */
 export function getGradeStyle(rawGrade: string | null | undefined): GradeStyle {
     if (!rawGrade) return gradeMap["OP"];
 

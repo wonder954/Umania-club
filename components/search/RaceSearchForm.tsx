@@ -5,7 +5,7 @@ import { Select } from "@/components/common/Select";
 import { useRaceSearch } from "@/hooks/useRaceSearch";
 import type { Race } from "@/lib/races";
 import { formatDateWithWeekday } from "@/lib/date";
-import { getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
 type Props = {
@@ -95,7 +95,7 @@ export default function RaceSearchForm({ races }: Props) {
                         ) : (
                             <div className="space-y-2">
                                 {filteredRaces.map((race) => {
-                                    const style = getGradeStyle(race.grade);
+                                    const style = getGradeStyleUI(race.grade);
 
                                     return (
                                         <Link
@@ -125,7 +125,7 @@ export default function RaceSearchForm({ races }: Props) {
                                                 <span
                                                     className={`
                         text-xs font-bold px-2.5 py-1 rounded 
-                        ${style.bg}/80 ${style.text}
+                        ${style.bg} ${style.text} opacity-80
                     `}
                                                 >
                                                     {style.label}
