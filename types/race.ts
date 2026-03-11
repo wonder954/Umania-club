@@ -17,6 +17,7 @@ export type RaceInfo = {
     direction?: string | null;    // "右" | "左"
     courseDetail?: string | null; // "外" | "内"
     weightType?: string | null;   // "別定" | "定量" | "ハンデ"
+    videoId: string | null;
 };
 
 // 出馬表エントリ

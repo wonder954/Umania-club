@@ -17,4 +17,6 @@ export interface Post {
     comment?: string;           // コメント（任意）
 
     createdAt: any;             // Firestore Timestamp
+    grade: string; // "G1" | "G2" | "JG1" | "OP" など
+
 }

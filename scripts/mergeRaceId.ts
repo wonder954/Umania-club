@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { cleanTitle } from "../utils/race/normalize";
-import { normalizeGrade } from "../utils/race/raceGradeUtils";
+import { cleanTitle } from "./utils/raceUtils";
+import { normalizeGrade } from "./utils/raceGradeUtils";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

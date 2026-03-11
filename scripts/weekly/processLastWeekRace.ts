@@ -4,15 +4,14 @@ import { saveRaceData, loadRaceData, loadPreviousWeekEntries } from '../utils/sa
 import { saveRaceToFirestore } from '../utils/saveRaceToFirestore';
 import type { RaceInfo, LastWeekRaceItem } from '../../types/race';
 
-/**
- * 先週の重賞レース 1件を処理する
- * - result ページから着順・払戻金を取得
- * - JSON 保存 → Firestore 保存
- */
+import merged from "../../scripts/data/2026_grades_merged.json";
+import { searchJraOfficialVideo } from "../../lib/searchJraOfficialVideo"; // ← 追加
+
 export async function processLastWeekRace(
     race: LastWeekRaceItem,
     targetFolder: string
 ): Promise<void> {
+
     const { info, result } = await fetchRaceResult(race.resultUrl);
 
     if (!result?.order?.length) {
@@ -20,18 +19,32 @@ export async function processLastWeekRace(
         return;
     }
 
-    // 既存の出馬表エントリを優先して使う（馬番あり情報を引き継ぐため）
+    // 🔥 短縮名を取得
+    const short = merged.find(r => r.id === race.raceId);
+
+    // 既存の出馬表エントリを優先
     const existingRaceData = loadRaceData(race.raceId, targetFolder);
     const previousEntries =
         existingRaceData?.entries ??
         loadPreviousWeekEntries(race.raceId) ??
         [];
 
+    // 🔥 YouTube 検索クエリを作成
+    const year = info.date?.slice(0, 4) ?? "";
+    const raceName = short?.name ?? race.title;
+    const query = `${year} ${raceName} JRA公式`;
+
+    console.log(`  🎥 YouTube検索: ${query}`);
+
+    // 🔥 YouTube から videoId を取得
+    const video = await searchJraOfficialVideo(query);
+
+    // 🔥 Yahoo の長い名前ではなく短縮名を優先
     const mergedInfo: RaceInfo = {
         date: info.date ?? '',
         place: info.place ?? '',
-        title: race.title,
-        grade: race.grade ?? null,
+        title: raceName,
+        grade: short?.grade ?? race.grade ?? null,
         raceNumber: info.raceNumber ?? null,
         placeDetail: info.placeDetail ?? null,
         distance: normalizeDistance(info.distance),
@@ -39,6 +52,9 @@ export async function processLastWeekRace(
         direction: info.direction ?? null,
         courseDetail: info.courseDetail ?? null,
         weightType: info.weightType ?? null,
+
+        // 🔥 追加：YouTube videoId
+        videoId: video?.videoId ?? null,
     };
 
     // JSON 保存
@@ -49,7 +65,7 @@ export async function processLastWeekRace(
     );
     console.log(`  ✅ 結果保存完了（フォルダ: ${targetFolder}）`);
 
-    // Firestore 保存（保存後のデータを再ロードして使う）
+    // Firestore 保存
     const updatedRaceData = loadRaceData(race.raceId, targetFolder);
     if (!updatedRaceData) {
         console.log('  ⚠️ Firestore 保存スキップ（raceData が null）');
@@ -62,5 +78,6 @@ export async function processLastWeekRace(
         entries: updatedRaceData.entries ?? [],
         result: updatedRaceData.result ?? null,
     });
+
     console.log('  🔄 Firestore に結果を保存しました');
 }

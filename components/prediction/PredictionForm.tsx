@@ -66,16 +66,13 @@ export default function PredictionForm({
             return;
         }
 
-        // グループ投稿のガード
-        if (visibilityTab === "group") {
-            if (!user) {
-                alert("グループ投稿にはログインが必要です");
-                return;
-            }
-            if (!selectedGroupId) {
-                alert("グループを選択してください");
-                return;
-            }
+        // 🔥 投稿直前に最新の race を取得
+        const raceSnap = await getDoc(doc(db, "races", race.id));
+        const freshRace = raceSnap.data();
+
+        if (!freshRace) {
+            alert("レース情報の取得に失敗しました");
+            return;
         }
 
         const finalVisibility =
@@ -93,6 +90,7 @@ export default function PredictionForm({
             comment,
             raceId: race.id,
             raceName: race.name,
+            grade: freshRace.grade,   // ← 🔥 ここが重要！
         };
 
         setIsSubmitting(true);
@@ -107,6 +105,7 @@ export default function PredictionForm({
             setIsSubmitting(false);
         }
     };
+
 
     const resetForm = () => {
         setIsSuccess(false);

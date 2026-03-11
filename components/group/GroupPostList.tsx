@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
+import { normalizeGrade } from "@/utils/race/raceGradeUtils";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
+import { formatRelativeTime } from "@/utils/formatTime";
 import type { Post } from "@/types/post";
 
 type Props = {
@@ -7,8 +9,8 @@ type Props = {
 };
 
 function extractGradeFromRaceName(name: string): string {
-    const match = name.match(/G[1-3]/);
-    return match ? match[0] : "OP";
+    const match = name.match(/J?G[1-3]/i);
+    return match ? match[0].toUpperCase() : "OP";
 }
 
 export default function GroupPostList({ posts }: Props) {
@@ -22,30 +24,41 @@ export default function GroupPostList({ posts }: Props) {
 
             <div className="space-y-4">
                 {posts.map((post) => {
-                    const grade = normalizeGrade(extractGradeFromRaceName(post.raceName));
-                    const colorClass = getGradeStyle(grade);
+                    const grade = normalizeGrade(post.grade ?? "OP");
+                    const style = getGradeStyleUI(grade);
+
+                    // 🔥 createdAt を Date に変換
+                    const createdAt =
+                        post.createdAt?.toDate
+                            ? post.createdAt.toDate()
+                            : new Date(post.createdAt);
 
                     return (
                         <Link key={post.id} href={`/races/${post.raceId}/posts/${post.id}`}>
                             <div
                                 className="
-                                    p-4 rounded-xl
-                                    bg-white/90 backdrop-blur-sm
-                                    border border-white/60
-                                    shadow-sm
-                                    cursor-pointer
-                                    hover:bg-slate-50/80 hover:shadow-md
-                                    transition
-                                "
+                    p-4 rounded-xl
+                    bg-white/90 backdrop-blur-sm
+                    border border-white/60
+                    shadow-sm
+                    cursor-pointer
+                    hover:bg-slate-50/80 hover:shadow-md
+                    transition
+                "
                             >
+                                {/* 🔥 タイムスタンプ（アイコン付き） */}
+                                <div className="flex items-center text-xs text-slate-500 mb-1 gap-1">
+                                    <span className="text-slate-400">🕒</span>
+                                    <span>{formatRelativeTime(createdAt)}</span>
+                                </div>
                                 <div className="flex items-center gap-3 mb-3">
                                     <img
                                         src={post.authorIcon || "/profile-icons/default1.png"}
                                         className="
-                                            w-8 h-8 rounded-full
-                                            border border-white/70
-                                            shadow-sm
-                                        "
+                            w-8 h-8 rounded-full
+                            border border-white/70
+                            shadow-sm
+                        "
                                         alt="icon"
                                     />
                                     <span className="text-sm text-slate-700">
@@ -55,10 +68,10 @@ export default function GroupPostList({ posts }: Props) {
 
                                 <span
                                     className={`
-                                        inline-block text-sm font-semibold
-                                        px-3 py-1 rounded-lg
-                                        ${colorClass}
-                                    `}
+                        inline-block text-sm font-semibold
+                        px-3 py-1 rounded-lg
+                        ${style.bg} ${style.text}
+                    `}
                                 >
                                     {post.raceName}
                                 </span>

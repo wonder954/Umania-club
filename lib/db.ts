@@ -69,6 +69,7 @@ export async function createPost(raceId: string, postData: any) {
         comment: postData.comment ?? "",
         raceId,
         raceName: postData.raceName,
+        grade: postData.grade,
         createdAt: serverTimestamp(),
     });
 

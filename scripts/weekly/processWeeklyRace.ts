@@ -3,6 +3,7 @@ import { mergeRaceInfo } from '../utils/mergeRaceInfo';
 import { saveRaceData } from '../utils/saveRaceData';
 import { saveRaceToFirestore } from '../utils/saveRaceToFirestore';
 import type { RaceInfo, RaceListItem, Entry } from '../../types/race';
+import merged from "../../scripts/data/2026_grades_merged.json";
 
 /**
  * 今週の重賞レース 1件を処理する
@@ -26,7 +27,10 @@ export async function processWeeklyRace(
         weightType: race.weightType ?? null,
         raceNumber: null,
         placeDetail: null,
+        videoId: null,
     };
+
+    const short = merged.find(r => r.id === race.raceId);
 
     // 特別登録ページから出馬表を取得
     const registUrl = race.detailUrl.replace('/race/denma/', '/race/regist/');
@@ -34,7 +38,14 @@ export async function processWeeklyRace(
     const { info: registInfo, entries } = await fetchRaceEntriesRegist(registUrl);
 
     // スクレイプ結果をマージ
-    const info = mergeRaceInfo(baseInfo, registInfo);
+    let info = mergeRaceInfo(baseInfo, registInfo);
+
+    // 🔥 ここで短縮名を適用する
+    if (short) {
+        info.title = short.name;   // ← スプリングS など
+        info.grade = short.grade;  // ← G2 / JG2 など
+    }
+
 
     // JSON 保存（既に entries があればスキップ）
     saveRaceData(

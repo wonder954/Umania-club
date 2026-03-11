@@ -7,6 +7,9 @@ import PayoutSection from "@/components/race/PayoutSection";
 import CommunityResultSection from "@/components/race/CommunityResultSection";
 import type { Race } from "@/lib/races";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
+import { RaceVideo } from "@/components/race/RaceVideo";
+
+
 
 type Props = {
     params: { raceId: string };
@@ -68,6 +71,12 @@ export default async function ResultPage({ params }: Props) {
             <RaceHeaderCard race={race} />
 
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
+                {race.info.videoId && (
+                    <section className="mt-8">
+                        <h2 className="text-lg font-semibold mb-3">レース動画</h2>
+                        <RaceVideo videoId={race.info.videoId} />
+                    </section>
+                )}
                 <RaceResultSection result={race.result} />
                 <PayoutSection payout={race.result.payout} />
                 <CommunityResultSection race={race} />

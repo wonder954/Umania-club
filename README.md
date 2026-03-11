@@ -7,7 +7,7 @@ cd scripts/scraper
 npx tsx run-weekly.ts    # 月〜木
 npx tsx run-friday.ts    # 金曜
 firebase deploy --only firestore:rules
-npx tsx scripts/scraper/run-weekly.ts
+npx tsx scripts/run-weekly.ts
 
 
 ## Features
