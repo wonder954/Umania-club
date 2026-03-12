@@ -1,14 +1,12 @@
-// lib/race/racesToCalendarRaces.ts
-
 import type { Race } from "@/lib/races";
 import type { CalendarRace } from "@/types/race";
 import type { GradeRace } from "@/lib/grades2026";
 
-import { cleanTitle } from "@/utils/race/normalize";          // ★ 検索用
+import { cleanTitle } from "@/utils/race/normalize";
 import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
-import { removeGradeSuffix } from "@/utils/race/displayName"; // ★ 表示用
+import { removeGradeSuffix } from "@/utils/race/displayName";
 
-/** レース名と日付で同一レースか判定（検索用の正規化） */
+/** レース名と日付で同一レースか判定 */
 function isSameRace(name1: string, name2: string, date1: string, date2: string): boolean {
     if (date1 !== date2) return false;
 
@@ -26,18 +24,18 @@ export function racesToCalendarRaces(
     const seenIds = new Set<string>();
     const calendarRaces: CalendarRace[] = [];
 
-    // 1. Yahoo!スクレイピングデータ
+    // 1. Firestore Race データ
     for (const r of races) {
-        if (seenIds.has(r.id)) continue;
-        seenIds.add(r.id);
+        if (seenIds.has(r.raceId)) continue;
+        seenIds.add(r.raceId);
 
-        const grade = normalizeGrade(r.grade ?? "OP");
+        const grade = normalizeGrade(r.info.grade ?? "OP");
 
         calendarRaces.push({
-            id: r.id,
-            name: r.name,
-            raceName: r.raceName || removeGradeSuffix(r.name), // ★ 安全に表示用へ
-            date: r.date,
+            id: r.raceId,
+            name: r.info.title,
+            raceName: removeGradeSuffix(r.info.title),
+            date: r.info.date,
             grade,
             color: getGradeStyle(grade),
             isWeak: false,
@@ -57,7 +55,7 @@ export function racesToCalendarRaces(
             calendarRaces.push({
                 id: jraRace.id,
                 name: jraRace.name,
-                raceName: removeGradeSuffix(jraRace.name), // ★ 表示用
+                raceName: removeGradeSuffix(jraRace.name),
                 date: jraRace.date,
                 grade,
                 color: getGradeStyle(grade),

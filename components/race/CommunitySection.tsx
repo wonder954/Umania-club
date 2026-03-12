@@ -6,9 +6,10 @@ import Image from "next/image";
 
 type Props = {
     race: Race;
+    raceId: string;
 };
 
-export default function CommunitySection({ race }: Props) {
+export default function CommunitySection({ race, raceId }: Props) {
     return (
         <section id="post-section">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
@@ -29,8 +30,6 @@ export default function CommunitySection({ race }: Props) {
                 />
             </h2>
 
-
-            {/* PostList を透明白カードで包む */}
             <div
                 className="
                     bg-white/70 backdrop-blur-sm 
@@ -39,7 +38,8 @@ export default function CommunitySection({ race }: Props) {
                     p-6
                 "
             >
-                <PostList raceId={race.id} race={race} />
+                {/* 🔥 ここを raceId に変更 */}
+                <PostList raceId={raceId} race={race} />
             </div>
         </section>
     );

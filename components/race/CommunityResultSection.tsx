@@ -11,7 +11,6 @@ export default function CommunityResultSection({ race }: Props) {
     return (
         <section id="post-section">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
-                {/* 🔥 アニメーションは残す。色だけ薄く調整 */}
                 <span className="text-orange-500/80 text-2xl animate-flame">🔥</span>
                 みんなの予想と結果
                 <span className="text-orange-500/80 text-2xl animate-flame">🔥</span>
@@ -25,7 +24,8 @@ export default function CommunityResultSection({ race }: Props) {
                     p-6
                 "
             >
-                <PostList raceId={race.id} race={race} />
+                {/* 🔥 修正ポイント：race.id → race.raceId */}
+                <PostList raceId={race.raceId} race={race} />
             </div>
         </section>
     );

@@ -1,7 +1,6 @@
 import { fetchRaceResult } from '../scraper/yahoo-scraper/index';
 import { normalizeDistance } from '../utils/normalize';
 import { saveRaceData, loadRaceData, loadPreviousWeekEntries } from '../utils/saveRaceData';
-import { saveRaceToFirestore } from '../utils/saveRaceToFirestore';
 import type { RaceInfo, LastWeekRaceItem } from '../../types/race';
 
 import merged from "../../scripts/data/2026_grades_merged.json";
@@ -64,20 +63,4 @@ export async function processLastWeekRace(
         targetFolder
     );
     console.log(`  ✅ 結果保存完了（フォルダ: ${targetFolder}）`);
-
-    // Firestore 保存
-    const updatedRaceData = loadRaceData(race.raceId, targetFolder);
-    if (!updatedRaceData) {
-        console.log('  ⚠️ Firestore 保存スキップ（raceData が null）');
-        return;
-    }
-
-    await saveRaceToFirestore({
-        raceId: race.raceId,
-        info: updatedRaceData.info,
-        entries: updatedRaceData.entries ?? [],
-        result: updatedRaceData.result ?? null,
-    });
-
-    console.log('  🔄 Firestore に結果を保存しました');
 }

@@ -38,35 +38,35 @@ export function useRaceSearch(allRaces: Race[]): UseRaceSearchReturn {
     const filteredRaces = useMemo(() => {
         return allRaces
             .filter((race) => {
-                if (!/^\d{10}$/.test(race.id)) return false;
+                // raceId は 10 桁
+                if (!/^\d{10}$/.test(race.raceId)) return false;
 
-                const d = new Date(race.date);
+                const d = new Date(race.info.date);
                 const y = d.getFullYear().toString();
                 const m = (d.getMonth() + 1).toString();
-
-                console.log("race.id:", race.id, "date:", race.date, "year:", y, "searchKey:", race.searchKey);
 
                 if (y !== selectedYear) return false;
                 if (selectedMonth && m !== selectedMonth) return false;
 
-                // 🔥 searchKey を使ったキーワード検索
-                function normalizeText(str: string) {
-                    return str
-                        .normalize("NFKC")
-                        .replace(/[\u0300-\u036f]/g, "") // 結合文字を除去
-                        .toLowerCase();
-                }
-
+                // 🔥 キーワード検索（title + place + grade + date）
                 if (keyword.trim() !== "") {
-                    const key = normalizeText(keyword);
-                    const searchKey = normalizeText(race.searchKey ?? "");
+                    const keys = keyword
+                        .split(/\s+/) // スペースで分割
+                        .map((k) => k.toLowerCase());
 
-                    if (!searchKey.includes(key)) return false;
+                    const text =
+                        `${race.info.title} ${race.info.place} ${race.info.grade ?? ""} ${race.info.date}`
+                            .toLowerCase();
+
+                    // 全キーワード AND 検索
+                    for (const k of keys) {
+                        if (!text.includes(k)) return false;
+                    }
                 }
 
                 return true;
             })
-            .sort((a, b) => a.date.localeCompare(b.date));
+            .sort((a, b) => a.info.date.localeCompare(b.info.date));
     }, [allRaces, selectedYear, selectedMonth, keyword]);
 
     return {

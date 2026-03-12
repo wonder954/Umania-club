@@ -7,26 +7,15 @@
 import React from "react";
 import { Bet } from "@/types/bet";
 import BetCard from "../../common/BetCard";
+import type { Race } from "@/lib/races";
 
 interface BetListProps {
-    /** 追加済みの馬券リスト */
     bets: Bet[];
-    /** 馬券が削除されたときのコールバック */
     onRemove: (id: string) => void;
+    race: Race;   // ← 追加
 }
 
-/**
- * 追加済み馬券リスト表示コンポーネント
- * 
- * 各馬券をカード形式で表示し、右上に削除ボタンを配置します。
- * 馬券がない場合は何も表示しません。
- * 
- * アクセシビリティ:
- * - リストには適切なaria-label
- * - 削除ボタンには明確なaria-label
- */
-export function BetList({ bets, onRemove }: BetListProps) {
-    // 馬券がない場合は何も表示しない
+export function BetList({ bets, onRemove, race }: BetListProps) {
     if (bets.length === 0) {
         return null;
     }
@@ -35,14 +24,12 @@ export function BetList({ bets, onRemove }: BetListProps) {
         <div className="space-y-3" role="list" aria-label="追加済み馬券一覧">
             {bets.map((bet) => (
                 <div key={bet.id} className="relative" role="listitem">
-                    {/* 馬券カード */}
-                    <BetCard bet={bet} />
+                    <BetCard bet={bet} race={race} />   {/* ← race を渡す */}
 
-                    {/* 削除ボタン */}
                     <button
                         onClick={() => onRemove(bet.id)}
                         aria-label={`${bet.type}の馬券を削除`}
-                        className={`
+                        className="
                             absolute top-2 right-2 
                             w-6 h-6 
                             flex items-center justify-center
@@ -51,7 +38,7 @@ export function BetList({ bets, onRemove }: BetListProps) {
                             rounded-full
                             transition-colors duration-200
                             font-bold text-lg
-                        `}
+                        "
                     >
                         ×
                     </button>

@@ -19,14 +19,19 @@ export async function searchJraOfficialVideo(query: string): Promise<YoutubeVide
         `&key=${apiKey}`;
 
     const res = await fetch(url);
+
+    // レスポンスを生で確認
+    const text = await res.text();
+    console.log("YouTube API raw response:", text);
+
     if (!res.ok) {
-        console.warn("YouTube API error", await res.text());
+        console.warn("YouTube API error", text);
         return null;
     }
 
-    const data = await res.json();
+    const data = JSON.parse(text);
+    console.log("YouTube API parsed:", data);
 
-    // 「JRA公式」を含むチャンネルを優先
     const items = data.items as any[] | undefined;
     if (!items || items.length === 0) return null;
 

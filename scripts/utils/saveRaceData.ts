@@ -155,6 +155,14 @@ export function saveRaceData(
             place: '',
             title: '',
             grade: '',
+            distance: null,
+            surface: null,
+            direction: null,
+            courseDetail: null,
+            weightType: null,
+            raceNumber: null,
+            placeDetail: null,
+            videoId: '',
         },
     };
 

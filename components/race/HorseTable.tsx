@@ -55,7 +55,7 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
 
                 {/* スマホ版（md未満） */}
                 <div className="md:hidden divide-y divide-slate-300/30">
-                    {race.horses.map((horse) => {
+                    {race.entries.map((horse) => {
                         const frame = Number(horse.frame);
                         const jockeyShort =
                             horse.jockey?.replace(/[\s.]/g, "").slice(0, 3) || "---";
@@ -120,7 +120,7 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                         </thead>
 
                         <tbody>
-                            {race.horses.map((horse) => {
+                            {race.entries.map((horse) => {
                                 const frame = Number(horse.frame);
 
                                 return (

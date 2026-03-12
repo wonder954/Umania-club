@@ -1,7 +1,6 @@
 import { fetchRaceEntriesRegist } from '../scraper/yahoo-scraper/index';
 import { mergeRaceInfo } from '../utils/mergeRaceInfo';
 import { saveRaceData } from '../utils/saveRaceData';
-import { saveRaceToFirestore } from '../utils/saveRaceToFirestore';
 import type { RaceInfo, RaceListItem, Entry } from '../../types/race';
 import merged from "../../scripts/data/2026_grades_merged.json";
 
@@ -56,7 +55,4 @@ export async function processWeeklyRace(
     );
     console.log(`  ✅ 出馬表保存完了（${entries.length} 頭）`);
 
-    // Firestore 保存
-    await saveRaceToFirestore({ raceId: race.raceId, info, entries, result: null });
-    console.log('  🔄 Firestore に出馬表を保存しました');
 }

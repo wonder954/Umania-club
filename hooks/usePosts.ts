@@ -28,6 +28,11 @@ export function usePosts(raceId: string, userId?: string) {
     const groupNameCache = useRef<Map<string, string>>(new Map());
 
     useEffect(() => {
+        if (!raceId) {
+            console.log("⏸ raceId がまだ undefined のため、Firestore 読み込みを停止");
+            return;
+        }
+
         if (authLoading) return;
 
         const ref = collection(db, "races", raceId, "posts");

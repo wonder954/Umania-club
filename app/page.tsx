@@ -29,23 +29,23 @@ export default async function Home() {
     // 今週の出馬表（次の開催週）
     const upcomingRaces = races
         .filter((r) => {
-            const raceWeek = getRaceWeekKey(r.date);
+            const raceWeek = getRaceWeekKey(r.info.date);
             return raceWeek > thisWeekKey;
         })
-        .sort((a, b) => a.date.localeCompare(b.date));
+        .sort((a, b) => a.info.date.localeCompare(b.info.date));
 
     // 先週の結果（昨日の開催週）
     const lastWeekRaces = races
         .filter((r) => {
-            const raceWeek = getRaceWeekKey(r.date);
+            const raceWeek = getRaceWeekKey(r.info.date);
             return raceWeek === lastWeekKey;
         })
-        .sort((a, b) => a.date.localeCompare(b.date));
+        .sort((a, b) => a.info.date.localeCompare(b.info.date));
 
     // カレンダー用（過去レース）
     const calendarRaces = races
-        .filter((r) => r.date < today)
-        .sort((a, b) => b.date.localeCompare(a.date));
+        .filter((r) => r.info.date < today)
+        .sort((a, b) => b.info.date.localeCompare(a.info.date));
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-transparent">
@@ -128,7 +128,7 @@ export default async function Home() {
                     <div className="grid gap-6">
                         {upcomingRaces.length > 0 ? (
                             upcomingRaces.map((race) => (
-                                <Link key={race.id} href={`/races/${race.id}`}>
+                                <Link key={race.raceId} href={`/races/${race.raceId}`}>
                                     <RaceCard race={race} variant="upcoming" />
                                 </Link>
                             ))
@@ -152,7 +152,7 @@ export default async function Home() {
                     <div className="grid gap-6">
                         {lastWeekRaces.length > 0 ? (
                             lastWeekRaces.map((race) => (
-                                <Link key={race.id} href={`/races/${race.id}/result`}>
+                                <Link key={race.raceId} href={`/races/${race.raceId}/result`}>
                                     <RaceCard race={race} variant="past" />
                                 </Link>
                             ))

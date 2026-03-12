@@ -1,5 +1,3 @@
-// components/calendar/RaceCalendarSection.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -20,10 +18,7 @@ export function RaceCalendarSection({
     races: Race[];
     holidays: Record<string, string>;
 }) {
-    // ★ Race[] + JRAデータ → CalendarRace[] に統合
     const calendarRaces: CalendarRace[] = racesToCalendarRaces(races, gradeRaces2026);
-
-    // ★ CalendarRace[] を日付ごとにグループ化
     const racesByDate = groupByDate(calendarRaces);
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -34,17 +29,12 @@ export function RaceCalendarSection({
 
         if (dayCalendarRaces.length === 0) return;
 
-        // ★ CalendarRace → Race に変換（詳細データがあれば差し替え）
-        const modalRaces = dayCalendarRaces.map(calRace => {
-            // raceId が10桁の数字 → races から詳細データを探す
+        const modalRaces = dayCalendarRaces.map((calRace) => {
+            // CalendarRace.id が 10桁 → Race.raceId と一致する可能性
             if (/^\d{10}$/.test(calRace.id)) {
-                const fullRace = races.find(r => r.id === calRace.id);
-                if (fullRace) {
-                    return fullRace; // ★ 詳細版を返す
-                }
+                const fullRace = races.find((r) => r.raceId === calRace.id);
+                if (fullRace) return fullRace;
             }
-
-            // 詳細データがなければ CalendarRace のまま
             return calRace;
         });
 
@@ -61,24 +51,26 @@ export function RaceCalendarSection({
             />
 
             <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-                {selectedRaces.map(race => {
-                    const isRaceId = /^\d{10}$/.test(race.id);
-                    const isPast = "result" in race && race.result; // ← ここが重要
+                {selectedRaces.map((race) => {
+                    const isRaceId = "raceId" in race; // Race かどうか
+                    const id = isRaceId ? race.raceId : race.id;
+
+                    const isPast = "result" in race && race.result;
 
                     const link = isPast
-                        ? `/races/${race.id}/result`
-                        : `/races/${race.id}`;
+                        ? `/races/${id}/result`
+                        : `/races/${id}`;
 
                     return isRaceId ? (
                         <Link
-                            key={race.id}
+                            key={id}
                             href={link}
                             className="block mb-4 hover:opacity-90 transition-opacity"
                         >
                             <RaceCard race={race} variant={isPast ? "past" : "upcoming"} />
                         </Link>
                     ) : (
-                        <div key={race.id} className="mb-4">
+                        <div key={id} className="mb-4">
                             <RaceCard race={race} />
                         </div>
                     );

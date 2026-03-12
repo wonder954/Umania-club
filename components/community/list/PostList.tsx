@@ -48,7 +48,7 @@ export default function PostList({ raceId, race }: Props) {
         if (type === "単勝" || type === "複勝") {
             return numbers
                 .map((num) => {
-                    const horse = race.horses.find((h) => h.number === num);
+                    const horse = race.entries.find((h) => h.number === num);
                     return horse ? `${num}.${horse.name}` : `${num}`;
                 })
                 .join(", ");

@@ -6,6 +6,8 @@
  * 各レースの詳細処理は weekly/ 配下のファイルに委譲している。
  */
 
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });  // ファイル名を指定
 import { fetchWeeklyRacesYahoo } from './scraper/yahoo-scraper/index';
 import { fetchLastWeekRacesYahoo } from './scraper/yahoo-scraper/index';
 
@@ -100,6 +102,12 @@ async function main() {
     // raceId マージ
     console.log('\n[6/6] JRA 重賞一覧に raceId をマージ中...');
     await mergeRaceId();
+
+    // Firestore アップロード
+    console.log('\n[7/7] Firestore にアップロード中...');
+    const { uploadRacesFromJson } = await import("./uploader/uploadRacesFromJson.ts");
+    await uploadRacesFromJson();
+
 }
 
 main().catch(console.error);

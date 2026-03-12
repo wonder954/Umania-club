@@ -63,8 +63,7 @@ export default async function RacePage({ params }: Props) {
                 {!race.result ? (
                     <>
                         <PredictionArea race={race} />
-                        <CommunitySection race={race} />
-                    </>
+                        <CommunitySection raceId={params.raceId} race={race} />                    </>
                 ) : (
                     <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-xl p-6 mb-8 text-center shadow-sm">
                         <h3 className="text-lg font-bold text-slate-800 mb-2">レース終了</h3>

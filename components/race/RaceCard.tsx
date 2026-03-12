@@ -1,9 +1,8 @@
 import { formatDateWithWeekday } from "@/lib/date";
 import type { CalendarRace } from "@/types/race";
 import type { Race } from "@/lib/races";
-import { getGradeStyle, normalizeGrade, type GradeStyle } from "@/utils/race/raceGradeUtils";
-import { formatRaceName } from "@/utils/race";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
+import { formatRaceName } from "@/utils/race";
 
 type Props = {
     race: CalendarRace | Race;
@@ -13,26 +12,35 @@ type Props = {
 export default function RaceCard({ race, variant = "upcoming" }: Props) {
     const isPast = variant === "past";
 
-    const detail = (race as any).course ? (race as Race) : null;
+    const isFirestoreRace = (race as Race).info !== undefined;
 
-    // ★ CalendarRace.color は GradeStyle に統一されている前提
-    const style = getGradeStyleUI(race.grade ?? "OP");
+    const info = isFirestoreRace
+        ? (race as Race).info
+        : {
+            // 🔥 CalendarRace は最低限の情報しか持っていない
+            grade: (race as CalendarRace).grade ?? null,
+            date: (race as CalendarRace).date,
+            title: (race as CalendarRace).raceName ?? (race as CalendarRace).name,
 
-    const bgClass = style.bg;
-    const borderClass = style.border;
+            // 🔥 CalendarRace には存在しないので全部 null
+            place: null,
+            raceNumber: null,
+            surface: null,
+            distance: null,
+            direction: null,
+            courseDetail: null,
+            weightType: null,
+        };
 
-    console.log("GRADE RAW:", race.grade);
-    console.log("GRADE NORMALIZED:", normalizeGrade(race.grade ?? "OP"));
-    console.log("STYLE:", getGradeStyleUI(race.grade ?? "OP"));
-
+    const style = getGradeStyleUI(info.grade ?? "OP");
 
     return (
         <div
             className={`
-                p-6 rounded-2xl transition-shadow border-l-4 
+                p-6 rounded-2xl transition-shadow border-l-4
                 ${isPast
                     ? "bg-white/50 backdrop-blur-sm border-white/40 shadow-sm"
-                    : `bg-white/70 backdrop-blur-sm ${borderClass} shadow-sm hover:shadow-md border border-white/40`
+                    : `bg-white/70 backdrop-blur-sm ${style.border} shadow-sm hover:shadow-md border border-white/40`
                 }
             `}
         >
@@ -42,28 +50,28 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                         {style.label}
                     </span>
 
-                    {detail && (
+                    {info.place && (
                         <p className="text-slate-600 text-sm">
-                            {detail.place} / {detail.raceNumber}
+                            {info.place} / {info.raceNumber}
                         </p>
                     )}
                 </div>
 
                 <span className="text-slate-500 text-sm">
-                    {formatDateWithWeekday(race.date)}
+                    {formatDateWithWeekday(info.date)}
                 </span>
             </div>
 
             <h2 className="text-2xl font-bold mb-1 text-slate-800">
-                {formatRaceName(race.raceName ?? race.name)}
+                {formatRaceName(info.title)}
             </h2>
 
             <p className="text-slate-600 text-sm">
-                {detail ? (
+                {info.surface && info.distance ? (
                     <>
-                        {detail.course.surface} {detail.course.distance}m
-                        {detail.weightType ? ` / ${detail.weightType}` : ""}
-                        {detail.course.courseDetail ? ` / ${detail.course.courseDetail}` : ""}
+                        {info.surface} {info.distance}m
+                        {info.weightType ? ` / ${info.weightType}` : ""}
+                        {info.courseDetail ? ` / ${info.courseDetail}` : ""}
                     </>
                 ) : (
                     <span className="italic text-slate-400">詳細情報なし</span>

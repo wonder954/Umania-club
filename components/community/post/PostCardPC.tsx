@@ -15,7 +15,7 @@ import { togglePostLike, addComment } from "@/lib/db";
 
 type Props = {
     post: Post;
-    race: Race; // ← パターンAでは必ず存在する
+    race: Race;
     user: User | null;
     comments: Comment[];
     expandedBets: Set<string>;
@@ -57,7 +57,8 @@ export default function PostCardPC(props: Props) {
     const handleLike = () => {
         if (!user) return;
 
-        togglePostLike(race.id, post.id, user.uid);
+        // 🔥 修正：race.id → race.raceId
+        togglePostLike(race.raceId, post.id, user.uid);
 
         setAnimateLike(true);
         setTimeout(() => setAnimateLike(false), 300);
@@ -75,7 +76,8 @@ export default function PostCardPC(props: Props) {
     const handleAddReply = async (text: string, parentId: string) => {
         if (!user) return;
 
-        await addComment(race.id, post.id, {
+        // 🔥 修正：race.id → race.raceId
+        await addComment(race.raceId, post.id, {
             text,
             authorId: user.uid,
             authorName: user.displayName,
@@ -88,7 +90,8 @@ export default function PostCardPC(props: Props) {
     };
 
     const handleShare = () => {
-        const url = `${window.location.origin}/races/${race.id}/posts/${post.id}`;
+        // 🔥 修正：race.id → race.raceId
+        const url = `${window.location.origin}/races/${race.raceId}/posts/${post.id}`;
         const text = `この投稿を共有します\n${url}`;
         const encoded = encodeURIComponent(text);
 
@@ -168,7 +171,7 @@ export default function PostCardPC(props: Props) {
                         comments={comments}
                         user={user}
                         handleDeleteComment={handleDeleteComment}
-                        raceId={race.id}
+                        raceId={race.raceId}   /* ← 修正 */
                         postId={post.id}
                         replyTarget={replyTarget}
                         setReplyTarget={setReplyTarget}

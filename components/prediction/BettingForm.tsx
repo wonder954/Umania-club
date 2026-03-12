@@ -18,12 +18,14 @@ import {
 
 import { BettingSelector } from "@/components/prediction/selectors/BettingSelector";
 import { BetList } from "@/components/prediction/components/BetList";
+import type { Race } from "@/lib/races";
 
 interface BettingFormProps {
     horses: { number: number | null; name: string }[];
     bets: Bet[];
     onChange: (bets: Bet[]) => void;
     allowedNumbers?: number[];
+    race: Race;
 }
 
 export default function BettingForm({
@@ -31,6 +33,7 @@ export default function BettingForm({
     bets,
     onChange,
     allowedNumbers,
+    race,
 }: BettingFormProps) {
     const { state, actions } = useBettingInput();
 
@@ -157,7 +160,7 @@ export default function BettingForm({
 
             <div ref={betListRef}></div>
 
-            <BetList bets={bets} onRemove={handleRemoveBet} />
+            <BetList bets={bets} onRemove={handleRemoveBet} race={race} />
         </div>
     );
 }

@@ -47,7 +47,7 @@ export default function PredictionForm({
 
     const totalPoints = bets.reduce((sum, bet) => sum + (bet.points || 0), 0);
 
-    const allowedNumbers = getAllowedNumbers(prediction, race);
+    const allowedNumbers = getAllowedNumbers(prediction, race.entries);
 
     const addButtonRef = useRef<HTMLDivElement>(null);
 
@@ -67,9 +67,8 @@ export default function PredictionForm({
         }
 
         // 🔥 投稿直前に最新の race を取得
-        const raceSnap = await getDoc(doc(db, "races", race.id));
+        const raceSnap = await getDoc(doc(db, "races", race.raceId));
         const freshRace = raceSnap.data();
-
         if (!freshRace) {
             alert("レース情報の取得に失敗しました");
             return;
@@ -88,14 +87,15 @@ export default function PredictionForm({
             prediction,
             bets,
             comment,
-            raceId: race.id,
-            raceName: race.name,
-            grade: freshRace.grade,   // ← 🔥 ここが重要！
+
+            raceId: race.raceId,                // ← 修正
+            raceName: race.info.title,          // ← 修正
+            grade: freshRace.info.grade,        // ← 修正
         };
 
         setIsSubmitting(true);
         try {
-            await createPost(race.id, postData);
+            await createPost(race.raceId, postData);
             setIsSuccess(true);
             onPostSuccess?.();
         } catch (e) {
@@ -157,13 +157,14 @@ export default function PredictionForm({
                         ※買い目は、出馬表で印をつけた馬だけ選択できます。
                     </p>
 
-                    {race.horses.some(h => h.number) ? (
+                    {race.entries.some(h => h.number) ? (
                         <>
                             <BettingForm
-                                horses={race.horses}
+                                horses={race.entries}
                                 bets={bets}
                                 onChange={setBets}
                                 allowedNumbers={allowedNumbers}
+                                race={race}
                             />
 
                             <div className="mt-2 text-right font-bold text-slate-700">

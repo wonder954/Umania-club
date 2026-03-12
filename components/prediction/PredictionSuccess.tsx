@@ -39,18 +39,17 @@ export default function PredictionSuccess({
 
             <div className="flex flex-col items-center">
                 <ShareImageGenerator
-                    raceName={race.name}
-                    courseText={`${race.course.surface} ${race.course.distance}（${race.course.direction}${race.course.courseDetail}）`}
-                    grade={race.grade || ""}
-                    date={race.date || ""}
+                    raceName={race.info.title}
+                    courseText={`${race.info.surface} ${race.info.distance}m（${race.info.direction}${race.info.courseDetail ?? ""}）`}
+                    grade={race.info.grade || ""}
+                    date={race.info.date || ""}
                     prediction={prediction}
-                    horses={race.horses.map(h => ({
+                    horses={race.entries.map(h => ({
                         number: h.number ?? "",
                         name: h.name
                     }))}
                     comment={comment}
                 />
-
                 <button
                     onClick={onReset}
                     className="
