@@ -6,46 +6,18 @@ import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/lib/holidays";
 import RaceSearchForm from "@/components/search/RaceSearchForm";
 import { FlagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import { getRaceWeekKey, getPreviousWeekKey, formatDate } from "@/lib/dateUtils";
+import { getWeeklyRaceData } from "@/lib/raceService";
+
 
 export default async function Home() {
     const holidays = await fetchHolidays();
     const races = await getAllRaces();
 
-    // 今日（JST）
-    const now = new Date();
-    const today = formatDate(now);
-
-    // 昨日
-    const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-
-    // 昨日が属する開催週 → 今週
-    const thisWeekKey = getRaceWeekKey(formatDate(yesterday));
-
-    // 先週の開催週
-    const lastWeekKey = getPreviousWeekKey(thisWeekKey);
-
-    // 今週の出馬表（次の開催週）
-    const upcomingRaces = races
-        .filter((r) => {
-            const raceWeek = getRaceWeekKey(r.info.date);
-            return raceWeek > thisWeekKey;
-        })
-        .sort((a, b) => a.info.date.localeCompare(b.info.date));
-
-    // 先週の結果（昨日の開催週）
-    const lastWeekRaces = races
-        .filter((r) => {
-            const raceWeek = getRaceWeekKey(r.info.date);
-            return raceWeek === lastWeekKey;
-        })
-        .sort((a, b) => a.info.date.localeCompare(b.info.date));
-
-    // カレンダー用（過去レース）
-    const calendarRaces = races
-        .filter((r) => r.info.date < today)
-        .sort((a, b) => b.info.date.localeCompare(a.info.date));
+    const {
+        upcomingRaces,
+        lastWeekRaces,
+        calendarRaces,
+    } = getWeeklyRaceData(races);
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-transparent">

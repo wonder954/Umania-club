@@ -12,6 +12,8 @@ import PostCommentList from "../comment/PostCommentList";
 import PostCommentForm from "../comment/PostCommentForm";
 import PostBets from "./PostBets";
 import { togglePostLike, addComment } from "@/lib/db";
+import Link from "next/link";
+import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
 type Props = {
     post: Post;
@@ -95,6 +97,9 @@ export default function PostCardMobile(props: Props) {
         window.open(`https://line.me/R/msg/text/?${encoded}`, "_blank");
     };
 
+    const style = getGradeStyleUI(race.info.grade);
+
+
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 space-y-6">
 
@@ -106,6 +111,26 @@ export default function PostCardMobile(props: Props) {
             )}
 
             <PostHeader post={post} currentUserUid={user?.uid} />
+
+            {/* レース名＋グレード＋リンク */}
+            <div className="flex items-center gap-3 mt-3 mb-4">
+                <Link
+                    href={`/races/${race.raceId}`}
+                    className="text-2xl font-extrabold text-slate-900 hover:underline break-words"
+                >
+                    {race.info.title}
+                </Link>
+
+                <span
+                    className={`
+            text-xl font-bold px-2.5 py-1 rounded-lg
+            shadow-sm
+            ${style.bg} ${style.text}
+        `}
+                >
+                    {race.info.grade}
+                </span>
+            </div>
 
             <div className="space-y-2">
                 <PostPrediction post={post} race={race} vertical />

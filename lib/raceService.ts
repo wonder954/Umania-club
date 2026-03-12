@@ -1,47 +1,36 @@
-import { RaceDetail } from './types';
+// lib/raceService.ts
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+import { groupRaceWeeks, getRaceWeekKey, getThisWeekKey, getPreviousWeekKey } from "./raceWeekUtils";
+import { formatDate } from "./dateUtils";
+import { Race } from "@/lib/races"; // 型があるなら
 
-/**
- * 今週の重賞レース一覧を取得
- */
-export async function getWeeklyRaces(): Promise<RaceDetail[]> {
-    try {
-        const response = await fetch(`${BASE_URL}/api/races`, {
-            cache: 'no-store', // 常に最新データを取得
-        });
+export function getWeeklyRaceData(races: Race[]) {
+    const today = formatDate(new Date());
+    const allDates = races.map(r => r.info.date);
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch races: ${response.statusText}`);
-        }
+    const weeks = groupRaceWeeks(allDates);
+    const thisWeekKey = getThisWeekKey(today, weeks);
+    const lastWeekKey = thisWeekKey ? getPreviousWeekKey(thisWeekKey, weeks) : null;
 
-        return await response.json();
-    } catch (error) {
-        console.error('Error in getWeeklyRaces:', error);
-        throw error;
-    }
-}
+    const upcomingRaces = races
+        .filter(r => thisWeekKey && getRaceWeekKey(r.info.date, weeks) === thisWeekKey)
+        .sort((a, b) => a.info.date.localeCompare(b.info.date));
 
-/**
- * 個別レース詳細を取得
- */
-export async function getRaceDetail(id: string): Promise<RaceDetail | null> {
-    try {
-        const response = await fetch(`${BASE_URL}/api/races/${id}`, {
-            cache: 'no-store',
-        });
+    const lastWeekRaces = races
+        .filter(r => lastWeekKey && getRaceWeekKey(r.info.date, weeks) === lastWeekKey)
+        .sort((a, b) => a.info.date.localeCompare(b.info.date));
 
-        if (response.status === 404) {
-            return null;
-        }
+    const calendarRaces = races
+        .filter(r => r.info.date < today)
+        .sort((a, b) => b.info.date.localeCompare(a.info.date));
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch race ${id}: ${response.statusText}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error(`Error in getRaceDetail(${id}):`, error);
-        throw error;
-    }
+    return {
+        today,
+        weeks,
+        thisWeekKey,
+        lastWeekKey,
+        upcomingRaces,
+        lastWeekRaces,
+        calendarRaces,
+    };
 }

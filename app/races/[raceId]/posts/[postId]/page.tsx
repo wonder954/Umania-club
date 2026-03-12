@@ -81,19 +81,14 @@ export default function PostDetailPage() {
                 race={race}
                 user={user}
                 comments={comments[post.id] || []}
-
                 expandedBets={expandedBets}
                 toggleBets={toggleBets}
-
                 showComments={showComments}
                 toggleComments={toggleComments}
-
                 commentText={commentText}
                 setCommentText={setCommentText}
-
                 handleAddComment={(text) => addComment(post.id, text)}
                 handleDeleteComment={(commentId) => deleteComment(post.id, commentId)}
-
                 postHit={postHit}
                 renderNumbers={() => ""}
                 groupName={post.groupName}
