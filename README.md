@@ -4,10 +4,9 @@
 Built with Next.js, Firebase, and ❤️
 
 cd scripts/scraper
-npx tsx run-weekly.ts    # 月〜木
-npx tsx run-friday.ts    # 金曜
 firebase deploy --only firestore:rules
 npx tsx scripts/run-weekly.ts
+npx tsx scripts/run-friday.ts
 
 
 ## Features
@@ -44,5 +43,3 @@ E. 投稿詳細に「LINE共有」ボタンを追加する
 firebaseのルールの権限の部分だよね
 
 グループの投稿表示がない。デフォルトアイコン、名無し問題。招待リンクページの参加ボタンが押せない。
-
-ViewModel パターンの導入

@@ -48,19 +48,21 @@ export async function fetchRaceEntriesDenma(url: string): Promise<{ info: Partia
                 const weightText = jockeyCell?.querySelector('p')?.textContent?.trim() || '';
                 const weight = weightText ? parseFloat(weightText) : undefined;
 
-                // オッズ・人気（あれば）
+                // オッズ・人気
                 const oddsCell = row.querySelector('.hr-table__data--odds');
                 let odds: number | undefined;
                 let popular: number | undefined;
-                if (oddsCell) {
-                    const oddsText = oddsCell.textContent?.trim() || '';
-                    const oddsMatch = oddsText.match(/(\d+)\s*\((\d+\.?\d*)\)/);
-                    if (oddsMatch) {
-                        popular = parseInt(oddsMatch[1]);
-                        odds = parseFloat(oddsMatch[2]);
-                    }
-                }
 
+                if (oddsCell) {
+                    const popularText = oddsCell.childNodes[0]?.textContent?.trim() || "";
+                    const oddsSpan = oddsCell.querySelector("span")?.textContent?.trim() || "";
+
+                    const p = parseInt(popularText);
+                    popular = isNaN(p) ? undefined : p;
+
+                    const o = parseFloat(oddsSpan);
+                    odds = isNaN(o) ? undefined : o;
+                }
                 if (name) {
                     results.push({
                         frame,

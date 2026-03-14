@@ -13,6 +13,17 @@ function extractGradeFromRaceName(name: string): string {
     return match ? match[0].toUpperCase() : "OP";
 }
 
+function getHonmei(post: Post): string | null {
+    if (!post.prediction) return null;
+
+    // prediction: { "馬名": "◎", ... }
+    for (const [horse, mark] of Object.entries(post.prediction)) {
+        if (mark === "◎") return horse;
+    }
+
+    return null;
+}
+
 export default function GroupPostList({ posts }: Props) {
     return (
         <div className="space-y-4">
@@ -32,6 +43,8 @@ export default function GroupPostList({ posts }: Props) {
                         post.createdAt?.toDate
                             ? post.createdAt.toDate()
                             : new Date(post.createdAt);
+
+                    const honmei = getHonmei(post);
 
                     return (
                         <Link key={post.id} href={`/races/${post.raceId}/posts/${post.id}`}>
@@ -68,13 +81,20 @@ export default function GroupPostList({ posts }: Props) {
 
                                 <span
                                     className={`
-                        inline-block text-sm font-semibold
-                        px-3 py-1 rounded-lg
-                        ${style.bg} ${style.text}
-                    `}
+        inline-block text-sm font-semibold
+        px-3 py-1 rounded-lg
+        ${style.bg} ${style.text}
+    `}
                                 >
                                     {post.raceName}
                                 </span>
+
+                                {/* ◎ 本命馬 */}
+                                {honmei && (
+                                    <p className="text-sm text-slate-700 mt-1 ml-9">
+                                        ◎ {honmei}…
+                                    </p>
+                                )}
 
                                 {post.comment && (
                                     <p className="text-sm text-slate-700 mt-1 ml-9 line-clamp-2">
