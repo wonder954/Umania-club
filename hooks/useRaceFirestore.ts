@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Race } from "@/lib/races";
 
@@ -8,20 +8,18 @@ export function useRaceFirestore(raceId: string) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function load() {
-            const ref = doc(db, "races", raceId);
-            const snap = await getDoc(ref);
+        const ref = doc(db, "races", raceId);
 
+        const unsub = onSnapshot(ref, (snap) => {
             if (snap.exists()) {
                 setRace(snap.data() as Race);
             } else {
                 setRace(null);
             }
-
             setLoading(false);
-        }
+        });
 
-        load();
+        return () => unsub();
     }, [raceId]);
 
     return { race, loading };
