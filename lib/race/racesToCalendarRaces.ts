@@ -1,6 +1,6 @@
 import type { FirestoreRace } from "@/lib/race/types";
 import type { GradeRace } from "@/lib/grades2026";
-import type { CalendarRace } from "@/types/race";
+import type { CalendarRace } from "@/components/calendar/types";
 
 import { cleanTitle } from "@/utils/race/normalize";
 import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
@@ -27,19 +27,29 @@ export function racesToCalendarRaces(
         if (seenIds.has(r.id)) continue;
         seenIds.add(r.id);
 
-        const grade = normalizeGrade(r.grade ?? "OP");
+        // ★ FirestoreRace と JRA のマッチング
+        const jra = jraData.find(j =>
+            j.date === r.date &&
+            isSameRace(r.title, j.name, r.date, j.date)
+        );
+
+        // ★ JRA 名を優先して title を上書き
+        const title = jra ? jra.name : r.title;
+
+        // ★ grade も JRA を優先
+        const grade = normalizeGrade(jra?.grade ?? r.grade ?? "OP");
 
         calendarRaces.push({
-            id: r.id,
-            title: r.title,
-            raceName: removeGradeSuffix(r.title),
+            id: jra?.id ?? r.id,                 // JRA ID を優先
+            title,                               // ← JRA 名に統一
+            raceName: removeGradeSuffix(title),  // ← JRA 名ベース
             date: r.date,
             grade,
             color: getGradeStyle(grade),
         });
     }
 
-    // JRA データ
+    // JRA データ追加（既存と重複しないものだけ）
     for (const jraRace of jraData) {
         const exists = calendarRaces.some(r =>
             r.id === jraRace.id ||

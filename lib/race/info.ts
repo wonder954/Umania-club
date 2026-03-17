@@ -1,8 +1,8 @@
 /**
- * レースデータ型定義
+ * RaceInfo（スクレイピング生データ）
  * Yahoo! 競馬スクレイピング用
+ * FirestoreRace に変換する前の中間モデル
  */
-
 
 // レース基本情報
 export type RaceInfo = {
@@ -10,17 +10,17 @@ export type RaceInfo = {
     place: string | null;         // "中山"（regist で未取得のことがある）
     placeDetail?: string | null;  // "1回中山8日"
     title: string;                // "アメリカジョッキークラブカップ"
-    grade: string | null;         // "GI" | "GII" | "GIII" | null
+    grade: string | null;         // "GI" | "GII" | "GIII" | "J・GⅡ" | null
     raceNumber?: string | null;   // "11R"
     surface?: string | null;      // "芝" | "ダート"
-    distance?: number | null;     // "2200"
+    distance?: number | null;     // 2200
     direction?: string | null;    // "右" | "左"
     courseDetail?: string | null; // "外" | "内"
     weightType?: string | null;   // "別定" | "定量" | "ハンデ"
     videoId: string | null;
 };
 
-// 出馬表エントリ
+// 出馬表エントリ（出馬表 JSON のときだけ存在）
 export type Entry = {
     number: number | null;
     frame: number | null;
@@ -34,7 +34,7 @@ export type Entry = {
     popular?: number | null;
 };
 
-// 着順データ
+// 着順データ（結果 JSON のときだけ存在）
 export type RaceOrder = {
     rank: number;
     frame: number;
@@ -69,62 +69,16 @@ export type Payout = {
     trifecta?: PayoutItem[];
 };
 
-// レース結果
+// レース結果（結果 JSON のときだけ存在）
 export type RaceResult = {
     order: RaceOrder[];
     payout: Payout;
 } | null;
 
-// JSON 保存用
+// RaceData（スクレイピング JSON の最終形）
 export type RaceData = {
     raceId: string;
     info: RaceInfo;
-    entries?: Entry[];
-    result?: RaceResult;
-};
-
-// ===============================
-// 今週の重賞一覧（detailUrl を持つ）
-// ===============================
-export type RaceListItem = {
-    raceId: string;
-    title: string;
-    grade: string | null;
-    detailUrl: string;          // ← 今週は detailUrl
-    surface?: string | null;
-    direction?: string | null;
-    courseDetail?: string | null;
-    distance?: number | null;
-    weightType?: string | null;
-    date?: string | null;
-};
-
-// ===============================
-// 先週の重賞一覧（resultUrl を持つ）
-// ===============================
-export type LastWeekRaceItem = {
-    raceId: string;
-    title: string;
-    grade: string | null;
-    resultUrl: string;          // ← 先週は resultUrl
-};
-
-// ===============================
-// GradeStyle（UI 依存を排除した scripts 用）
-// ===============================
-export type GradeStyle = {
-    label: string;
-    bg: string;
-    text: string;
-    border: string;
-};
-
-export type CalendarRace = {
-    id: string;
-    title: string;          // FirestoreRace.title に対応
-    raceName?: string;      // GII を除いた純粋なレース名
-    grade: string | null;   // FirestoreRace.grade に対応
-    date: string;
-    color: GradeStyle;      // UI 用
-    isWeak?: boolean;       // JRA データかどうか
+    entries?: Entry[];   // 出馬表 JSON のときだけ存在
+    result?: RaceResult; // 結果 JSON のときだけ存在
 };

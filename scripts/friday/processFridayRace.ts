@@ -1,45 +1,34 @@
 // scripts/friday/processFridayRace.ts
-import type { RaceInfo } from "../../types/race";
-import { createInitialInfo } from "./createInitialInfo";
+
+import { processRaceCommon } from "../common/processRaceCommon";
+import { toDenmaUrl } from "../common/urlTransform";
 import { fetchRaceEntriesDenma } from "../scraper/yahoo-scraper/index";
-import { saveRaceData } from "../utils/saveRaceData";
+import merged from "../../scripts/data/2026_grades_merged.json";
+import type { RaceListItem } from "../types/raceList";
 
-export async function processFridayRace(race: any, folderName: string) {
-    console.log(`\n--- ${race.raceId} ${race.title} (${race.grade}) ---`);
+export async function processFridayRace(
+    race: RaceListItem,
+    folderName: string
+) {
+    // --- ① merged.json から title / grade を補完（friday 専用） ---
+    const short = merged.find(r => r.id === race.raceId);
 
-    // ① 初期 info（weekly と同じ）
-    const info: RaceInfo = createInitialInfo(race);
-
-    // ② denma URL に変換
-    const denmaUrl = race.detailUrl.includes("/race/denma/")
-        ? race.detailUrl
-        : race.detailUrl.replace("/race/index/", "/race/denma/");
-
-    console.log("  📋 出馬表（確定版）を取得中...");
-    const { info: denmaInfo, entries } = await fetchRaceEntriesDenma(denmaUrl);
-
-    // ③ denma 情報をマージ（weekly と同じ戦略）
-    info.date = denmaInfo.date ?? info.date;
-    info.place = denmaInfo.place ?? info.place;
-    info.placeDetail = denmaInfo.placeDetail ?? info.placeDetail;
-    info.raceNumber = denmaInfo.raceNumber ?? info.raceNumber;
-
-    if (denmaInfo.surface) info.surface = denmaInfo.surface;
-    if (denmaInfo.direction) info.direction = denmaInfo.direction;
-    if (denmaInfo.courseDetail) info.courseDetail = denmaInfo.courseDetail;
-    if (denmaInfo.weightType) info.weightType = denmaInfo.weightType;
-
-    if (denmaInfo.distance !== null && denmaInfo.distance !== undefined) {
-        info.distance = denmaInfo.distance;
-    }
-
-    // ④ JSON 保存（entries は上書き、result は保持）
-    saveRaceData(
-        race.raceId,
-        { raceId: race.raceId, info, entries },
+    // --- ② processRaceCommon に委譲 ---
+    return processRaceCommon({
+        race: {
+            ...race,
+            // denma URL を detailUrl として扱う
+            detailUrl: race.detailUrl,
+            // merged.json の補完を race 側に反映
+            title: short?.name ?? race.title,
+            grade: short?.grade ?? race.grade ?? null,
+        },
         folderName,
-        { skipIfExists: { result: true } }
-    );
 
-    console.log(`  ✅ 出馬表保存完了（${entries.length} 頭）`);
+        transformUrlFn: toDenmaUrl,
+        fetchEntriesFn: fetchRaceEntriesDenma,
+
+        // friday は「結果が既にあればスキップ」
+        skipIfExists: { result: true },
+    });
 }

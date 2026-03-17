@@ -18,7 +18,7 @@ import { generateFolderName, getLatestFolderByType } from './utils/saveRaceData'
 
 import { mergeRaceId } from './mergeRaceId';
 
-import type { RaceListItem, LastWeekRaceItem } from '../types/race';
+import type { RaceListItem, LastWeekRaceItem } from './types/raceList';
 
 async function main() {
     console.log('='.repeat(60));

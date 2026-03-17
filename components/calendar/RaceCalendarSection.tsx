@@ -5,10 +5,10 @@ import Link from "next/link";
 import { RaceCalendar } from "@/components/calendar/RaceCalendar";
 import { racesToCalendarRaces, groupByDate } from "@/lib/race/racesToCalendarRaces";
 import { Modal } from "@/components/common/Modal";
-import RaceCard from "@/components/race/RaceCard";
+import { UnifiedRaceCard } from "@/components/race/UnifiedRaceCard";
 
 import type { FirestoreRace } from "@/lib/race/types";
-import type { CalendarRace } from "@/types/race";
+import type { CalendarRace } from "@/components/calendar/types";
 import { gradeRaces2026 } from "@/lib/grades2026";
 
 export function RaceCalendarSection({
@@ -45,28 +45,41 @@ export function RaceCalendarSection({
 
             <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
                 {selectedRaces.map((calRace) => {
-                    const id = calRace.id;
+                    const fullRace = races.find((r) =>
+                        r.date === calRace.date &&
+                        (r.title === calRace.title ||
+                            r.title.includes(calRace.title) ||
+                            calRace.title.includes(r.title))
+                    );
 
-                    // FirestoreRace を探す
-                    const fullRace = races.find((r) => r.id === id);
+                    const Card = (
+                        <UnifiedRaceCard
+                            calRace={calRace}
+                            fullRace={fullRace ?? null}
+                        />
+                    );
 
-                    // FirestoreRace が無い場合は RaceCard を表示しない
-                    if (!fullRace) return null;
+                    if (fullRace) {
+                        const isPast = !!fullRace.result;
+                        const link = isPast
+                            ? `/races/${fullRace.id}/result`
+                            : `/races/${fullRace.id}`;
 
-                    const isPast = !!fullRace.result;
-
-                    const link = isPast
-                        ? `/races/${id}/result`
-                        : `/races/${id}`;
+                        return (
+                            <Link
+                                key={`fs-${fullRace.id}`}
+                                href={link}
+                                className="block mb-4 hover:opacity-90 transition-opacity"
+                            >
+                                {Card}
+                            </Link>
+                        );
+                    }
 
                     return (
-                        <Link
-                            key={id}
-                            href={link}
-                            className="block mb-4 hover:opacity-90 transition-opacity"
-                        >
-                            <RaceCard race={fullRace} variant={isPast ? "past" : "upcoming"} />
-                        </Link>
+                        <div key={`jra-${calRace.id}`} className="mb-4">
+                            {Card}
+                        </div>
                     );
                 })}
             </Modal>

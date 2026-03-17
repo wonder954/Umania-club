@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import type { RaceData, Entry } from '../../types/race';
+import type { RaceData, Entry } from '../../lib/race/info';
 
 // ESM で __dirname を再現
 const __filename = fileURLToPath(import.meta.url);

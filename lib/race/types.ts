@@ -1,20 +1,23 @@
 // --- Firestore に保存される Race の正規形 ---
+// normalizeRace() の出力そのもの。
+// Firestore は undefined を保存できないため、
+// すべての optional フィールドは null を許容する形に統一している。
 export type FirestoreRace = {
     id: string; // raceId と同じ
 
     // --- 基本情報（フェーズ1〜3で常に存在） ---
-    date: string;          // "2026-03-07"
-    place: string;         // "中山"
-    title: string;         // "中山牝馬S"
-    grade: string | null;  // "GⅢ"
-    distance: number;      // 1800
-    surface: string;       // "芝"
-    direction: string | null;     // "右"
-    courseDetail: string | null;  // null or "外回り"
-    weightType: string | null;    // "ハンデ" など
-    raceNumber: string;           // "11R"
-    placeDetail: string | null;   // "2回中山3日"
-    videoId: string | null;       // YouTube ID
+    date: string;               // "2026-03-07"
+    place: string;              // "中山"
+    title: string;              // "中山牝馬S"
+    grade: string | null;       // "GⅢ" / null
+    distance: number;           // 1800
+    surface: string;            // "芝"
+    direction: string | null;   // "右" / null
+    courseDetail: string | null;// "外回り" / null
+    weightType: string | null;  // "ハンデ" / null
+    raceNumber: string;         // "11R"
+    placeDetail: string | null; // "2回中山3日" / null
+    videoId: string | null;     // YouTube ID / null
 
     // --- 出走馬（フェーズ1〜2で存在、フェーズ3では空配列） ---
     entries: RaceEntry[];
@@ -23,42 +26,55 @@ export type FirestoreRace = {
     result: RaceResult | null;
 };
 
+
+
 // --- 出走馬（フェーズ1〜2 の情報をすべて許容） ---
+// Firestore 互換のため undefined は禁止、null を許可。
 export type RaceEntry = {
     frame: number | null;   // 枠番（フェーズ2で確定）
     number: number | null;  // 馬番（フェーズ2で確定）
     name: string;           // 馬名（フェーズ1から存在）
 
-    sex?: string;           // 性別（フェーズ1から存在）
-    age?: number;           // 年齢（フェーズ1から存在）
+    sex: string | null;     // 性別（牡/牝/セ）/ null
+    age: number | null;     // 年齢 / null
 
-    jockey?: string;        // 騎手（フェーズ2で確定）
-    weight?: number | string; // 斤量（フェーズ2で確定）
-    odds?: number;          // オッズ（フェーズ2で確定）
-    popular?: number;       // 人気（フェーズ2で確定）
+    jockey: string | null;  // 騎手名 / null
+    weight: string | null;  // 斤量（"56" など）/ null
+    odds: number | null;    // オッズ / null
+    popular: number | null; // 人気 / null
 };
 
+
+
 // --- 結果（フェーズ3） ---
+// payout は null の可能性がある（地方競馬など）
 export type RaceResult = {
     order: RaceOrder[];
     payout: RacePayout | null;
 };
 
+
+
 // --- 着順 ---
+// Firestore 互換のため undefined は禁止、null を許可。
 export type RaceOrder = {
-    rank: number;
-    frame: number;
-    number: number;
-    name: string;
-    time: string;
-    margin: string;
-    jockey: string;
-    weight: string;
-    popular: number;
-    odds: number;
+    rank: number;           // 着順（1〜18）
+    frame: number;          // 枠番
+    number: number;         // 馬番
+    name: string;           // 馬名
+
+    time: string | null;    // 走破タイム / null
+    margin: string | null;  // 着差 / null
+    jockey: string | null;  // 騎手名 / null
+    weight: string | null;  // 斤量（"56" など）/ null
+    popular: number | null; // 人気 / null
+    odds: number | null;    // オッズ / null
 };
 
+
+
 // --- 払戻 ---
+// 各券種は存在しない場合があるため optional。
 export type RacePayout = {
     win?: PayoutItem[];
     place?: PayoutItem[];
@@ -71,7 +87,7 @@ export type RacePayout = {
 };
 
 export type PayoutItem = {
-    numbers: number[];
-    amount: number;
-    popular: number;
+    numbers: number[];  // 組番
+    amount: number;     // 払戻金
+    popular: number;    // 人気順
 };

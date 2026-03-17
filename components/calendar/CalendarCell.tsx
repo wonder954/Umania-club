@@ -1,5 +1,5 @@
 import { shortenRaceName, formatRaceName } from "@/utils/race";
-import type { CalendarRace } from "@/types/race";
+import type { CalendarRace } from "@/components/calendar/types";
 import Link from "next/link";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 

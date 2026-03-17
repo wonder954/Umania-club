@@ -1,5 +1,5 @@
 import type { BetType } from "@/types/bet";
-import type { Payout, PayoutItem } from "@/types/race";
+import type { Payout, PayoutItem } from "@/lib/race/info";
 
 export function calculatePayout(
     hitTickets: { type: BetType; numbers: number[] }[],

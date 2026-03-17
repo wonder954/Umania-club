@@ -1,4 +1,4 @@
-import type { RaceListItem } from '../../../types/race';
+import type { RaceListItem } from '../../types/raceList';
 import { createBrowserPage } from './helpers';
 import { normalizeGrade } from '../../utils/raceGradeUtils';
 

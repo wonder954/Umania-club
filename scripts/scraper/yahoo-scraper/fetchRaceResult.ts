@@ -1,4 +1,4 @@
-import type { RaceInfo, RaceResult, RaceOrder, Payout } from '../../../types/race';
+import type { RaceInfo, RaceResult, RaceOrder, Payout } from '../../../lib/race/info';
 import { createBrowserPage, extractRaceInfo } from './helpers';
 
 /**

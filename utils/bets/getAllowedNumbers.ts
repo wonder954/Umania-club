@@ -1,4 +1,4 @@
-import type { Entry } from "@/types/race";
+import type { Entry } from "@/lib/race/info";
 import { Mark } from "@/types/mark";
 
 export function getAllowedNumbers(

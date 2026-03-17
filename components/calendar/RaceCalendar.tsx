@@ -5,7 +5,7 @@ import { getCalendarMatrix } from "./calendarMatrix";
 import { CalendarHeader } from "./CalendarHeader";
 import { CalendarCell } from "./CalendarCell";
 
-import type { CalendarRace } from "@/types/race";
+import type { CalendarRace } from "@/components/calendar/types";
 
 export type RacesByDate = {
     [date: string]: CalendarRace[];

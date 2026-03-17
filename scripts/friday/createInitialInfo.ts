@@ -1,10 +1,10 @@
 // scripts/friday/createInitialInfo.ts
-import type { RaceInfo } from "../../types/race";
+import type { RaceInfo } from "../../lib/race/info";
 
 export function createInitialInfo(race: any): RaceInfo {
     return {
         date: race.date ?? "",
-        place: null,
+        place: race.place ?? null,
         title: race.title,
         grade: race.grade ?? null,
         surface: race.surface ?? null,
