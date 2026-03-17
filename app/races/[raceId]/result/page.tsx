@@ -5,7 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import RaceResultSection from "@/components/race/RaceResultSection";
 import PayoutSection from "@/components/race/PayoutSection";
 import CommunityResultSection from "@/components/race/CommunityResultSection";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
 import { RaceVideo } from "@/components/race/RaceVideo";
 
@@ -15,14 +15,14 @@ type Props = {
     params: { raceId: string };
 };
 
-async function getRaceFromFirestore(raceId: string): Promise<Race | null> {
+async function getRaceFromFirestore(raceId: string): Promise<FirestoreRace | null> {
     const ref = doc(db, "races", raceId);
     const snap = await getDoc(ref);
 
     if (!snap.exists()) return null;
 
     const plain = JSON.parse(JSON.stringify(snap.data()));
-    return plain as Race;
+    return plain as FirestoreRace;
 }
 
 export default async function ResultPage({ params }: Props) {
@@ -71,7 +71,7 @@ export default async function ResultPage({ params }: Props) {
             <RaceHeaderCard race={race} />
 
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-                <RaceVideo videoId={race.info.videoId} />
+                <RaceVideo videoId={race.videoId} />
                 <RaceResultSection result={race.result} />
                 <PayoutSection payout={race.result.payout} />
                 <CommunityResultSection race={race} />

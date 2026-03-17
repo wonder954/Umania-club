@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllRaces } from "@/lib/races";
+import { getAllFirestoreRaces } from "@/lib/race/firestore";
 import RaceCard from "@/components/race/RaceCard";
 import { RaceCalendarSection } from "@/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/lib/holidays";
@@ -11,7 +11,7 @@ import { getWeeklyRaceData } from "@/lib/raceService";
 
 export default async function Home() {
     const holidays = await fetchHolidays();
-    const races = await getAllRaces();
+    const races = await getAllFirestoreRaces();
 
     const {
         upcomingRaces,
@@ -100,7 +100,7 @@ export default async function Home() {
                     <div className="grid gap-6">
                         {upcomingRaces.length > 0 ? (
                             upcomingRaces.map((race) => (
-                                <Link key={race.raceId} href={`/races/${race.raceId}`}>
+                                <Link key={race.id} href={`/races/${race.id}`}>
                                     <RaceCard race={race} variant="upcoming" />
                                 </Link>
                             ))
@@ -124,7 +124,7 @@ export default async function Home() {
                     <div className="grid gap-6">
                         {lastWeekRaces.length > 0 ? (
                             lastWeekRaces.map((race) => (
-                                <Link key={race.raceId} href={`/races/${race.raceId}/result`}>
+                                <Link key={race.id} href={`/races/${race.id}/result`}>
                                     <RaceCard race={race} variant="past" />
                                 </Link>
                             ))
@@ -153,7 +153,7 @@ export default async function Home() {
                         過去のレースカレンダー
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
                     </h2>
-                    <RaceCalendarSection races={calendarRaces} holidays={holidays} />
+                    <RaceCalendarSection races={races} holidays={holidays} />
                 </section>
 
             </div>

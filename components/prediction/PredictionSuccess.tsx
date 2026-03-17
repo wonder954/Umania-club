@@ -1,11 +1,11 @@
 "use client";
 
 import ShareImageGenerator from "@/components/share/ShareImageGenerator";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { Mark } from "@/types/mark";
 
 type Props = {
-    race: Race;
+    race: FirestoreRace;
     prediction: Record<string, Mark>;
     comment: string;
     onReset: () => void;
@@ -39,10 +39,10 @@ export default function PredictionSuccess({
 
             <div className="flex flex-col items-center">
                 <ShareImageGenerator
-                    raceName={race.info.title}
-                    courseText={`${race.info.surface} ${race.info.distance}m（${race.info.direction}${race.info.courseDetail ?? ""}）`}
-                    grade={race.info.grade || ""}
-                    date={race.info.date || ""}
+                    raceName={race.title}
+                    courseText={`${race.surface} ${race.distance}m（${race.direction}${race.courseDetail ?? ""}）`}
+                    grade={race.grade || ""}
+                    date={race.date || ""}
                     prediction={prediction}
                     horses={race.entries.map(h => ({
                         number: h.number ?? "",

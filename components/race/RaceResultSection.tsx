@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { RaceResult, Payout } from "@/types/race";
+import type { RaceResult, RacePayout } from "@/lib/race/types";
 
 type Props = {
     result: RaceResult | null | undefined;
@@ -20,7 +20,7 @@ const frameColors: Record<number, string> = {
 };
 
 // 券種の日本語名
-const payoutLabels: Record<keyof Payout, string> = {
+const payoutLabels: Record<keyof RacePayout, string> = {
     win: "単勝",
     place: "複勝",
     bracket: "枠連",

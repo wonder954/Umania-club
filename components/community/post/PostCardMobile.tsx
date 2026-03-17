@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { User } from "firebase/auth";
 import { Bet } from "@/types/bet";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 import { Post, Comment } from "./types";
 import PostHeader from "./PostHeader";
 import PostPrediction from "./PostPrediction";
@@ -17,7 +17,7 @@ import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
 type Props = {
     post: Post;
-    race: Race; // ← パターンAでは必ず存在する
+    race: FirestoreRace;   // ← 修正
     user: User | null;
     comments: Comment[];
     expandedBets: Set<string>;
@@ -29,8 +29,7 @@ type Props = {
     handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race: Race) => string;
-
+    renderNumbers: (bet: Bet, race: FirestoreRace) => string;   // ← 修正
     groupName?: string | null;
 };
 
@@ -59,7 +58,7 @@ export default function PostCardMobile(props: Props) {
     const handleLike = () => {
         if (!user) return;
 
-        togglePostLike(race.raceId, post.id, user.uid);
+        togglePostLike(race.id, post.id, user.uid);   // ← 修正
 
         setAnimateLike(true);
         setTimeout(() => setAnimateLike(false), 300);
@@ -77,7 +76,7 @@ export default function PostCardMobile(props: Props) {
     const handleAddReply = async (text: string, parentId: string) => {
         if (!user) return;
 
-        await addComment(race.raceId, post.id, {
+        await addComment(race.id, post.id, {   // ← 修正
             text,
             authorId: user.uid,
             authorName: user.displayName,
@@ -90,20 +89,18 @@ export default function PostCardMobile(props: Props) {
     };
 
     const handleShare = () => {
-        const url = `${window.location.origin}/races/${race.raceId}/posts/${post.id}`;
+        const url = `${window.location.origin}/races/${race.id}/posts/${post.id}`;   // ← 修正
         const text = `この投稿を共有します\n${url}`;
         const encoded = encodeURIComponent(text);
 
         window.open(`https://line.me/R/msg/text/?${encoded}`, "_blank");
     };
 
-    const style = getGradeStyleUI(race.info.grade);
-
+    const style = getGradeStyleUI(race.grade);   // ← 修正
 
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 space-y-6">
 
-            {/* グループ名帯 */}
             {post.visibility?.startsWith("group:") && (
                 <div className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded mb-2">
                     {groupName ? `${groupName} の投稿` : "グループの投稿"}
@@ -112,23 +109,22 @@ export default function PostCardMobile(props: Props) {
 
             <PostHeader post={post} currentUserUid={user?.uid} />
 
-            {/* レース名＋グレード＋リンク */}
             <div className="flex items-center gap-3 mt-3 mb-4">
                 <Link
-                    href={`/races/${race.raceId}`}
+                    href={`/races/${race.id}`}   // ← 修正
                     className="text-2xl font-extrabold text-slate-900 hover:underline break-words"
                 >
-                    {race.info.title}
+                    {race.title}
                 </Link>
 
                 <span
                     className={`
-            text-xl font-bold px-2.5 py-1 rounded-lg
-            shadow-sm
-            ${style.bg} ${style.text}
-        `}
+                        text-xl font-bold px-2.5 py-1 rounded-lg
+                        shadow-sm
+                        ${style.bg} ${style.text}
+                    `}
                 >
-                    {race.info.grade}
+                    {race.grade}
                 </span>
             </div>
 
@@ -146,7 +142,6 @@ export default function PostCardMobile(props: Props) {
                 vertical
             />
 
-            {/* ❤️ いいね & 💬 コメント */}
             <div className="mt-3 flex justify-between items-center text-gray-500 text-sm relative">
 
                 <button
@@ -194,7 +189,7 @@ export default function PostCardMobile(props: Props) {
                         comments={comments}
                         user={user}
                         handleDeleteComment={handleDeleteComment}
-                        raceId={race.raceId}
+                        raceId={race.id}   // ← 修正
                         postId={post.id}
                         replyTarget={replyTarget}
                         setReplyTarget={setReplyTarget}

@@ -1,11 +1,11 @@
 import { Bet } from "@/types/bet";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 import { judgeHit } from "@/utils/race/judge";
 import { formatBetStructure } from "@/utils/bets/format";
 
 type Props = {
     bet: Bet;
-    race: Race;
+    race: FirestoreRace;   // ← 修正
     showHit?: boolean;
 };
 
@@ -25,17 +25,14 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
             {/* 馬券種 ＋ 買い方 */}
             <div className="flex items-center gap-2 text-xs font-semibold">
 
-                {/* 馬券種（濃い緑 → 透明緑） */}
                 <span className="px-2 py-1 rounded-full bg-green-600/70 text-white shadow-sm">
                     {bet.type}
                 </span>
 
-                {/* 買い方（グレー → 透明グレー） */}
                 <span className="px-2 py-1 rounded-full bg-slate-200/70 text-slate-700 shadow-sm">
                     {structure.buyType}
                 </span>
 
-                {/* マルチ（黄色 → 透明黄色） */}
                 {bet.isMulti && (
                     <span className="px-2 py-1 rounded-full bg-yellow-200/70 text-yellow-800 shadow-sm">
                         マルチ
@@ -60,7 +57,6 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
             {/* 的中/不的中 ＋ 点数 */}
             <div className="flex items-center justify-between pt-1">
 
-                {/* 的中/不的中（色を薄く） */}
                 {hitInfo ? (
                     <span
                         className={`
@@ -79,7 +75,6 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
                     <span className="text-xs text-slate-400">　</span>
                 )}
 
-                {/* 点数 */}
                 <span className="text-xs font-bold text-slate-700">
                     合計{bet.points}点
                 </span>

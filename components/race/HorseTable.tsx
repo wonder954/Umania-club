@@ -1,14 +1,14 @@
 "use client";
 
 import MarkSelector from "@/components/prediction/MarkSelector";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import Image from "next/image";
 import type { Mark } from "@/types/mark";
 
 
 
 type Props = {
-    race: Race;
+    race: FirestoreRace;
     prediction: Record<string, Mark>;
     onPredictionChange: (prediction: Record<string, Mark>) => void;
 };

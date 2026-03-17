@@ -4,12 +4,12 @@ import { useState, useRef } from "react";
 import HorseTable from "@/components/race/HorseTable";
 import PredictionForm from "@/components/prediction/PredictionForm";
 import { Bet } from "@/types/bet";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import Image from "next/image";
 import type { Mark } from "@/types/mark";
 
 
-export default function PredictionArea({ race }: { race: Race }) {
+export default function PredictionArea({ race }: { race: FirestoreRace }) {
     const [prediction, setPrediction] = useState<Record<string, Mark>>({});
     const [bets, setBets] = useState<Bet[]>([]);
     const [comment, setComment] = useState("");

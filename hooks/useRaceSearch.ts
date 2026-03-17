@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 
 type UseRaceSearchReturn = {
     selectedYear: string;
@@ -8,12 +8,12 @@ type UseRaceSearchReturn = {
     setSelectedYear: (year: string) => void;
     setSelectedMonth: (month: string) => void;
     setKeyword: (keyword: string) => void;
-    filteredRaces: Race[];
+    filteredRaces: FirestoreRace[];
     years: { label: string; value: string }[];
     months: { label: string; value: string }[];
 };
 
-export function useRaceSearch(allRaces: Race[]): UseRaceSearchReturn {
+export function useRaceSearch(allRaces: FirestoreRace[]): UseRaceSearchReturn {
     const years = useMemo(() => {
         const y = new Date().getFullYear();
         return [
@@ -38,10 +38,10 @@ export function useRaceSearch(allRaces: Race[]): UseRaceSearchReturn {
     const filteredRaces = useMemo(() => {
         return allRaces
             .filter((race) => {
-                // raceId は 10 桁
-                if (!/^\d{10}$/.test(race.raceId)) return false;
+                // FirestoreRace.id は 10 桁
+                if (!/^\d{10}$/.test(race.id)) return false;
 
-                const d = new Date(race.info.date);
+                const d = new Date(race.date);
                 const y = d.getFullYear().toString();
                 const m = (d.getMonth() + 1).toString();
 
@@ -51,14 +51,13 @@ export function useRaceSearch(allRaces: Race[]): UseRaceSearchReturn {
                 // 🔥 キーワード検索（title + place + grade + date）
                 if (keyword.trim() !== "") {
                     const keys = keyword
-                        .split(/\s+/) // スペースで分割
+                        .split(/\s+/)
                         .map((k) => k.toLowerCase());
 
                     const text =
-                        `${race.info.title} ${race.info.place} ${race.info.grade ?? ""} ${race.info.date}`
+                        `${race.title} ${race.place ?? ""} ${race.grade ?? ""} ${race.date}`
                             .toLowerCase();
 
-                    // 全キーワード AND 検索
                     for (const k of keys) {
                         if (!text.includes(k)) return false;
                     }
@@ -66,7 +65,7 @@ export function useRaceSearch(allRaces: Race[]): UseRaceSearchReturn {
 
                 return true;
             })
-            .sort((a, b) => a.info.date.localeCompare(b.info.date));
+            .sort((a, b) => a.date.localeCompare(b.date));
     }, [allRaces, selectedYear, selectedMonth, keyword]);
 
     return {

@@ -18,14 +18,14 @@ import {
 
 import { BettingSelector } from "@/components/prediction/selectors/BettingSelector";
 import { BetList } from "@/components/prediction/components/BetList";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 
 interface BettingFormProps {
     horses: { number: number | null; name: string }[];
     bets: Bet[];
     onChange: (bets: Bet[]) => void;
     allowedNumbers?: number[];
-    race: Race;
+    race: FirestoreRace;   // ← 修正
 }
 
 export default function BettingForm({
@@ -37,11 +37,9 @@ export default function BettingForm({
 }: BettingFormProps) {
     const { state, actions } = useBettingInput();
 
-    // ★ 数字欄へのスクロール用 ref
     const numberSectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // 単勝・複勝はパターン選択なしで即スクロール
         if (state.selectedType === "単勝" || state.selectedType === "複勝") {
             numberSectionRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -50,7 +48,6 @@ export default function BettingForm({
             return;
         }
 
-        // その他の馬券種は「馬券種 + パターン」が揃ったらスクロール
         if (state.selectedType && state.inputMode) {
             numberSectionRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -70,7 +67,6 @@ export default function BettingForm({
         }
     }, [bets.length]);
 
-    // 馬番号を number 型に正規化
     const normalizedHorses: Horse[] = useMemo(() => {
         return horses.map((h) => ({
             number: Number(h.number),
@@ -135,7 +131,6 @@ export default function BettingForm({
                     />
                 )}
 
-                {/* ★ 数字欄の直前に ref を置く */}
                 <div ref={numberSectionRef}></div>
 
                 <BettingSelector
@@ -160,7 +155,7 @@ export default function BettingForm({
 
             <div ref={betListRef}></div>
 
-            <BetList bets={bets} onRemove={handleRemoveBet} race={race} />
+            <BetList bets={bets} onRemove={handleRemoveBet} race={race} />   {/* ← FirestoreRace */}
         </div>
     );
 }

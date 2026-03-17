@@ -1,20 +1,19 @@
 // UI部品（買い目）
 
 import { Post } from "./types";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 import { Bet } from "@/types/bet";
 import BetCard from "@/components/common/BetCard";
 
 type Props = {
     post: Post;
-    race: Race;
+    race: FirestoreRace;   // ← 修正
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race: Race) => string;
+    renderNumbers: (bet: Bet, race: FirestoreRace) => string;   // ← 修正
     vertical?: boolean;
 };
-
 
 export default function PostBets({
     post,
@@ -27,23 +26,21 @@ export default function PostBets({
 }: Props) {
     if (!post.bets || post.bets.length === 0) return null;
 
-    // 投稿内の合計点数
     const totalPoints = post.bets.reduce((sum, b) => sum + b.points, 0);
 
     return (
         <div className={vertical ? "space-y-2" : "mb-3"}>
 
-            {/* トグルボタン（透明色 × 元の色を薄く残す） */}
             <button
                 onClick={() => toggleBets(post.id)}
                 className={`
-        text-xs px-3 py-2 rounded-xl font-semibold w-full text-left transition
-        shadow-sm backdrop-blur-sm
-        ${postHit.isHit
+                    text-xs px-3 py-2 rounded-xl font-semibold w-full text-left transition
+                    shadow-sm backdrop-blur-sm
+                    ${postHit.isHit
                         ? "bg-red-100/70 text-red-700"
                         : "bg-blue-100/70 text-blue-800"
                     }
-    `}
+                `}
             >
                 {race.result ? (
                     postHit.isHit ? (
@@ -60,7 +57,6 @@ export default function PostBets({
                 </span>
             </button>
 
-            {/* 展開部分（透明白 × 柔らかい影） */}
             {expandedBets.has(post.id) && (
                 <div
                     className={`

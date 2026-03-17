@@ -6,14 +6,14 @@ import Link from "next/link";
 import PredictionArea from "@/components/race/PredictionArea";
 import CommunitySection from "@/components/race/CommunitySection";
 import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
 
 type Props = {
     params: { raceId: string };
 };
 
-async function getRaceFromFirestore(raceId: string): Promise<Race | null> {
+async function getRaceFromFirestore(raceId: string): Promise<FirestoreRace | null> {
     const ref = doc(db, "races", raceId);
     const snap = await getDoc(ref);
 
@@ -22,7 +22,7 @@ async function getRaceFromFirestore(raceId: string): Promise<Race | null> {
     // Firestore Timestamp を含む全てをプレーン化
     const plain = JSON.parse(JSON.stringify(snap.data()));
 
-    return plain as Race;
+    return { id: raceId, ...plain } as FirestoreRace;
 }
 
 export default async function RacePage({ params }: Props) {

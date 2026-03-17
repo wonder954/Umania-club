@@ -1,11 +1,11 @@
 "use client";
 
 import PostList from "@/components/community/list/PostList";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import Image from "next/image";
 
 type Props = {
-    race: Race;
+    race: FirestoreRace;
     raceId: string;
 };
 
@@ -38,8 +38,7 @@ export default function CommunitySection({ race, raceId }: Props) {
                     p-6
                 "
             >
-                {/* 🔥 ここを raceId に変更 */}
-                <PostList raceId={raceId} race={race} />
+                <PostList raceId={race.id} race={race} />
             </div>
         </section>
     );

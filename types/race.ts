@@ -121,10 +121,10 @@ export type GradeStyle = {
 
 export type CalendarRace = {
     id: string;
-    name: string;
-    raceName?: string;     // GII を除いた純粋なレース名
-    grade: "G1" | "G2" | "G3" | "JG1" | "JG2" | "JG3" | "OP" | string;
+    title: string;          // FirestoreRace.title に対応
+    raceName?: string;      // GII を除いた純粋なレース名
+    grade: string | null;   // FirestoreRace.grade に対応
     date: string;
-    color: GradeStyle;     // ← string を廃止して GradeStyle に統一
-    isWeak?: boolean;      // ← 薄い色にするかどうか
+    color: GradeStyle;      // UI 用
+    isWeak?: boolean;       // JRA データかどうか
 };

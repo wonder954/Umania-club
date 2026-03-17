@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { formatDateWithWeekday } from "@/lib/date";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
@@ -11,11 +11,9 @@ function parseDistance(raw: any): number | null {
     return Number.isFinite(num) ? num : null;
 }
 
-export function RaceHeaderCard({ race }: { race: Race }) {
-    const info = race.info;
-
-    const style = getGradeStyleUI(info.grade ?? "OP");
-    const distance = parseDistance(info.distance);
+export function RaceHeaderCard({ race }: { race: FirestoreRace }) {
+    const style = getGradeStyleUI(race.grade ?? "OP");
+    const distance = parseDistance(race.distance);
 
     return (
         <section
@@ -38,20 +36,20 @@ export function RaceHeaderCard({ race }: { race: Race }) {
                         className="h-8 w-auto object-contain"
                     />
                     <span className="text-slate-600 text-sm font-medium">
-                        {formatDateWithWeekday(info.date)}
+                        {formatDateWithWeekday(race.date)}
                     </span>
                 </div>
 
                 {/* 場所 + R + レース名 */}
                 <div className="flex items-start gap-2">
                     <div className="leading-tight text-lg font-bold text-slate-800 min-w-[42px]">
-                        <div>{info.place}</div>
-                        <div>{info.raceNumber}</div>
+                        <div>{race.place}</div>
+                        <div>{race.raceNumber}</div>
                     </div>
 
                     <div className="flex items-center gap-1 flex-wrap">
                         <h1 className="text-3xl font-extrabold text-slate-900 break-words">
-                            {formatRaceName(info.title)}
+                            {formatRaceName(race.title)}
                         </h1>
 
                         <span
@@ -61,17 +59,17 @@ export function RaceHeaderCard({ race }: { race: Race }) {
                                 shadow-sm
                             `}
                         >
-                            {info.grade}
+                            {race.grade}
                         </span>
                     </div>
                 </div>
 
                 {/* コース情報 */}
                 <p className="text-slate-600 font-medium ml-1">
-                    {info.surface}{" "}
+                    {race.surface}{" "}
                     {distance ? `${distance}m` : "距離不明"}
-                    {info.direction &&
-                        `（${info.direction}${info.courseDetail ? ` ${info.courseDetail}` : ""}）`}
+                    {race.direction &&
+                        `（${race.direction}${race.courseDetail ? ` ${race.courseDetail}` : ""}）`}
                 </p>
             </div>
         </section>

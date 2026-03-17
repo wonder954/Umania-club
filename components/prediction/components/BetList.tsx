@@ -1,18 +1,16 @@
 /**
  * 追加済み馬券リスト表示コンポーネント
- * 
- * ユーザーが追加した馬券の一覧を表示し、削除機能を提供します。
  */
 
 import React from "react";
 import { Bet } from "@/types/bet";
 import BetCard from "../../common/BetCard";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 
 interface BetListProps {
     bets: Bet[];
     onRemove: (id: string) => void;
-    race: Race;   // ← 追加
+    race: FirestoreRace;   // ← 修正
 }
 
 export function BetList({ bets, onRemove, race }: BetListProps) {
@@ -24,7 +22,7 @@ export function BetList({ bets, onRemove, race }: BetListProps) {
         <div className="space-y-3" role="list" aria-label="追加済み馬券一覧">
             {bets.map((bet) => (
                 <div key={bet.id} className="relative" role="listitem">
-                    <BetCard bet={bet} race={race} />   {/* ← race を渡す */}
+                    <BetCard bet={bet} race={race} />   {/* ← FirestoreRace を渡す */}
 
                     <button
                         onClick={() => onRemove(bet.id)}
@@ -50,8 +48,6 @@ export function BetList({ bets, onRemove, race }: BetListProps) {
 
 /**
  * 空の状態表示コンポーネント
- * 
- * まだ馬券が追加されていない時に表示するメッセージです。
  */
 export function EmptyBetList() {
     return (

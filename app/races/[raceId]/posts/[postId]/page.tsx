@@ -9,6 +9,7 @@ import { useCommentActions } from "@/hooks/useCommentActions";
 import PostCard from "@/components/community/post/PostCard";
 import { judgeHit } from "@/utils/race/judge";
 import { useRace } from "@/hooks/useRace";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 追加
 
 export default function PostDetailPage() {
     const raw = useParams();
@@ -24,7 +25,11 @@ export default function PostDetailPage() {
     const { user } = useAuth();
 
     const { post, loading: postLoading } = usePost(raceId, postId);
-    const { race, loading: raceLoading } = useRace(raceId);
+    const { race, loading: raceLoading } = useRace(raceId) as {
+        race: FirestoreRace | null;   // ← 修正
+        loading: boolean;
+    };
+
     const { comments } = useComments(raceId, post ? [post] : []);
     const { addComment, deleteComment } = useCommentActions(raceId);
 
@@ -48,7 +53,6 @@ export default function PostDetailPage() {
         });
     };
 
-    // 🔥 パターンAでは race が null になるのは「データが壊れている」状態
     if (postLoading || raceLoading) {
         return <p className="text-center text-gray-500 py-10">読み込み中...</p>;
     }
@@ -63,7 +67,7 @@ export default function PostDetailPage() {
 
     const postHit = race.result
         ? (post.bets ?? [])
-            .map(bet => judgeHit(bet, race.result!))
+            .map(bet => judgeHit(bet, race.result!))   // ← FirestoreRace の result なら OK
             .filter(r => r.isHit)
             .reduce(
                 (acc, r) => ({
@@ -78,7 +82,7 @@ export default function PostDetailPage() {
         <div className="max-w-2xl mx-auto py-6 px-4">
             <PostCard
                 post={post}
-                race={race}
+                race={race}   // ← FirestoreRace を渡す
                 user={user}
                 comments={comments[post.id] || []}
                 expandedBets={expandedBets}

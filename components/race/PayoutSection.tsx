@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import type { Payout, PayoutItem } from "@/types/race";
+import type { RacePayout, PayoutItem } from "@/lib/race/types";
 
 type Props = {
-    payout: Payout;
+    payout: RacePayout | null;
 };
 
-const payoutLabels: Record<keyof Payout, string> = {
+const payoutLabels: Record<keyof RacePayout, string> = {
     win: "単勝",
     place: "複勝",
     bracket: "枠連",
@@ -20,6 +20,21 @@ const payoutLabels: Record<keyof Payout, string> = {
 
 export default function PayoutSection({ payout }: Props) {
     const [showMore, setShowMore] = useState(false);
+
+    if (!payout) {
+        return (
+            <section>
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
+                    <span className="text-green-600/80 text-2xl animate-coin">💰</span>
+                    払戻金
+                    <span className="text-green-600/80 text-2xl animate-coin">💰</span>
+                </h2>
+                <p className="text-center text-slate-500 py-4">
+                    払戻情報はありません
+                </p>
+            </section>
+        );
+    }
 
     return (
         <section>
@@ -35,7 +50,6 @@ export default function PayoutSection({ payout }: Props) {
                 border border-white/40 
                 overflow-hidden
             ">
-                {/* Header */}
                 <div className="
                     px-4 py-3 
                     bg-green-500/15 
@@ -46,28 +60,22 @@ export default function PayoutSection({ payout }: Props) {
                 </div>
 
                 <div className="p-4">
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        {/* 単勝 */}
-                        {(payout.win ?? []).length > 0 && (
-                            <PayoutCard label="単勝" items={payout.win ?? []} color="green" />
+                        {payout.win && payout.win.length > 0 && (
+                            <PayoutCard label="単勝" items={payout.win} color="green" />
                         )}
 
-
-                        {/* 複勝 */}
-                        {(payout.place ?? []).length > 0 && (
-                            <PayoutCard label="複勝" items={payout.place ?? []} color="blue" />
+                        {payout.place && payout.place.length > 0 && (
+                            <PayoutCard label="複勝" items={payout.place} color="blue" />
                         )}
 
-
-                        {/* 折りたたみ部分 */}
                         {showMore &&
-                            (Object.keys(payoutLabels) as Array<keyof Payout>)
+                            (Object.keys(payoutLabels) as Array<keyof RacePayout>)
                                 .filter((key) => key !== "win" && key !== "place")
                                 .map((key) => {
-                                    const items = payout[key] ?? [];
-                                    if (items.length === 0) return null;
+                                    const items = payout[key];
+                                    if (!items || items.length === 0) return null;
 
                                     return (
                                         <PayoutCard
@@ -81,7 +89,6 @@ export default function PayoutSection({ payout }: Props) {
                                 })}
                     </div>
 
-                    {/* ボタン */}
                     <button
                         onClick={() => setShowMore(!showMore)}
                         className="
@@ -93,7 +100,6 @@ export default function PayoutSection({ payout }: Props) {
                     >
                         {showMore ? "▲ 払戻金を閉じる" : "▼ 払戻金をもっと見る"}
                     </button>
-
                 </div>
             </div>
         </section>

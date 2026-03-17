@@ -2,7 +2,7 @@ import { expandTickets } from "./expand";
 import { isHitSingleTicket } from "./hit";
 import { calculatePayout } from "./payout";
 import type { Bet } from "@/types/bet";
-import type { RaceResult } from "@/types/race";
+import type { RaceResult } from "@/lib/race/types";
 
 export function judgeHit(bet: Bet, result: RaceResult | null) {
     // 結果がない（未開催 or データなし）

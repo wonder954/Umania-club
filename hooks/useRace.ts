@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 
 export function useRace(raceId: string) {
-    const [race, setRace] = useState<Race | null>(null);
+    const [race, setRace] = useState<FirestoreRace | null>(null);   // ← 修正
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -29,9 +29,11 @@ export function useRace(raceId: string) {
                 if (cancelled) return;
 
                 if (snap.exists()) {
-                    setRace(snap.data() as Race);
+                    const plain = JSON.parse(JSON.stringify(snap.data()));
+
+                    // FirestoreRace は id を持つので raceId を補完
+                    setRace({ id, ...plain } as FirestoreRace);   // ← 修正
                 } else {
-                    // パターンAでは race が存在しないのは異常
                     console.warn(`Race ${id} が存在しません`);
                     setRace(null);
                 }
@@ -47,7 +49,9 @@ export function useRace(raceId: string) {
 
         fetchRace();
 
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+        };
     }, [raceId]);
 
     return { race, loading };

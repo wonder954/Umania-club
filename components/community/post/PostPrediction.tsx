@@ -1,9 +1,9 @@
 import { Post } from "./types";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 
 type Props = {
     post: Post;
-    race: Race;          // ← 必須に変更
+    race: FirestoreRace;   // ← 修正
     vertical?: boolean;
 };
 
@@ -18,7 +18,7 @@ export default function PostPrediction({ post, race, vertical = false }: Props) 
 
             return {
                 mark,
-                number: horse?.number ?? null,
+                number: horse?.number ?? "?",
                 name: horse?.name ?? key,
             };
         })
@@ -47,7 +47,7 @@ export default function PostPrediction({ post, race, vertical = false }: Props) 
                 >
                     <span className="font-bold mr-1.5 text-lg">{item.mark}</span>
 
-                    {item.number && (
+                    {item.number !== "?" && (
                         <span className="text-gray-700 font-mono mr-2">
                             {item.number}番
                         </span>

@@ -70,7 +70,7 @@ export function CalendarCell({
                     const style = getGradeStyleUI(race.grade ?? "OP");
 
                     // ★ デバッグ
-                    console.log("race:", race.name, "bg:", style.bg, "text:", style.text, "weak:", race.isWeak);
+                    console.log("race:", race.title, "bg:", style.bg, "text:", style.text, "weak:", race.isWeak);
 
 
                     // ★ 薄い色にするかどうか（変数名を変更）
@@ -85,7 +85,7 @@ export function CalendarCell({
                 hover:opacity-80
             `}
                         >
-                            {shortenRaceName(formatRaceName(race.raceName ?? race.name))}
+                            {shortenRaceName(formatRaceName(race.raceName ?? race.title))}
                         </span>
                     );
 

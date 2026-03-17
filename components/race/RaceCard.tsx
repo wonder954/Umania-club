@@ -1,38 +1,17 @@
 import { formatDateWithWeekday } from "@/lib/date";
-import type { CalendarRace } from "@/types/race";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
 type Props = {
-    race: CalendarRace | Race;
+    race: FirestoreRace;
     variant?: "upcoming" | "past";
 };
 
 export default function RaceCard({ race, variant = "upcoming" }: Props) {
     const isPast = variant === "past";
 
-    const isFirestoreRace = (race as Race).info !== undefined;
-
-    const info = isFirestoreRace
-        ? (race as Race).info
-        : {
-            // 🔥 CalendarRace は最低限の情報しか持っていない
-            grade: (race as CalendarRace).grade ?? null,
-            date: (race as CalendarRace).date,
-            title: (race as CalendarRace).raceName ?? (race as CalendarRace).name,
-
-            // 🔥 CalendarRace には存在しないので全部 null
-            place: null,
-            raceNumber: null,
-            surface: null,
-            distance: null,
-            direction: null,
-            courseDetail: null,
-            weightType: null,
-        };
-
-    const style = getGradeStyleUI(info.grade ?? "OP");
+    const style = getGradeStyleUI(race.grade ?? "OP");
 
     return (
         <div
@@ -50,28 +29,28 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                         {style.label}
                     </span>
 
-                    {info.place && (
+                    {race.place && (
                         <p className="text-slate-600 text-sm">
-                            {info.place} / {info.raceNumber}
+                            {race.place} / {race.raceNumber}
                         </p>
                     )}
                 </div>
 
                 <span className="text-slate-500 text-sm">
-                    {formatDateWithWeekday(info.date)}
+                    {formatDateWithWeekday(race.date)}
                 </span>
             </div>
 
             <h2 className="text-2xl font-bold mb-1 text-slate-800">
-                {formatRaceName(info.title)}
+                {formatRaceName(race.title)}
             </h2>
 
             <p className="text-slate-600 text-sm">
-                {info.surface && info.distance ? (
+                {race.surface && race.distance ? (
                     <>
-                        {info.surface} {info.distance}m
-                        {info.weightType ? ` / ${info.weightType}` : ""}
-                        {info.courseDetail ? ` / ${info.courseDetail}` : ""}
+                        {race.surface} {race.distance}m
+                        {race.weightType ? ` / ${race.weightType}` : ""}
+                        {race.courseDetail ? ` / ${race.courseDetail}` : ""}
                     </>
                 ) : (
                     <span className="italic text-slate-400">詳細情報なし</span>

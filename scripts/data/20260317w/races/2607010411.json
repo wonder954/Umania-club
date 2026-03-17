@@ -1,0 +1,124 @@
+{
+  "raceId": "2607010411",
+  "info": {
+    "date": "2026-03-22",
+    "place": "中京",
+    "title": "愛知杯",
+    "grade": "GⅢ",
+    "distance": 1400,
+    "surface": "芝",
+    "direction": "左",
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "1回中京4日",
+    "videoId": null
+  },
+  "entries": [
+    {
+      "frame": null,
+      "number": null,
+      "name": "アイサンサン"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "アブキールベイ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "アルセナール"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ウイントワイライト"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "カルプスペルシュ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "カンパニョーラ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "クランフォード"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ショウナンザナドゥ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "シンバーシア"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "スリールミニョン"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "セフィロ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ソルトクィーン"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "チェルビアット"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ドロップオブライト"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ナムラクララ"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "マサノカナリア"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "マピュース"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "モリノドリーム"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "リラボニート"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "レディマリオン"
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ワイドラトゥール"
+    }
+  ]
+}

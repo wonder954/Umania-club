@@ -58,7 +58,6 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 ? `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                                 : null;
 
-                        // ★ CalendarRace[] をそのまま渡す
                         const races = dateKey ? racesByDate[dateKey] ?? [] : [];
 
                         const isHoliday = dateKey ? holidays[dateKey] !== undefined : false;
@@ -69,7 +68,7 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                                 key={`${wi}-${di}`}
                                 day={day}
                                 dateStr={dateKey}
-                                races={races} // ★ CalendarRace[] を渡す
+                                races={races}
                                 weekday={di}
                                 isToday={isToday(day)}
                                 isHoliday={isHoliday}

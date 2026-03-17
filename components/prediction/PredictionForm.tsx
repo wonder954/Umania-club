@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import BettingForm from "./BettingForm";
 import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
-import { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 import { useAuth } from "@/context/AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase-auth";
@@ -18,7 +18,7 @@ import type { Mark } from "@/types/mark";
 
 
 type Props = {
-    race: Race;
+    race: FirestoreRace;
     prediction: Record<string, Mark>;
     setPrediction: React.Dispatch<React.SetStateAction<Record<string, Mark>>>;
     bets: Bet[];
@@ -67,7 +67,7 @@ export default function PredictionForm({
         }
 
         // 🔥 投稿直前に最新の race を取得
-        const raceSnap = await getDoc(doc(db, "races", race.raceId));
+        const raceSnap = await getDoc(doc(db, "races", race.id));
         const freshRace = raceSnap.data();
         if (!freshRace) {
             alert("レース情報の取得に失敗しました");
@@ -88,14 +88,14 @@ export default function PredictionForm({
             bets,
             comment,
 
-            raceId: race.raceId,                // ← 修正
-            raceName: race.info.title,          // ← 修正
-            grade: freshRace.info.grade,        // ← 修正
+            raceId: race.id,
+            raceName: race.title,
+            grade: freshRace.grade,
         };
 
         setIsSubmitting(true);
         try {
-            await createPost(race.raceId, postData);
+            await createPost(race.id, postData);
             setIsSuccess(true);
             onPostSuccess?.();
         } catch (e) {

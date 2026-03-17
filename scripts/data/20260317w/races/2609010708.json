@@ -1,0 +1,254 @@
+{
+  "raceId": "2609010708",
+  "info": {
+    "date": "2026-03-14",
+    "place": "阪神",
+    "title": "阪神スプリングジャンプ",
+    "grade": "J・GⅡ",
+    "distance": 3900,
+    "surface": "芝",
+    "direction": null,
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "8R",
+    "placeDetail": "1回阪神7日",
+    "videoId": "Qehxj4_gEec"
+  },
+  "entries": [],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 9,
+        "name": "ディナースタ",
+        "time": "4:30.7",
+        "margin": "-",
+        "jockey": "高田 潤",
+        "weight": "60.0",
+        "popular": 3,
+        "odds": 5.6
+      },
+      {
+        "rank": 2,
+        "frame": 2,
+        "number": 2,
+        "name": "エコロデュエル",
+        "time": "4:30.7",
+        "margin": "ハナ",
+        "jockey": "草野 太郎",
+        "weight": "62.0",
+        "popular": 1,
+        "odds": 1.5
+      },
+      {
+        "rank": 3,
+        "frame": 3,
+        "number": 3,
+        "name": "ヘザルフェン",
+        "time": "4:31.0",
+        "margin": "1 3/4馬身",
+        "jockey": "森 一馬",
+        "weight": "60.0",
+        "popular": 4,
+        "odds": 16.1
+      },
+      {
+        "rank": 4,
+        "frame": 6,
+        "number": 6,
+        "name": "メイショウアツイタ",
+        "time": "4:31.1",
+        "margin": "クビ",
+        "jockey": "難波 剛健",
+        "weight": "60.0",
+        "popular": 6,
+        "odds": 83.3
+      },
+      {
+        "rank": 5,
+        "frame": 4,
+        "number": 4,
+        "name": "レッドファーロ",
+        "time": "4:32.0",
+        "margin": "5馬身",
+        "jockey": "小野寺 祐太",
+        "weight": "60.0",
+        "popular": 5,
+        "odds": 55.7
+      },
+      {
+        "rank": 6,
+        "frame": 8,
+        "number": 10,
+        "name": "ネビーイーム",
+        "time": "4:32.4",
+        "margin": "2 1/2馬身",
+        "jockey": "小牧 加矢太",
+        "weight": "60.0",
+        "popular": 2,
+        "odds": 3.1
+      },
+      {
+        "rank": 7,
+        "frame": 7,
+        "number": 8,
+        "name": "マイネルメサイア",
+        "time": "4:32.9",
+        "margin": "3馬身",
+        "jockey": "上野 翔",
+        "weight": "60.0",
+        "popular": 8,
+        "odds": 99.1
+      },
+      {
+        "rank": 8,
+        "frame": 1,
+        "number": 1,
+        "name": "ゲインサポート",
+        "time": "4:33.1",
+        "margin": "1馬身",
+        "jockey": "中村 将之",
+        "weight": "60.0",
+        "popular": 9,
+        "odds": 185.9
+      },
+      {
+        "rank": 9,
+        "frame": 7,
+        "number": 7,
+        "name": "ゴールドブリーズ",
+        "time": "4:33.5",
+        "margin": "2 1/2馬身",
+        "jockey": "石神 深一",
+        "weight": "60.0",
+        "popular": 7,
+        "odds": 98.1
+      },
+      {
+        "rank": 10,
+        "frame": 5,
+        "number": 5,
+        "name": "ポリトナリティー",
+        "time": "4:42.2",
+        "margin": "大差",
+        "jockey": "五十嵐 雄祐",
+        "weight": "58.0",
+        "popular": 10,
+        "odds": 232.3
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 560,
+          "popular": 3
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 160,
+          "popular": 3
+        },
+        {
+          "numbers": [
+            2
+          ],
+          "amount": 110,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            3
+          ],
+          "amount": 210,
+          "popular": 4
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            2,
+            9
+          ],
+          "amount": 420,
+          "popular": 2
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            2,
+            9
+          ],
+          "amount": 190,
+          "popular": 2
+        },
+        {
+          "numbers": [
+            2,
+            3
+          ],
+          "amount": 320,
+          "popular": 4
+        },
+        {
+          "numbers": [
+            3,
+            9
+          ],
+          "amount": 490,
+          "popular": 6
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            9,
+            2
+          ],
+          "amount": 1150,
+          "popular": 4
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            2,
+            3,
+            9
+          ],
+          "amount": 830,
+          "popular": 3
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            9,
+            2,
+            3
+          ],
+          "amount": 4430,
+          "popular": 13
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            2,
+            8
+          ],
+          "amount": 120,
+          "popular": 1
+        }
+      ]
+    }
+  }
+}

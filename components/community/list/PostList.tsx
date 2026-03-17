@@ -8,11 +8,11 @@ import { useCommentActions } from "@/hooks/useCommentActions";
 import { judgeHit } from "@/utils/race/judge";
 import PostCard from "../post/PostCard";
 import type { Bet } from "@/types/bet";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 
 type Props = {
     raceId: string;
-    race: Race; // ← 必須に変更
+    race: FirestoreRace;   // ← 修正
 };
 
 export default function PostList({ raceId, race }: Props) {
@@ -41,8 +41,7 @@ export default function PostList({ raceId, race }: Props) {
         });
     };
 
-    // race は必ず存在する前提なので race?: Race → race: Race に変更
-    const renderNumbers = (bet: Bet, race: Race): string => {
+    const renderNumbers = (bet: Bet, race: FirestoreRace): string => {   // ← 修正
         const { type, mode, numbers, formation } = bet;
 
         if (type === "単勝" || type === "複勝") {
@@ -110,7 +109,7 @@ export default function PostList({ raceId, race }: Props) {
                     <PostCard
                         key={post.id}
                         post={post}
-                        race={race} // ← Race が必ず渡る
+                        race={race}   // ← FirestoreRace が渡る
                         user={user}
                         comments={comments[post.id] || []}
                         expandedBets={expandedBets}

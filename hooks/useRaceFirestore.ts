@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import type { Race } from "@/lib/races";
+import type { FirestoreRace } from "@/lib/race/types";
 
 export function useRaceFirestore(raceId: string) {
-    const [race, setRace] = useState<Race | null>(null);
+    const [race, setRace] = useState<FirestoreRace | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export function useRaceFirestore(raceId: string) {
 
         const unsub = onSnapshot(ref, (snap) => {
             if (snap.exists()) {
-                setRace(snap.data() as Race);
+                setRace(snap.data() as FirestoreRace);
             } else {
                 setRace(null);
             }
