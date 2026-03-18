@@ -1,10 +1,9 @@
 import type { RaceListItem } from '../../types/raceList';
 import { createBrowserPage } from './helpers';
 import { normalizeGrade } from '../../utils/raceGradeUtils';
+import { yahooSelectors } from './selectors';
+import { safeSelectors } from '../../utils/safeSelectors';
 
-/**
- * Yahoo!競馬 次回のレース情報を取得
- */
 export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
     const { browser, page } = await createBrowserPage();
 
@@ -15,10 +14,16 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
             timeout: 30000,
         });
 
+        // PC版のレース一覧が描画されるまで待つ
+        await page.waitForSelector('.hr-tableLeft__dataArea', { timeout: 10000 });
+
         console.log('Extracting race list...');
 
-        const rawRaces = await page.evaluate(() => {
-            const results: Array<{
+        // ★ selectors を evaluate に安全に渡せる形に変換
+        const sel = safeSelectors(yahooSelectors);
+
+        const rawRaces = await page.evaluate((sel) => {
+            const results: {
                 raceId: string;
                 title: string;
                 grade: string;
@@ -28,17 +33,22 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 courseDetail: string | null;
                 distance: number | null;
                 weightType: string | null;
-            }> = [];
+            }[] = [];
 
-            const rows = document.querySelectorAll('.hr-tableLeft__dataArea');
+            const rows = document.querySelectorAll(sel.weeklyUpcoming.rows);
 
-            rows.forEach(row => {
-                const titleElement = row.querySelector('.hr-tableLeft__title');
-                const title = titleElement?.childNodes[0]?.textContent?.trim() || '';
+            rows.forEach((row) => {
+                const title =
+                    row.querySelector(sel.weeklyUpcoming.title)?.textContent?.trim() ?? '';
 
-                const rawGrade = row.querySelector('.hr-label')?.textContent?.trim() || '';
-                const status = row.querySelector('.hr-tableLeft__status')?.textContent?.trim() || '';
-                const link = (row.querySelector('.hr-tableLeft__link') as HTMLAnchorElement)?.href || '';
+                const rawGrade =
+                    row.querySelector(sel.weeklyUpcoming.grade)?.textContent?.trim() ?? '';
+
+                const status =
+                    row.querySelector(sel.weeklyUpcoming.status)?.textContent?.trim() ?? '';
+
+                const link =
+                    (row.querySelector(sel.weeklyUpcoming.link) as HTMLAnchorElement)?.href ?? '';
 
                 const detailUrl = link.replace('/race/index/', '/race/denma/');
 
@@ -48,18 +58,18 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 const courseMatch = status.match(
                     /(芝|ダート)[・･]?\s*(右|左|外|内|直線)?\s*(外|内)?\s*(\d{3,4})m/
                 );
-                const surface = courseMatch?.[1] || null;
-                const direction = courseMatch?.[2] || null;
-                const courseDetail = courseMatch?.[3] || null;
+                const surface = courseMatch?.[1] ?? null;
+                const direction = courseMatch?.[2] ?? null;
+                const courseDetail = courseMatch?.[3] ?? null;
                 const distance = courseMatch ? Number(courseMatch[4]) : null;
 
                 const weightMatch = status.match(/(定量|別定|ハンデ|馬齢)/);
-                const weightType = weightMatch?.[1] || null;
+                const weightType = weightMatch?.[1] ?? null;
 
                 results.push({
                     raceId,
                     title,
-                    grade: rawGrade, // ★ 正規化は evaluate の外で行う
+                    grade: rawGrade,
                     detailUrl,
                     surface,
                     direction,
@@ -70,19 +80,17 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
             });
 
             return results;
-        });
+        }, sel);
 
-        // ★ Node 側で正規化（import した normalizeGrade を使う）
         const races = rawRaces
-            .map(r => ({
+            .map((r) => ({
                 ...r,
                 grade: normalizeGrade(r.grade),
             }))
-            .filter(r => ['G1', 'G2', 'G3', 'JG1', 'JG2', 'JG3'].includes(r.grade));
+            .filter((r) => ['G1', 'G2', 'G3', 'JG1', 'JG2', 'JG3'].includes(r.grade));
 
         console.log(`Found ${races.length} races`);
         return races;
-
     } finally {
         await browser.close();
     }

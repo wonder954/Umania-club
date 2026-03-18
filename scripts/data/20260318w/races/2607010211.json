@@ -1,0 +1,300 @@
+{
+  "raceId": "2607010211",
+  "info": {
+    "date": "2026-03-15",
+    "place": "中京",
+    "title": "金鯱賞",
+    "grade": "GⅡ",
+    "distance": 2000,
+    "surface": "芝",
+    "direction": "左",
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "1回中京2日",
+    "videoId": "t4aQkozKpMg"
+  },
+  "entries": [],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 6,
+        "number": 9,
+        "name": "シェイクユアハート",
+        "time": "1:58.1",
+        "margin": "-",
+        "jockey": "古川 吉洋",
+        "weight": "57.0",
+        "popular": 8,
+        "odds": 13.5
+      },
+      {
+        "rank": 2,
+        "frame": 3,
+        "number": 3,
+        "name": "ジョバンニ",
+        "time": "1:58.1",
+        "margin": "ハナ",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 8.7
+      },
+      {
+        "rank": 3,
+        "frame": 7,
+        "number": 12,
+        "name": "クイーンズウォーク",
+        "time": "1:58.2",
+        "margin": "1/2馬身",
+        "jockey": "川田 将雅",
+        "weight": "56.0",
+        "popular": 1,
+        "odds": 3.6
+      },
+      {
+        "rank": 4,
+        "frame": 2,
+        "number": 2,
+        "name": "ジューンテイク",
+        "time": "1:58.2",
+        "margin": "クビ",
+        "jockey": "武 豊",
+        "weight": "58.0",
+        "popular": 5,
+        "odds": 7.7
+      },
+      {
+        "rank": 5,
+        "frame": 1,
+        "number": 1,
+        "name": "ドゥラドーレス",
+        "time": "1:58.2",
+        "margin": "アタマ",
+        "jockey": "戸崎 圭太",
+        "weight": "57.0",
+        "popular": 2,
+        "odds": 5.6
+      },
+      {
+        "rank": 6,
+        "frame": 4,
+        "number": 6,
+        "name": "ヴィレム",
+        "time": "1:58.2",
+        "margin": "クビ",
+        "jockey": "M.ディー",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 6.4
+      },
+      {
+        "rank": 7,
+        "frame": 4,
+        "number": 5,
+        "name": "ディマイザキッド",
+        "time": "1:58.4",
+        "margin": "1 1/4馬身",
+        "jockey": "柴田 善臣",
+        "weight": "57.0",
+        "popular": 10,
+        "odds": 35
+      },
+      {
+        "rank": 8,
+        "frame": 7,
+        "number": 11,
+        "name": "キングズパレス",
+        "time": "1:58.6",
+        "margin": "1 1/4馬身",
+        "jockey": "菊沢 一樹",
+        "weight": "57.0",
+        "popular": 11,
+        "odds": 73.5
+      },
+      {
+        "rank": 9,
+        "frame": 8,
+        "number": 14,
+        "name": "サフィラ",
+        "time": "1:58.6",
+        "margin": "クビ",
+        "jockey": "丸山 元気",
+        "weight": "55.0",
+        "popular": 12,
+        "odds": 88.9
+      },
+      {
+        "rank": 10,
+        "frame": 5,
+        "number": 8,
+        "name": "アラタ",
+        "time": "1:58.7",
+        "margin": "クビ",
+        "jockey": "横山 典弘",
+        "weight": "57.0",
+        "popular": 14,
+        "odds": 142.3
+      },
+      {
+        "rank": 11,
+        "frame": 6,
+        "number": 10,
+        "name": "セキトバイースト",
+        "time": "1:59.0",
+        "margin": "2馬身",
+        "jockey": "浜中 俊",
+        "weight": "55.0",
+        "popular": 9,
+        "odds": 24.8
+      },
+      {
+        "rank": 12,
+        "frame": 5,
+        "number": 7,
+        "name": "ニシノレヴナント",
+        "time": "1:59.1",
+        "margin": "クビ",
+        "jockey": "野中 悠太郎",
+        "weight": "57.0",
+        "popular": 13,
+        "odds": 102.5
+      },
+      {
+        "rank": 12,
+        "frame": 8,
+        "number": 13,
+        "name": "ホウオウビスケッツ",
+        "time": "1:59.1",
+        "margin": "クビ",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 4,
+        "odds": 7.3
+      },
+      {
+        "rank": 14,
+        "frame": 3,
+        "number": 4,
+        "name": "アーバンシック",
+        "time": "1:59.1",
+        "margin": "アタマ",
+        "jockey": "三浦 皇成",
+        "weight": "58.0",
+        "popular": 7,
+        "odds": 11.9
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 1350,
+          "popular": 8
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            9
+          ],
+          "amount": 300,
+          "popular": 7
+        },
+        {
+          "numbers": [
+            3
+          ],
+          "amount": 270,
+          "popular": 4
+        },
+        {
+          "numbers": [
+            12
+          ],
+          "amount": 150,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            3,
+            6
+          ],
+          "amount": 2090,
+          "popular": 14
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            3,
+            9
+          ],
+          "amount": 4870,
+          "popular": 24
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            9,
+            12
+          ],
+          "amount": 640,
+          "popular": 4
+        },
+        {
+          "numbers": [
+            3,
+            12
+          ],
+          "amount": 670,
+          "popular": 5
+        },
+        {
+          "numbers": [
+            3,
+            9
+          ],
+          "amount": 1360,
+          "popular": 21
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            9,
+            3
+          ],
+          "amount": 12480,
+          "popular": 53
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            3,
+            9,
+            12
+          ],
+          "amount": 5180,
+          "popular": 18
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            9,
+            3,
+            12
+          ],
+          "amount": 51310,
+          "popular": 206
+        }
+      ]
+    }
+  }
+}

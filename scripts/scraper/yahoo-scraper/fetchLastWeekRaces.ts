@@ -1,76 +1,79 @@
 import { createBrowserPage } from './helpers';
 import { normalizeGrade } from '../../utils/raceGradeUtils';
+import { yahooSelectors } from './selectors';
+import { safeSelectors } from '../../utils/safeSelectors';
 
 /** Yahoo!競馬トップから「前回のレース情報」を取得 */
-export async function fetchLastWeekRacesYahoo(): Promise<Array<{
-    raceId: string;
-    title: string;
-    grade: string;
-    resultUrl: string;
-}>> {
+export async function fetchLastWeekRacesYahoo(): Promise<
+    Array<{
+        raceId: string;
+        title: string;
+        grade: string;
+        resultUrl: string;
+    }>
+> {
     const { browser, page } = await createBrowserPage();
 
     try {
-        console.log('Navigating to Yahoo! Keiba for last week races...');
-        await page.goto('https://sports.yahoo.co.jp/keiba/', {
-            waitUntil: 'domcontentloaded',
+        console.log("Navigating to Yahoo! Keiba for last week races...");
+        await page.goto("https://sports.yahoo.co.jp/keiba/", {
+            waitUntil: "domcontentloaded",
             timeout: 30000,
         });
 
-        console.log('Extracting last week race list...');
+        console.log("Extracting last week race list...");
 
-        // ★ evaluate 内では rawGrade を返すだけ
-        const rawRaces = await page.evaluate(() => {
-            const results: Array<{
-                raceId: string;
-                title: string;
-                grade: string;
-                resultUrl: string;
-            }> = [];
+        // ★ evaluate に渡す前に安全化
+        const sel = safeSelectors(yahooSelectors);
 
-            const sections = Array.from(document.querySelectorAll('.hr-modCommon02'));
+        const rawRaces = await page.evaluate((sel) => {
+            const results: any[] = [];
 
-            for (const section of sections) {
-                const heading = section.querySelector('h3');
-                if (!heading || !heading.textContent?.includes('前回のレース情報')) continue;
+            const sections = document.querySelectorAll(sel.weeklyPast.section);
 
-                const rows = section.querySelectorAll('.hr-tableLeft__data');
+            sections.forEach((section: any) => {
+                const heading = section.querySelector(sel.weeklyPast.heading);
+                if (!heading) return;
+                if (!heading.textContent?.includes("前回のレース情報")) return;
 
-                rows.forEach((row: Element) => {
-                    const link = row.querySelector('a') as HTMLAnchorElement;
+                const rows = section.querySelectorAll(sel.weeklyPast.rows);
+
+                rows.forEach((row: any) => {
+                    const link = row.querySelector(sel.weeklyPast.link);
                     if (!link) return;
 
                     const href = link.href;
-                    const title = link.textContent?.trim() || '';
+                    const title = link.textContent?.trim() || "";
 
-                    const label = row.querySelector('.hr-label');
-                    const rawGrade = label?.textContent?.trim() || '';
+                    const gradeEl = row.querySelector(sel.weeklyPast.grade);
+                    const rawGrade = gradeEl?.textContent?.trim() || "";
 
                     const raceIdMatch = href.match(/(\d{10})$/);
-                    const raceId = raceIdMatch ? raceIdMatch[1] : '';
+                    const raceId = raceIdMatch ? raceIdMatch[1] : "";
                     if (!raceId) return;
 
-                    const resultUrl = href.replace('/race/index/', '/race/result/');
+                    const resultUrl = href.replace("/race/index/", "/race/result/");
 
                     results.push({
                         raceId,
                         title,
-                        grade: rawGrade, // ★ 正規化は外でやる
+                        grade: rawGrade,
                         resultUrl,
                     });
                 });
-            }
+            });
 
             return results;
-        });
+        }, sel);
 
-        // ★ Node 側で正規化 & フィルタ
         const races = rawRaces
-            .map(r => ({
+            .map((r: any) => ({
                 ...r,
                 grade: normalizeGrade(r.grade),
             }))
-            .filter(r => ['G1', 'G2', 'G3', 'JG1', 'JG2', 'JG3'].includes(r.grade));
+            .filter((r: any) =>
+                ["G1", "G2", "G3", "JG1", "JG2", "JG3"].includes(r.grade)
+            );
 
         console.log(`Found ${races.length} last week races`);
         return races;
