@@ -1,11 +1,11 @@
 "use client";
 
 import PostList from "@/components/community/list/PostList";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import Image from "next/image";
 
 type Props = {
-    race: FirestoreRace;
+    race: RaceViewModel;
     raceId: string;
 };
 

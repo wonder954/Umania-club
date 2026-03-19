@@ -9,7 +9,7 @@ import { useCommentActions } from "@/hooks/useCommentActions";
 import PostCard from "@/components/community/post/PostCard";
 import { judgeHit } from "@/utils/race/judge";
 import { useRace } from "@/hooks/useRace";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 追加
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 export default function PostDetailPage() {
     const raw = useParams();
@@ -26,7 +26,7 @@ export default function PostDetailPage() {
 
     const { post, loading: postLoading } = usePost(raceId, postId);
     const { race, loading: raceLoading } = useRace(raceId) as {
-        race: FirestoreRace | null;   // ← 修正
+        race: RaceViewModel | null;
         loading: boolean;
     };
 
@@ -67,7 +67,7 @@ export default function PostDetailPage() {
 
     const postHit = race.result
         ? (post.bets ?? [])
-            .map(bet => judgeHit(bet, race.result!))   // ← FirestoreRace の result なら OK
+            .map(bet => judgeHit(bet, race.result!))
             .filter(r => r.isHit)
             .reduce(
                 (acc, r) => ({
@@ -82,7 +82,7 @@ export default function PostDetailPage() {
         <div className="max-w-2xl mx-auto py-6 px-4">
             <PostCard
                 post={post}
-                race={race}   // ← FirestoreRace を渡す
+                race={race}
                 user={user}
                 comments={comments[post.id] || []}
                 expandedBets={expandedBets}

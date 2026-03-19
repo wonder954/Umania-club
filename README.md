@@ -8,7 +8,7 @@ firebase deploy --only firestore:rules
 npx tsx scripts/run-weekly.ts
 npx tsx scripts/run-friday.ts
 
-
+predictionformリファクタリング
 ## Features
 - SNSシェア画像生成
 - レースデータ自動取得（スクレイピング）

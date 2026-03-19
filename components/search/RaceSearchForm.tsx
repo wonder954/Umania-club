@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { Select } from "@/components/common/Select";
 import { useRaceSearch } from "@/hooks/useRaceSearch";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { formatDateWithWeekday } from "@/lib/date";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
 type Props = {
-    races: FirestoreRace[];
+    races: RaceViewModel[];
 };
 
 export default function RaceSearchForm({ races }: Props) {
@@ -26,15 +26,7 @@ export default function RaceSearchForm({ races }: Props) {
     } = useRaceSearch(races);
 
     return (
-        <div
-            className="
-                w-full max-w-4xl mx-auto 
-                bg-white/70 backdrop-blur-sm 
-                p-6 rounded-2xl shadow-sm 
-                border border-white/40 
-                mb-8
-            "
-        >
+        <div className="w-full max-w-4xl mx-auto bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40 mb-8">
             <h2 className="text-lg font-bold text-slate-800 mb-4 border-b border-slate-300/40 pb-2">
                 過去のレースを検索
             </h2>
@@ -46,12 +38,7 @@ export default function RaceSearchForm({ races }: Props) {
                     placeholder="レース名・日付で検索（例: 弥生賞 / 2026）"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    className="
-                        w-full px-4 py-2 rounded-xl
-                        border border-slate-300/40
-                        bg-white/70 backdrop-blur-sm
-                        focus:outline-none focus:ring-2 focus:ring-blue-300/40
-                    "
+                    className="w-full px-4 py-2 rounded-xl border border-slate-300/40 bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-300/40"
                 />
             </div>
 
@@ -83,14 +70,7 @@ export default function RaceSearchForm({ races }: Props) {
                         レース一覧 ({filteredRaces.length}件)
                     </label>
 
-                    <div
-                        className="
-                            bg-white/50 backdrop-blur-sm 
-                            rounded-xl p-2 
-                            max-h-60 overflow-y-auto 
-                            border border-slate-300/40
-                        "
-                    >
+                    <div className="bg-white/50 backdrop-blur-sm rounded-xl p-2 max-h-60 overflow-y-auto border border-slate-300/40">
                         <div className="space-y-2">
                             {filteredRaces.map((race) => {
                                 const style = getGradeStyleUI(race.grade ?? "OP");
@@ -99,16 +79,7 @@ export default function RaceSearchForm({ races }: Props) {
                                     <Link
                                         key={race.id}
                                         href={`/races/${race.id}`}
-                                        className="
-                                            w-full text-left px-4 py-3 
-                                            bg-white/70 backdrop-blur-sm 
-                                            hover:bg-white/90 
-                                            border-l-4 
-                                            border border-white/40 
-                                            rounded-xl shadow-sm 
-                                            transition-all hover:shadow-md 
-                                            flex justify-between items-center group
-                                        "
+                                        className="w-full text-left px-4 py-3 bg-white/70 backdrop-blur-sm hover:bg-white/90 border-l-4 border border-white/40 rounded-xl shadow-sm transition-all hover:shadow-md flex justify-between items-center group"
                                         style={{ borderLeftColor: style.border }}
                                     >
                                         <div className="flex flex-col">
@@ -122,10 +93,7 @@ export default function RaceSearchForm({ races }: Props) {
 
                                         {race.grade && (
                                             <span
-                                                className={`
-                                                    text-xs font-bold px-2.5 py-1 rounded 
-                                                    ${style.bg} ${style.text} opacity-80
-                                                `}
+                                                className={`text-xs font-bold px-2.5 py-1 rounded ${style.bg} ${style.text} opacity-80`}
                                             >
                                                 {style.label}
                                             </span>

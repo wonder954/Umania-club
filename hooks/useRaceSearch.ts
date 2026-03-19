@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 type UseRaceSearchReturn = {
     selectedYear: string;
@@ -8,12 +8,12 @@ type UseRaceSearchReturn = {
     setSelectedYear: (year: string) => void;
     setSelectedMonth: (month: string) => void;
     setKeyword: (keyword: string) => void;
-    filteredRaces: FirestoreRace[];
+    filteredRaces: RaceViewModel[];
     years: { label: string; value: string }[];
     months: { label: string; value: string }[];
 };
 
-export function useRaceSearch(allRaces: FirestoreRace[]): UseRaceSearchReturn {
+export function useRaceSearch(allRaces: RaceViewModel[]): UseRaceSearchReturn {
     const years = useMemo(() => {
         const y = new Date().getFullYear();
         return [

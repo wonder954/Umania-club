@@ -1,10 +1,10 @@
 "use client";
 
 import PostList from "@/components/community/list/PostList";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
-    race: FirestoreRace;
+    race: RaceViewModel;
 };
 
 export default function CommunityResultSection({ race }: Props) {

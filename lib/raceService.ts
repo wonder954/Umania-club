@@ -1,10 +1,8 @@
-// lib/raceService.ts
-
 import { groupRaceWeeks, getRaceWeekKey, getThisWeekKey, getPreviousWeekKey } from "./raceWeekUtils";
 import { formatDate } from "./dateUtils";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
-export function getWeeklyRaceData(races: FirestoreRace[]) {
+export function getWeeklyRaceData(races: RaceViewModel[]) {
     const today = formatDate(new Date());
     const allDates = races.map(r => r.date);
 

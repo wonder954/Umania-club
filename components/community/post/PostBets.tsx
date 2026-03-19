@@ -1,17 +1,17 @@
 // UI部品（買い目）
 
 import { Post } from "./types";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { Bet } from "@/types/bet";
 import BetCard from "@/components/common/BetCard";
 
 type Props = {
     post: Post;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;   // ← 修正
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race: FirestoreRace) => string;   // ← 修正
+    renderNumbers: (bet: Bet, race: RaceViewModel) => string;   // ← 修正
     vertical?: boolean;
 };
 

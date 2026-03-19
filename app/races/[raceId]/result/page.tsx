@@ -8,8 +8,7 @@ import CommunityResultSection from "@/components/race/CommunityResultSection";
 import type { FirestoreRace } from "@/lib/race/types";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
 import { RaceVideo } from "@/components/race/RaceVideo";
-
-
+import { toRaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
     params: { raceId: string };
@@ -22,7 +21,7 @@ async function getRaceFromFirestore(raceId: string): Promise<FirestoreRace | nul
     if (!snap.exists()) return null;
 
     const plain = JSON.parse(JSON.stringify(snap.data()));
-    return plain as FirestoreRace;
+    return { id: raceId, ...plain } as FirestoreRace;
 }
 
 export default async function ResultPage({ params }: Props) {
@@ -66,15 +65,18 @@ export default async function ResultPage({ params }: Props) {
         );
     }
 
+    // 🔥 FirestoreRace → RaceViewModel に変換
+    const vm = toRaceViewModel(race);
+
     return (
         <div className="min-h-screen pb-20 bg-transparent">
-            <RaceHeaderCard race={race} />
+            <RaceHeaderCard race={vm} />
 
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
                 <RaceVideo videoId={race.videoId} />
                 <RaceResultSection result={race.result} />
                 <PayoutSection payout={race.result.payout} />
-                <CommunityResultSection race={race} />
+                <CommunityResultSection race={vm} />
             </main>
         </div>
     );

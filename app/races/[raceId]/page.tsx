@@ -8,6 +8,7 @@ import CommunitySection from "@/components/race/CommunitySection";
 import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
 import type { FirestoreRace } from "@/lib/race/types";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
+import { toRaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
     params: { raceId: string };
@@ -19,7 +20,6 @@ async function getRaceFromFirestore(raceId: string): Promise<FirestoreRace | nul
 
     if (!snap.exists()) return null;
 
-    // Firestore Timestamp を含む全てをプレーン化
     const plain = JSON.parse(JSON.stringify(snap.data()));
 
     return { id: raceId, ...plain } as FirestoreRace;
@@ -48,22 +48,23 @@ export default async function RacePage({ params }: Props) {
         );
     }
 
+    const vm = toRaceViewModel(race);
+
     return (
         <div className="min-h-screen pb-20 bg-transparent">
             {/* Race Info Card */}
-            <RaceHeaderCard race={race} />
+            <RaceHeaderCard race={vm} />
 
-            {/* みんなの予想へボタン */}
             <div className="max-w-4xl mx-auto mt-4 px-4">
                 <ScrollToPostsButton />
             </div>
 
             <main className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-                {/* 予想セクション */}
                 {!race.result ? (
                     <>
-                        <PredictionArea race={race} />
-                        <CommunitySection raceId={params.raceId} race={race} />                    </>
+                        <PredictionArea race={vm} />
+                        <CommunitySection raceId={params.raceId} race={vm} />
+                    </>
                 ) : (
                     <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-xl p-6 mb-8 text-center shadow-sm">
                         <h3 className="text-lg font-bold text-slate-800 mb-2">レース終了</h3>

@@ -2,14 +2,15 @@
 
 import { User } from "firebase/auth";
 import { Bet } from "@/types/bet";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 import { Post, Comment } from "./types";
 import PostCardPC from "./PostCardPC";
 import PostCardMobile from "./PostCardMobile";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
+
 
 type Props = {
     post: Post;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;
     user: User | null;
     expandedBets: Set<string>;
     toggleBets: (postId: string) => void;
@@ -21,7 +22,7 @@ type Props = {
     handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race: FirestoreRace) => string;   // ← 修正
+    renderNumbers: (bet: Bet, race: RaceViewModel) => string;   // ← 修正
     groupName?: string | null;
 };
 

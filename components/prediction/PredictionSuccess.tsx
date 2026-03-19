@@ -1,11 +1,11 @@
 "use client";
 
 import ShareImageGenerator from "@/components/share/ShareImageGenerator";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { Mark } from "@/types/mark";
 
 type Props = {
-    race: FirestoreRace;
+    race: RaceViewModel;
     prediction: Record<string, Mark>;
     comment: string;
     onReset: () => void;

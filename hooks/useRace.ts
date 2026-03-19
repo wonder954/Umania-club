@@ -3,16 +3,18 @@
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+
+import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
+import { toRaceViewModel } from "@/viewmodels/raceViewModel";
 
 export function useRace(raceId: string) {
-    const [race, setRace] = useState<FirestoreRace | null>(null);   // ← 修正
+    const [race, setRace] = useState<RaceViewModel | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const id = String(raceId);
 
-        // raceId が 10桁数字でない場合は無効
         if (!/^\d{10}$/.test(id)) {
             setRace(null);
             setLoading(false);
@@ -30,9 +32,9 @@ export function useRace(raceId: string) {
 
                 if (snap.exists()) {
                     const plain = JSON.parse(JSON.stringify(snap.data()));
+                    const fsRace = { id, ...plain } as FirestoreRace;
 
-                    // FirestoreRace は id を持つので raceId を補完
-                    setRace({ id, ...plain } as FirestoreRace);   // ← 修正
+                    setRace(toRaceViewModel(fsRace));
                 } else {
                     console.warn(`Race ${id} が存在しません`);
                     setRace(null);

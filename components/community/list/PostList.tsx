@@ -8,11 +8,12 @@ import { useCommentActions } from "@/hooks/useCommentActions";
 import { judgeHit } from "@/utils/race/judge";
 import PostCard from "../post/PostCard";
 import type { Bet } from "@/types/bet";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
+
 
 type Props = {
     raceId: string;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;
 };
 
 export default function PostList({ raceId, race }: Props) {
@@ -41,7 +42,7 @@ export default function PostList({ raceId, race }: Props) {
         });
     };
 
-    const renderNumbers = (bet: Bet, race: FirestoreRace): string => {   // ← 修正
+    const renderNumbers = (bet: Bet, race: RaceViewModel): string => {   // ← 修正
         const { type, mode, numbers, formation } = bet;
 
         if (type === "単勝" || type === "複勝") {
@@ -109,7 +110,7 @@ export default function PostList({ raceId, race }: Props) {
                     <PostCard
                         key={post.id}
                         post={post}
-                        race={race}   // ← FirestoreRace が渡る
+                        race={race}
                         user={user}
                         comments={comments[post.id] || []}
                         expandedBets={expandedBets}

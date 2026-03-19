@@ -5,12 +5,12 @@
 import React from "react";
 import { Bet } from "@/types/bet";
 import BetCard from "../../common/BetCard";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 interface BetListProps {
     bets: Bet[];
     onRemove: (id: string) => void;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;
 }
 
 export function BetList({ bets, onRemove, race }: BetListProps) {
@@ -22,7 +22,7 @@ export function BetList({ bets, onRemove, race }: BetListProps) {
         <div className="space-y-3" role="list" aria-label="追加済み馬券一覧">
             {bets.map((bet) => (
                 <div key={bet.id} className="relative" role="listitem">
-                    <BetCard bet={bet} race={race} />   {/* ← FirestoreRace を渡す */}
+                    <BetCard bet={bet} race={race} />
 
                     <button
                         onClick={() => onRemove(bet.id)}

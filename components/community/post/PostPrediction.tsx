@@ -1,9 +1,9 @@
 import { Post } from "./types";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
     post: Post;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;   // ← 修正
     vertical?: boolean;
 };
 

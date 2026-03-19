@@ -1,11 +1,11 @@
 import { Bet } from "@/types/bet";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
 import { judgeHit } from "@/utils/race/judge";
 import { formatBetStructure } from "@/utils/bets/format";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
     bet: Bet;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;
     showHit?: boolean;
 };
 

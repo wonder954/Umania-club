@@ -4,12 +4,11 @@ import { useState, useRef } from "react";
 import HorseTable from "@/components/race/HorseTable";
 import PredictionForm from "@/components/prediction/PredictionForm";
 import { Bet } from "@/types/bet";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import Image from "next/image";
 import type { Mark } from "@/types/mark";
 
-
-export default function PredictionArea({ race }: { race: FirestoreRace }) {
+export default function PredictionArea({ race }: { race: RaceViewModel }) {
     const [prediction, setPrediction] = useState<Record<string, Mark>>({});
     const [bets, setBets] = useState<Bet[]>([]);
     const [comment, setComment] = useState("");
@@ -31,8 +30,6 @@ export default function PredictionArea({ race }: { race: FirestoreRace }) {
 
     return (
         <div className="space-y-10 relative overflow-visible">
-
-            {/* 出馬表 */}
             <div ref={horseTableRef} className="scroll-mt-24">
                 <HorseTable
                     race={race}
@@ -41,7 +38,6 @@ export default function PredictionArea({ race }: { race: FirestoreRace }) {
                 />
             </div>
 
-            {/* 予想フォーム */}
             <section>
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                     <Image

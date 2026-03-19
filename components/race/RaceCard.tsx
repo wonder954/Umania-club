@@ -1,10 +1,10 @@
 import { formatDateWithWeekday } from "@/lib/date";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
 type Props = {
-    race: FirestoreRace;
+    race: RaceViewModel;
     variant?: "upcoming" | "past";
 };
 

@@ -7,11 +7,13 @@ import { fetchHolidays } from "@/lib/holidays";
 import RaceSearchForm from "@/components/search/RaceSearchForm";
 import { FlagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { getWeeklyRaceData } from "@/lib/raceService";
+import { toRaceViewModel } from "@/viewmodels/raceViewModel";
 
 
 export default async function Home() {
     const holidays = await fetchHolidays();
-    const races = await getAllFirestoreRaces();
+    const fsRaces = await getAllFirestoreRaces();
+    const races = fsRaces.map(toRaceViewModel);
 
     const {
         upcomingRaces,
@@ -153,7 +155,7 @@ export default async function Home() {
                         過去のレースカレンダー
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
                     </h2>
-                    <RaceCalendarSection races={races} holidays={holidays} />
+                    <RaceCalendarSection races={fsRaces} holidays={holidays} />
                 </section>
 
             </div>

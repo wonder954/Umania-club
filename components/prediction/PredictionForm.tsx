@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import BettingForm from "./BettingForm";
 import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
-import type { FirestoreRace } from "@/lib/race/types";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { useAuth } from "@/context/AuthContext";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase-auth";
@@ -18,7 +18,7 @@ import type { Mark } from "@/types/mark";
 
 
 type Props = {
-    race: FirestoreRace;
+    race: RaceViewModel;
     prediction: Record<string, Mark>;
     setPrediction: React.Dispatch<React.SetStateAction<Record<string, Mark>>>;
     bets: Bet[];
@@ -28,6 +28,7 @@ type Props = {
     onPostSuccess?: () => void;
     onReset?: () => void;
 };
+
 
 export default function PredictionForm({
     race,

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { User } from "firebase/auth";
 import { Bet } from "@/types/bet";
-import type { FirestoreRace } from "@/lib/race/types";   // ← 修正
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { Post, Comment } from "./types";
 import PostHeader from "./PostHeader";
 import PostPrediction from "./PostPrediction";
@@ -17,7 +17,7 @@ import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
 type Props = {
     post: Post;
-    race: FirestoreRace;   // ← 修正
+    race: RaceViewModel;
     user: User | null;
     comments: Comment[];
     expandedBets: Set<string>;
@@ -29,7 +29,7 @@ type Props = {
     handleAddComment: (text: string) => void;
     handleDeleteComment: (commentId: string) => void;
     postHit: { isHit: boolean; payout?: number };
-    renderNumbers: (bet: Bet, race: FirestoreRace) => string;   // ← 修正
+    renderNumbers: (bet: Bet, race: RaceViewModel) => string;   // ← 修正
     groupName?: string | null;
 };
 
@@ -56,7 +56,10 @@ export default function PostCardMobile(props: Props) {
     const [floatHearts, setFloatHearts] = useState<number[]>([]);
 
     const handleLike = () => {
-        if (!user) return;
+        if (!user) {
+            alert("いいねするにはログインが必要です");
+            return;
+        }
 
         togglePostLike(race.id, post.id, user.uid);   // ← 修正
 
