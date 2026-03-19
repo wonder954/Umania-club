@@ -55,48 +55,75 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                 <div className="md:hidden divide-y divide-slate-300/30">
                     {race.entries.map((horse) => {
                         const frame = Number(horse.frame);
+                        const hasFrame = !!horse.frame;
+                        const hasNumber = !!horse.number;
+                        const hasWeight = !!horse.weight;
+                        const hasJockey = !!horse.jockey;
+
                         const jockeyShort =
-                            horse.jockey?.replace(/[\s.]/g, "").slice(0, 3) || "---";
+                            horse.jockey?.replace(/[\s.]/g, "").slice(0, 3) || "";
 
                         return (
-                            <div
-                                key={horse.number || horse.name}
-                                className="flex items-center gap-3 py-3 px-3"
-                            >
-                                {/* 枠番（濃い色 × 透明感） */}
-                                <div
-                                    className={`
-                                        w-9 h-9 flex items-center justify-center rounded font-bold 
-                                        shadow-sm ${frameColors[frame]}
-                                    `}
-                                >
-                                    {horse.frame}
-                                </div>
+                            <div key={horse.number || horse.name} className="py-3 px-3">
 
-                                {/* 馬番 */}
-                                <div className="w-8 text-center font-bold text-slate-800">
-                                    {horse.number}
-                                </div>
+                                {/* 1行目：枠 + ◎○ + 馬名 */}
+                                <div className="flex items-center gap-3 mb-1">
 
-                                {/* 印 */}
-                                <div className="flex gap-1">
-                                    <MarkSelector
-                                        prediction={prediction}
-                                        targetKey={horse.name}
-                                        onChange={onPredictionChange}
-                                    />
-                                </div>
+                                    {/* 枠番（未確定なら非表示） */}
+                                    {hasFrame && (
+                                        <div
+                                            className={`
+                w-9 h-9 flex items-center justify-center rounded font-bold
+                shadow-sm ${frameColors[frame]}
+              `}
+                                        >
+                                            {horse.frame}
+                                        </div>
+                                    )}
 
-                                {/* 馬名 + 騎手 */}
-                                <div className="flex-1 flex items-center justify-between">
-                                    <div className="font-bold text-[15px] text-slate-800 truncate">
+                                    {/* ◎○（左詰め） */}
+                                    <div className="flex gap-1">
+                                        <MarkSelector
+                                            prediction={prediction}
+                                            targetKey={horse.name}
+                                            onChange={onPredictionChange}
+                                            filter={["◎", "〇"]}
+                                        />
+                                    </div>
+
+                                    {/* 馬名 */}
+                                    <div className="flex-1 font-bold text-[15px] text-slate-800 truncate">
                                         {horse.name}
                                     </div>
+                                </div>
 
-                                    <div className="text-[13px] text-slate-500 text-right leading-tight ml-2 shrink-0">
-                                        <div>{horse.weight}</div>
-                                        <div>{jockeyShort}</div>
+                                {/* 2行目：馬番 + ▲△× + 斤量 + 騎手 */}
+                                <div className="flex items-center gap-3">
+
+                                    {/* 馬番（未確定なら非表示） */}
+                                    {hasNumber && (
+                                        <div className="w-8 text-center font-bold text-slate-800">
+                                            {horse.number}
+                                        </div>
+                                    )}
+
+                                    {/* ▲△×（左詰め） */}
+                                    <div className="flex gap-1">
+                                        <MarkSelector
+                                            prediction={prediction}
+                                            targetKey={horse.name}
+                                            onChange={onPredictionChange}
+                                            filter={["▲", "△"]}
+                                        />
                                     </div>
+
+                                    {/* 斤量 + 騎手（未確定なら非表示） */}
+                                    {(hasWeight || hasJockey) && (
+                                        <div className="ml-auto text-right text-[13px] text-slate-500 leading-tight">
+                                            <div>{horse.weight || ""}</div>
+                                            <div>{jockeyShort}</div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         );

@@ -2,12 +2,12 @@ import type { Mark } from "@/types/mark";
 
 const MARKS: { label: Mark; color: string }[] = [
     { label: "◎", color: "text-red-600" },
-    { label: "〇", color: "text-blue-600" }, // 入力は「〇」（漢数字）
+    { label: "〇", color: "text-blue-600" },
     { label: "▲", color: "text-green-600" },
     { label: "△", color: "text-gray-600" },
 ];
 
-// 排他制御ロジックを分離
+// 排他制御ロジック
 export function updatePrediction(
     currentPrediction: Record<string, Mark>,
     targetKey: string,
@@ -15,15 +15,12 @@ export function updatePrediction(
 ): Record<string, Mark> {
     const newVal = { ...currentPrediction };
 
-    // 1. 同じ印を押した → 解除
     if (newVal[targetKey] === newMark) {
         delete newVal[targetKey];
         return newVal;
     }
 
-    // 2. 特殊ルール: ◎〇▲は1つのみ
     if (["◎", "〇", "▲"].includes(newMark)) {
-        // 既にその印を持っている他の馬から削除
         Object.keys(newVal).forEach(key => {
             if (newVal[key] === newMark) {
                 delete newVal[key];
@@ -31,11 +28,10 @@ export function updatePrediction(
         });
         newVal[targetKey] = newMark;
     } else if (newMark === "△") {
-        // 3. △は4頭まで
         const count = Object.values(newVal).filter(m => m === "△").length;
         if (count >= 4) {
             alert("△は4頭までです");
-            return currentPrediction; // 変更なし
+            return currentPrediction;
         }
         newVal[targetKey] = newMark;
     }
@@ -47,9 +43,10 @@ type Props = {
     prediction: Record<string, Mark>;
     targetKey: string;
     onChange: (newPrediction: Record<string, Mark>) => void;
+    filter?: Mark[]; // ← 追加
 };
 
-export default function MarkSelector({ prediction, targetKey, onChange }: Props) {
+export default function MarkSelector({ prediction, targetKey, onChange, filter }: Props) {
     const currentMark = prediction[targetKey];
 
     const handleSelect = (mark: Mark) => {
@@ -57,16 +54,21 @@ export default function MarkSelector({ prediction, targetKey, onChange }: Props)
         onChange(newPrediction);
     };
 
+    // filter がある場合は対象の印だけ表示
+    const marksToShow = filter
+        ? MARKS.filter(m => filter.includes(m.label))
+        : MARKS;
+
     return (
         <div className="flex gap-1 justify-center">
-            {MARKS.map((m) => {
+            {marksToShow.map((m) => {
                 const isSelected = currentMark === m.label;
                 return (
                     <button
                         key={m.label}
                         type="button"
                         onClick={(e) => {
-                            e.preventDefault(); // Form送信防止
+                            e.preventDefault();
                             handleSelect(m.label);
                         }}
                         className={`
