@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Select } from "@/components/common/Select";
 import { useRaceSearch } from "@/hooks/useRaceSearch";
 import type { RaceViewModel } from "@/viewmodels/raceViewModel";
-import { formatDateWithWeekday } from "@/lib/date";
+import { formatDateWithWeekday, formatShortDate } from "@/lib/date";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRaceName } from "@/utils/race";
 
@@ -83,9 +83,16 @@ export default function RaceSearchForm({ races }: Props) {
                                         style={{ borderLeftColor: style.border }}
                                     >
                                         <div className="flex flex-col">
-                                            <span className="text-xs text-slate-500 mb-0.5">
+                                            {/* スマホ用（〜md） */}
+                                            <span className="text-xs text-slate-500 mb-0.5 md:hidden">
+                                                {formatShortDate(race.date)} {race.place}
+                                            </span>
+
+                                            {/* PC用（md〜） */}
+                                            <span className="text-xs text-slate-500 mb-0.5 hidden md:inline">
                                                 {formatDateWithWeekday(race.date)} {race.place}
                                             </span>
+
                                             <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors">
                                                 {formatRaceName(race.title)}
                                             </span>

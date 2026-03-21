@@ -9,6 +9,12 @@ module.exports = {
     ],
 
     safelist: [
+        // ===== 枠番色 =====
+        "bg-white", "bg-black",
+        "bg-red-600", "bg-blue-600", "bg-yellow-400",
+        "bg-green-600", "bg-orange-500", "bg-pink-500",
+        "border-slate-300",
+
         // G1〜G3
         "bg-blue-900",
         "bg-red-700",
@@ -78,5 +84,5 @@ module.exports = {
         },
     },
     plugins: [],
-    darkMode: false,
+    darkMode: "class",
 };

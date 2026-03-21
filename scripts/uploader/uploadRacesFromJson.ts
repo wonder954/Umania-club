@@ -29,6 +29,9 @@ export async function uploadRacesFromJson() {
     for (const file of files) {
         const json = JSON.parse(fs.readFileSync(path.join(racesDir, file), "utf8"));
 
+        console.log("🔥 JSON entries sample:", json.raceId, json.entries?.[0]);
+
+
         if (!json.raceId || !json.info) {
             console.warn(`⚠️ スキップ: 不完全なデータ (${file})`);
             continue;

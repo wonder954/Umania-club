@@ -2,7 +2,7 @@ import type { FirestoreRace } from "@/lib/race/types";
 import type { GradeRace } from "@/lib/grades2026";
 import type { CalendarRace } from "@/components/calendar/types";
 
-import { cleanTitle } from "@/utils/race/normalize";
+import { cleanTitle, unifyRaceTitle } from "@/utils/race/normalize";
 import { normalizeGrade, getGradeStyle } from "@/utils/race/raceGradeUtils";
 import { removeGradeSuffix } from "@/utils/race/displayName";
 
@@ -33,17 +33,16 @@ export function racesToCalendarRaces(
             isSameRace(r.title, j.name, r.date, j.date)
         );
 
-        // ★ JRA 名を優先して title を上書き
-        const title = jra ? jra.name : r.title;
+        // ★ FirestoreRace を JRA 名に統一
+        const unified = unifyRaceTitle(r, jra);
 
-        // ★ grade も JRA を優先
-        const grade = normalizeGrade(jra?.grade ?? r.grade ?? "OP");
+        const grade = normalizeGrade(unified.grade ?? "OP");
 
         calendarRaces.push({
-            id: jra?.id ?? r.id,                 // JRA ID を優先
-            title,                               // ← JRA 名に統一
-            raceName: removeGradeSuffix(title),  // ← JRA 名ベース
-            date: r.date,
+            id: jra?.id ?? unified.id,                 // JRA ID を優先
+            title: unified.title,                      // ← JRA 名に統一済み
+            raceName: removeGradeSuffix(unified.title),// ← JRA 名ベース
+            date: unified.date,
             grade,
             color: getGradeStyle(grade),
         });
@@ -61,8 +60,8 @@ export function racesToCalendarRaces(
 
             calendarRaces.push({
                 id: jraRace.id,
-                title: jraRace.name,
-                raceName: removeGradeSuffix(jraRace.name),
+                title: jraRace.name,                       // ← JRA 名
+                raceName: removeGradeSuffix(jraRace.name), // ← JRA 名ベース
                 date: jraRace.date,
                 grade,
                 color: getGradeStyle(grade),

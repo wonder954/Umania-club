@@ -4,6 +4,7 @@ import type { FirestoreRace } from "@/lib/race/types";
 import { normalizeGrade } from "@/utils/race/raceGradeUtils";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatDate } from "@/lib/dateUtils";
+import { formatRaceName } from "@/utils/race/displayName";
 
 export type RaceViewModel = {
     id: string;
@@ -73,7 +74,7 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
 
         // RaceHeaderCard 用
         placeLabel: r.place,     // ← 改行のため place と raceNumber を分けて保持
-        titleLabel: r.title,
+        titleLabel: formatRaceName(r.title),
         gradeLabel: grade,
 
         entries: r.entries,

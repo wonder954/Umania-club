@@ -7,6 +7,7 @@ import { getUserProfile } from "@/lib/userCache";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
+import { formatRelativeTime } from "@/utils/formatTime";
 
 type Props = {
     post: Post;
@@ -45,48 +46,56 @@ export default function PostHeader({ post, currentUserUid }: Props) {
     return (
         <div className="flex items-center gap-2 mb-3">
 
-            {/* アイコン＋名前をまとめてリンク */}
-            <Link href={`/users/${post.authorId}`} className="flex items-center gap-2">
-                <img
-                    src={profile?.icon ?? "/profile-icons/default1.png"}
-                    alt="user icon"
-                    className="w-8 h-8 rounded-full object-cover border shadow-sm"
-                />
+            <div className="flex flex-col gap-1 w-full">
 
-                <div className="text-sm font-medium text-gray-800">
-                    {profile?.name ?? "名無し"}
+                {/* 🔓グループ投稿ラベル */}
+                {post.visibility?.startsWith("group:") && (
+                    <div className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                        🔓 {groupName ? `${groupName} の投稿` : "グループの投稿"}
+                    </div>
+                )}
+
+                {/* アイコン＋名前＋時間＋削除 */}
+                <div className="flex items-center gap-2 w-full">
+
+                    {/* 左側：アイコン＋名前＋時間 */}
+                    <Link
+                        href={`/users/${post.authorId}`}
+                        className="flex items-center gap-1.5 flex-shrink-0"
+                    >
+                        <img
+                            src={profile?.icon ?? "/profile-icons/default1.png"}
+                            alt="user icon"
+                            className="w-8 h-8 rounded-full object-cover border shadow-sm"
+                        />
+
+                        {/* 名前＋時間 */}
+                        <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium text-gray-800 truncate max-w-[110px]">
+                                {profile?.name ?? "名無し"}
+                            </span>
+
+                            <span className="text-xs text-gray-400">
+                                {post.createdAt?.toDate
+                                    ? formatRelativeTime(post.createdAt.toDate())
+                                    : "たった今"}
+                            </span>
+                        </div>
+                    </Link>
+
+                    {/* 右側：ゴミ箱だけ右端 */}
+                    {currentUserUid === post.authorId && (
+                        <button
+                            onClick={handleDelete}
+                            className="ml-auto text-red-400 hover:text-red-600 text-xs"
+                            title="削除"
+                        >
+                            🗑️
+                        </button>
+                    )}
                 </div>
-            </Link>
 
-            {/* グループ限定バッジ */}
-            {post.visibility?.startsWith("group:") && (
-                <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                    {groupName ? `${groupName} 限定` : "グループ限定"}
-                </span>
-            )}
-
-            {/* 投稿日時 */}
-            <div className="text-xs text-gray-400 ml-auto">
-                {post.createdAt?.toDate
-                    ? post.createdAt.toDate().toLocaleString("ja-JP", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    })
-                    : "たった今"}
             </div>
-
-            {/* 削除ボタン */}
-            {currentUserUid === post.authorId && (
-                <button
-                    onClick={handleDelete}
-                    className="ml-2 text-red-400 hover:text-red-600 text-xs"
-                    title="削除"
-                >
-                    🗑️
-                </button>
-            )}
         </div>
     );
 }

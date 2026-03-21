@@ -8,18 +8,32 @@ import RaceSearchForm from "@/components/search/RaceSearchForm";
 import { FlagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { getWeeklyRaceData } from "@/lib/raceService";
 import { toRaceViewModel } from "@/viewmodels/raceViewModel";
+import { unifyRaceTitle, matchJraRace } from "@/utils/race/normalize";
+import { gradeRaces2026 } from "@/lib/grades2026"; // ← JRA データ取得関数（仮）
 
 
 export default async function Home() {
     const holidays = await fetchHolidays();
     const fsRaces = await getAllFirestoreRaces();
-    const races = fsRaces.map(toRaceViewModel);
+
+    // ★ FirestoreRace → JRA 名に統一
+    const unified = fsRaces.map(r => {
+        const jra = gradeRaces2026.find(j =>
+            j.date === r.date && matchJraRace(r.title, j.name)
+        );
+        return unifyRaceTitle(r, jra);
+    });
+
+
+    // ★ ViewModel 化（titleLabel が短縮される）
+    const races = unified.map(toRaceViewModel);
 
     const {
         upcomingRaces,
         lastWeekRaces,
         calendarRaces,
     } = getWeeklyRaceData(races);
+
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-24 bg-transparent">
@@ -40,11 +54,20 @@ export default async function Home() {
                 {/* Hero Text */}
                 <div className="text-center mb-12">
                     <div className="text-center mb-12 bg-white/40 backdrop-blur-sm rounded-xl p-4">
-                        <h1 className="text-2xl font-bold text-slate-800 mb-2">
-                            JRA重賞レース情報をサクッとチェック
+                        <h1
+                            className="
+                                flex flex-col md:flex-row
+                                items-center justify-center
+                                text-center
+                                text-2xl font-bold text-slate-800 mb-2
+                                leading-tight tracking-tight
+                            "
+                        >
+                            <span>🏇JRA重賞レース情報を🏇</span>
+                            <span>サクッとチェック</span>
                         </h1>
                         <p className="text-slate-700">
-                            予想投稿・結果をまとめて確認できる競馬アプリ
+                            🎯仲間内で予想投稿できる競馬アプリ🎯
                         </p>
                     </div>
                     <div className="flex justify-center gap-4">
@@ -64,11 +87,14 @@ export default async function Home() {
                                 "
                             >
                                 <FlagIcon className="w-5 h-5 text-slate-500" />
-                                今週のレース
+
+                                <div className="flex flex-col md:flex-row leading-[1.3]">
+                                    <span>今週の</span>
+                                    <span>レース</span>
+                                </div>
                             </div>
                         </Link>
 
-                        {/* カレンダーを見る */}
                         <Link href="#calendar">
                             <div
                                 className="
@@ -83,7 +109,11 @@ export default async function Home() {
                                 "
                             >
                                 <CalendarDaysIcon className="w-5 h-5 text-slate-500" />
-                                カレンダーを見る
+
+                                <div className="flex flex-col md:flex-row leading-[1.3]">
+                                    <span>カレンダーを</span>
+                                    <span>見る</span>
+                                </div>
                             </div>
                         </Link>
 
@@ -118,7 +148,7 @@ export default async function Home() {
                 <section className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
                     <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/result-icon.png" alt="" className="w-8 h-8" />
-                        先週の重賞レース結果
+                        先週のレース結果
                         <img src="/result-icon.png" alt="" className="w-8 h-8" />
                     </h2>
                     <p className="text-slate-600 mb-4">直近の開催結果をまとめて確認</p>
@@ -152,7 +182,7 @@ export default async function Home() {
                 <section id="calendar" className="mb-12 bg-white/70 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/40">
                     <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
-                        過去のレースカレンダー
+                        レースカレンダー
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
                     </h2>
                     <RaceCalendarSection races={fsRaces} holidays={holidays} />

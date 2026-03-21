@@ -1,7 +1,6 @@
-import { formatDateWithWeekday } from "@/lib/date";
+import { RaceDateLabel } from "@/components/race/RaceDateLabel";
 import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
-import { formatRaceName } from "@/utils/race";
 
 type Props = {
     race: RaceViewModel;
@@ -36,13 +35,12 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
                     )}
                 </div>
 
-                <span className="text-slate-500 text-sm">
-                    {formatDateWithWeekday(race.date)}
-                </span>
+                <RaceDateLabel date={race.date} />
+
             </div>
 
             <h2 className="text-2xl font-bold mb-1 text-slate-800">
-                {formatRaceName(race.title)}
+                {race.titleLabel}
             </h2>
 
             <p className="text-slate-600 text-sm">

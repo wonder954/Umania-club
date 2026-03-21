@@ -9,6 +9,8 @@ import ScrollToPostsButton from "@/components/race/ScrollToPostsButton";
 import type { FirestoreRace } from "@/lib/race/types";
 import { RaceHeaderCard } from "@/components/race/RaceHeaderCard";
 import { toRaceViewModel } from "@/viewmodels/raceViewModel";
+import { unifyRaceTitle, matchJraRace } from "@/utils/race/normalize";
+import { gradeRaces2026 } from "@/lib/grades2026";
 
 type Props = {
     params: { raceId: string };
@@ -48,7 +50,11 @@ export default async function RacePage({ params }: Props) {
         );
     }
 
-    const vm = toRaceViewModel(race);
+    const jra = gradeRaces2026.find(j =>
+        j.date === race.date && matchJraRace(race.title, j.name)
+    );
+    const unified = unifyRaceTitle(race, jra);
+    const vm = toRaceViewModel(unified);
 
     return (
         <div className="min-h-screen pb-20 bg-transparent">

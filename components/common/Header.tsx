@@ -22,11 +22,15 @@ export default function Header() {
             "
         >
             {/* 左側：ロゴ */}
-            <Link href="/" className="flex items-center py-1">
+            <Link href="/" className="flex items-center py-0.5 sm:py-1">
                 <img
                     src="/umania-club logo.png"
                     alt="logo"
-                    className="h-14 w-auto object-contain drop-shadow-sm hover:opacity-90 transition-opacity"
+                    className="
+                        h-8 sm:h-14
+                        w-auto object-contain
+                        drop-shadow-sm hover:opacity-90 transition-opacity
+                    "
                 />
             </Link>
 

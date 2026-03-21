@@ -2,20 +2,10 @@
 
 import { useState } from "react";
 import type { RacePayout, PayoutItem } from "@/lib/race/types";
+import { payoutLabels } from "@/constants/race";
 
 type Props = {
     payout: RacePayout | null;
-};
-
-const payoutLabels: Record<keyof RacePayout, string> = {
-    win: "単勝",
-    place: "複勝",
-    bracket: "枠連",
-    quinella: "馬連",
-    wide: "ワイド",
-    exacta: "馬単",
-    trio: "3連複",
-    trifecta: "3連単",
 };
 
 export default function PayoutSection({ payout }: Props) {
@@ -154,8 +144,8 @@ function PayoutCard({
                 <tbody>
                     {items.map((item, idx) => (
                         <tr key={idx} className={`border-t ${c.border}`}>
-                            <td className="px-3 py-2 font-mono text-center text-slate-700">
-                                {item.numbers.join(" - ")}
+                            <td className="px-3 py-2 font-mono text-center text-slate-700 tracking-wide whitespace-nowrap">
+                                {item.numbers.join("-")}
                             </td>
                             <td className="px-3 py-2 text-right font-bold text-slate-800 tabular-nums">
                                 ¥{item.amount.toLocaleString()}

@@ -105,12 +105,6 @@ export default function PostCardPC(props: Props) {
     return (
         <div className="bg-white rounded-lg shadow p-4 border border-gray-100 animate-fadeIn">
 
-            {post.visibility?.startsWith("group:") && (
-                <div className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded mb-2">
-                    {groupName ? `${groupName} の投稿` : "グループの投稿"}
-                </div>
-            )}
-
             <PostHeader post={post} currentUserUid={user?.uid} />
 
             <div className="flex items-center gap-3 mt-3 mb-4">

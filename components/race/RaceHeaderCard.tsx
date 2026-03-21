@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { RaceViewModel } from "@/viewmodels/raceViewModel";
+import { RaceDateLabel } from "@/components/race/RaceDateLabel";
 
 export function RaceHeaderCard({ race }: { race: RaceViewModel }) {
     return (
@@ -22,9 +23,9 @@ export function RaceHeaderCard({ race }: { race: RaceViewModel }) {
                         height={40}
                         className="h-8 w-auto object-contain"
                     />
-                    <span className="text-slate-600 text-sm font-medium">
-                        {race.dateLabel}
-                    </span>
+
+                    <RaceDateLabel date={race.date} />
+
                 </div>
 
                 {/* 場所 + R + レース名 */}
@@ -35,7 +36,12 @@ export function RaceHeaderCard({ race }: { race: RaceViewModel }) {
                     </div>
 
                     <div className="flex items-center gap-1 flex-wrap">
-                        <h1 className="text-3xl font-extrabold text-slate-900 break-words">
+                        <h1
+                            className="
+    text-2xl font-extrabold text-slate-900
+    tracking-tight leading-tight break-words
+  "
+                        >
                             {race.titleLabel}
                         </h1>
 

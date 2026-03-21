@@ -1,3 +1,4 @@
+
 export function formatRelativeTime(date: Date) {
     const now = new Date();
     const diff = (now.getTime() - date.getTime()) / 1000; // 秒差
