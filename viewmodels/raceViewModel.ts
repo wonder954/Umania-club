@@ -6,10 +6,27 @@ import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatDate } from "@/lib/dateUtils";
 import { formatRaceName } from "@/utils/race/displayName";
 
+// UI が使う最終的な Entry 型
+export type RaceEntryViewModel = {
+    frame: number | null;
+    number: number | null;
+    name: string;
+
+    // Firestore と完全一致
+    sex: string | null;
+    age: number | null;
+    jockey: string | null;
+    weight: number | null;
+
+    // run-Odds の結果
+    odds: number | null;
+    popular: number | null;
+};
+
 export type RaceViewModel = {
     id: string;
 
-    // UI が必要とする生データ互換
+    // Firestore の生データ互換
     date: string;
     place: string;
     raceNumber: string | null;
@@ -30,13 +47,13 @@ export type RaceViewModel = {
     courseLabel: string;
     weightType: string | null;
 
-
-    // RaceHeaderCard が必要とする追加ラベル
+    // Header 用
     placeLabel: string;
     titleLabel: string;
     gradeLabel: string;
 
-    entries: FirestoreRace["entries"];
+    // ★ 出馬表 + オッズをマージした entries
+    entries: RaceEntryViewModel[];
 
     result: FirestoreRace["result"] | null;
 };
@@ -51,10 +68,26 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         : ""
         }`;
 
+    // ★ oddsEntries を number で検索しやすいように Map 化
+    const oddsMap = new Map(
+        (r.oddsEntries ?? []).map((o) => [o.number, o])
+    );
+
+    // ★ entries と oddsEntries をマージ
+    const mergedEntries: RaceEntryViewModel[] = (r.entries ?? []).map((e) => {
+        const odds = oddsMap.get(e.number ?? -1);
+
+        return {
+            ...e,
+            odds: odds?.odds ?? null,
+            popular: odds?.popular ?? null,
+        };
+    });
+
     return {
         id: r.id,
 
-        // 生データ互換（UI がそのまま使える）
+        // 生データ
         date: r.date,
         place: r.place,
         raceNumber: r.raceNumber ?? null,
@@ -71,13 +104,13 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         courseLabel: course,
         weightType: r.weightType ?? null,
 
-
-        // RaceHeaderCard 用
-        placeLabel: r.place,     // ← 改行のため place と raceNumber を分けて保持
+        // Header 用
+        placeLabel: r.place,
         titleLabel: formatRaceName(r.title),
         gradeLabel: grade,
 
-        entries: r.entries,
+        // ★ マージ済み entries
+        entries: mergedEntries,
 
         result: r.result ?? null,
     };

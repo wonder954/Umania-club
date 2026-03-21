@@ -10,7 +10,7 @@ export type OddsEntry = {
 
 export async function updateOdds(raceId: string, entries: OddsEntry[]) {
     await adminDb.collection("races").doc(raceId).set(
-        { entries },
+        { oddsEntries: entries },
         { merge: true }
     );
     console.log(`🟡 オッズ更新: ${raceId}`);

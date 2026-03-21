@@ -8,6 +8,7 @@ export interface Post {
 
     raceId: string;             // レースID
     raceName: string;           // レース名
+    raceTitleLabel?: string;
 
     visibility: string;         // "public" or "group:{id}"
 

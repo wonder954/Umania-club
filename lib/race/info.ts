@@ -30,8 +30,6 @@ export type Entry = {
     age?: number | null;
     weight?: number | string | null;
     jockey?: string | null;
-    odds?: number | null;
-    popular?: number | null;
 };
 
 // 着順データ（結果 JSON のときだけ存在）

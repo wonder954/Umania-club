@@ -44,8 +44,10 @@ export async function uploadRacesFromJson() {
         const safeRace = sanitizeFirestoreRace(race);
 
         // ★ Firestore に保存
-        await adminDb.collection("races").doc(safeRace.id).set(safeRace);
-
+        await adminDb.collection("races").doc(safeRace.id).set(
+            safeRace,
+            { merge: true }
+        );
         console.log(`✅ 保存: ${safeRace.id} - ${safeRace.title}`);
     }
 

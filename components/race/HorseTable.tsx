@@ -65,23 +65,23 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                                     </>
                                 )}
 
-                                {/* ▼ 確定版 UI（登録馬と同じ構造ベース） ▼ */}
+                                {/* ▼ 確定版 UI ▼ */}
                                 {isConfirmed && (
                                     <>
-                                        {/* 1行目：枠番 + マーク + 斤量（右） */}
+                                        {/* 1行目：枠番 + 印 + オッズ＋人気（同じ行） */}
                                         <div className="flex items-center mb-1">
 
-                                            {/* 枠番（左） */}
+                                            {/* 枠番 */}
                                             <div
                                                 className={`
-                                                    w-7 h-7 flex items-center justify-center rounded font-bold shadow-sm
-                                                    ${frameColors[frame] ?? ""}
-                                                `}
+                    w-7 h-7 flex items-center justify-center rounded font-bold shadow-sm
+                    ${frameColors[frame] ?? ""}
+                `}
                                             >
                                                 {horse.frame}
                                             </div>
 
-                                            {/* マーク（◎〇▲△） */}
+                                            {/* 印 */}
                                             <div className="flex gap-1 ml-2">
                                                 <MarkSelector
                                                     prediction={prediction}
@@ -91,28 +91,38 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                                                 />
                                             </div>
 
-                                            {/* 斤量（右詰） */}
-                                            <div className="ml-auto text-right text-[14px] font-semibold text-slate-700">
-                                                {horse.weight}
+                                            {/* オッズ＋人気（同じ行） */}
+                                            <div className="ml-auto flex items-center gap-2 text-right">
+                                                <span className="text-[13px] font-semibold text-slate-700">
+                                                    {horse.odds ?? "-"}倍
+                                                </span>
+                                                <span className="text-[12px] text-slate-500">
+                                                    {horse.popular ? `${horse.popular}人気` : "-"}
+                                                </span>
                                             </div>
                                         </div>
 
-                                        {/* 2行目：馬番 + 馬名（左） / 騎手（右） */}
+                                        {/* 2行目：馬番 + 馬名 + 斤量＋騎手（同じ行） */}
                                         <div className="flex items-center">
 
-                                            {/* 馬番（左） */}
+                                            {/* 馬番 */}
                                             <div className="w-7 h-7 flex items-center justify-center font-bold text-slate-800">
                                                 {horse.number}
                                             </div>
 
-                                            {/* 馬名（馬番の右） */}
+                                            {/* 馬名 */}
                                             <div className="flex-1 ml-2 font-bold text-[15px] text-slate-800 truncate">
                                                 {horse.name}
                                             </div>
 
-                                            {/* 騎手（右詰） */}
-                                            <div className="ml-auto text-right text-[13px] text-slate-500 truncate">
-                                                {jockeyShort}
+                                            {/* 斤量＋騎手（同じ行） */}
+                                            <div className="ml-auto flex items-center gap-2 text-right">
+                                                <span className="text-[13px] font-semibold text-slate-700">
+                                                    {horse.weight}
+                                                </span>
+                                                <span className="text-[13px] text-slate-500 truncate">
+                                                    {jockeyShort}
+                                                </span>
                                             </div>
                                         </div>
                                     </>
@@ -133,6 +143,8 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                                 <th className="px-3 py-2 text-left">馬名</th>
                                 <th className="px-3 py-2 text-left">斤量</th>
                                 <th className="px-3 py-2 text-left">騎手</th>
+                                <th className="px-3 py-2 text-left">オッズ</th>
+                                <th className="px-3 py-2 text-left">人気</th>
                             </tr>
                         </thead>
 
@@ -174,6 +186,8 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
 
                                         <td className="px-3 py-2 text-slate-700">{horse.weight}</td>
                                         <td className="px-3 py-2 text-slate-700">{horse.jockey}</td>
+                                        <td className="px-3 py-2 text-slate-700">{horse.odds ?? "-"}</td>
+                                        <td className="px-3 py-2 text-slate-700">{horse.popular ?? "-"}</td>
                                     </tr>
                                 );
                             })}

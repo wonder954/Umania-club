@@ -112,7 +112,7 @@ export default function PostCardPC(props: Props) {
                     href={`/races/${race.id}`}   // ← 修正
                     className="text-2xl font-extrabold text-slate-900 hover:underline break-words"
                 >
-                    {race.title}
+                    {race.titleLabel}
                 </Link>
 
                 <span

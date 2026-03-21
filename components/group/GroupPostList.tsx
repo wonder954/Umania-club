@@ -3,6 +3,7 @@ import { normalizeGrade } from "@/utils/race/raceGradeUtils";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRelativeTime } from "@/utils/formatTime";
 import type { Post } from "@/types/post";
+import { formatRaceName } from "@/utils/race";
 
 type Props = {
     posts: Post[];
@@ -86,7 +87,7 @@ export default function GroupPostList({ posts }: Props) {
         ${style.bg} ${style.text}
     `}
                                 >
-                                    {post.raceName}
+                                    {post.raceTitleLabel ?? formatRaceName(post.raceName)}
                                 </span>
 
                                 {/* ◎ 本命馬 */}

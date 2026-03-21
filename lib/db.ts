@@ -17,6 +17,7 @@ import {
     arrayUnion,
     arrayRemove
 } from "firebase/firestore";
+import { formatRaceName } from "@/utils/race/displayName";
 
 export type UserProfile = {
     uid: string;
@@ -69,6 +70,7 @@ export async function createPost(raceId: string, postData: any) {
         comment: postData.comment ?? "",
         raceId,
         raceName: postData.raceName,
+        raceTitleLabel: formatRaceName(postData.raceName),
         grade: postData.grade,
         createdAt: serverTimestamp(),
     });

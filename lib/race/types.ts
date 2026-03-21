@@ -22,6 +22,13 @@ export type FirestoreRace = {
     // --- 出走馬（フェーズ1〜2で存在、フェーズ3では空配列） ---
     entries: RaceEntry[];
 
+    // ★ run-Odds が保存するフィールド
+    oddsEntries?: {
+        number: number;
+        odds: number | null;
+        popular: number | null;
+    }[];
+
     // --- 結果（フェーズ3で存在、フェーズ1〜2では null） ---
     result: RaceResult | null;
 };
@@ -39,9 +46,7 @@ export type RaceEntry = {
     age: number | null;     // 年齢 / null
 
     jockey: string | null;  // 騎手名 / null
-    weight: string | null;  // 斤量（"56" など）/ null
-    odds: number | null;    // オッズ / null
-    popular: number | null; // 人気 / null
+    weight: number | null;  // 斤量（"56" など）/ null
 };
 
 

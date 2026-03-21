@@ -58,22 +58,6 @@ export async function fetchRaceEntriesDenma(
                 const weightText = jockeyCell?.querySelector("p")?.textContent?.trim() || "";
                 const weight = weightText ? parseFloat(weightText) : undefined;
 
-                const oddsCell = row.querySelector(sel.entries.odds);
-                let odds: number | undefined;
-                let popular: number | undefined;
-
-                if (oddsCell) {
-                    const popularText =
-                        oddsCell.querySelector("strong")?.textContent?.trim() || "";
-                    const oddsSpan =
-                        oddsCell.querySelector("span")?.textContent?.trim() || "";
-
-                    const p = parseInt(popularText);
-                    popular = isNaN(p) ? undefined : p;
-
-                    const o = parseFloat(oddsSpan);
-                    odds = isNaN(o) ? undefined : o;
-                }
 
                 if (name) {
                     results.push({
@@ -84,8 +68,6 @@ export async function fetchRaceEntriesDenma(
                         age,
                         jockey,
                         weight,
-                        odds,
-                        popular,
                     });
                 }
             });

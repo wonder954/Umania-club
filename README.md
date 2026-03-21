@@ -138,6 +138,9 @@ npx tsx scripts/run-friday.ts
 
 # 週末レース情報（登録馬）・先週のレース結果の取得
 npx tsx scripts/run-weekly.ts
+
+# 週末レース情報（出馬表）のオッズの更新
+npx tsx scripts/run-Odds.ts
 ```
 
 現在は手動実行ですが、今後 Firebase Functions を使って自動化予定です。

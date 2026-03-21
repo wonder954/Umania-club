@@ -1,0 +1,181 @@
+{
+  "raceId": "2607010411",
+  "info": {
+    "date": "2026-03-22",
+    "place": "中京",
+    "title": "愛知杯",
+    "grade": "GⅢ",
+    "distance": 1400,
+    "surface": "芝",
+    "direction": "左",
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "1回中京4日",
+    "videoId": "0oSD6q0IsV8"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "マピュース",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "田辺 裕信",
+      "weight": 56
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "レディマリオン",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "吉村 誠之助",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "モリノドリーム",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "小林 美駒",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "カンパニョーラ",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "嶋田 純次",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ウイントワイライト",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "横山 典弘",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ナムラクララ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "浜中 俊",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "チェルビアット",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "西村 淳也",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ソルトクィーン",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "富田 暁",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "マサノカナリア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "古川 吉洋",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "セフィロ",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "吉田 隼人",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "スリールミニョン",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "丸山 元気",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "カルプスペルシュ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "横山 武史",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "アブキールベイ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "小崎 綾也",
+      "weight": 56
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "シンバーシア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "団野 大成",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 15,
+      "name": "ワイドラトゥール",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "西塚 洸二",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "ドロップオブライト",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "松若 風馬",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 17,
+      "name": "リラボニート",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "田山 旺佑",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 18,
+      "name": "アイサンサン",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "幸 英明",
+      "weight": 55
+    }
+  ]
+}

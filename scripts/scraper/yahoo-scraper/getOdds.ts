@@ -44,14 +44,13 @@ export async function getOdds(url: string): Promise<
                 let popular: number | null = null;
 
                 if (oddsCell) {
-                    const popularText =
-                        oddsCell.querySelector("strong")?.textContent?.trim() || "";
-                    const oddsSpan =
-                        oddsCell.querySelector("span")?.textContent?.trim() || "";
+                    // 人気順位はテキストの最初の数字
+                    const text = oddsCell.textContent.trim(); // "5(8.9)"
+                    const match = text.match(/^(\d+)/);
+                    popular = match ? parseInt(match[1]) : null;
 
-                    const p = parseInt(popularText);
-                    popular = isNaN(p) ? null : p;
-
+                    // オッズは <span> の中
+                    const oddsSpan = oddsCell.querySelector("span")?.textContent?.trim() || "";
                     const o = parseFloat(oddsSpan);
                     odds = isNaN(o) ? null : o;
                 }
