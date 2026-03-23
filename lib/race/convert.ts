@@ -30,6 +30,8 @@ export function toFirestoreRace(json: any): FirestoreRace {
                 age: e.age ?? null,
                 jockey: e.jockey ?? null,
                 weight: e.weight ?? null,
+                odds: e.odds ?? null,
+                popular: e.popular ?? null,
             }))
             : [],
 
