@@ -3,7 +3,7 @@
  * Yahoo! 競馬スクレイピング用
  * FirestoreRace に変換する前の中間モデル
  */
-import type { RaceEntry, RaceOrder, RaceResult } from "./types";
+import type { RaceEntry, RaceResult } from "./types";
 
 // レース基本情報
 export type RaceInfo = {

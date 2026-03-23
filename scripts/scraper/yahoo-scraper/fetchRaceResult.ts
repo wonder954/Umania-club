@@ -1,4 +1,5 @@
-import type { RaceInfo, RaceResult, RaceOrder, Payout } from '../../../lib/race/info';
+import type { RaceInfo } from '../../../lib/race/info';
+import type { RaceResult } from '../../../lib/race/types';
 import { createBrowserPage, extractRaceInfo } from './helpers';
 import { yahooSelectors } from './selectors';
 import { safeSelectors } from '../../utils/safeSelectors';

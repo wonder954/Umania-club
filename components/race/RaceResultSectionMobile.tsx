@@ -3,7 +3,6 @@
 import type { RaceOrder } from "@/lib/race/types";
 import { frameColors } from "@/constants/race";
 import { mobileOddsColor } from "@/utils/race/oddsColor";
-import { mobilePopularColor } from "@/utils/race/popularColor";
 import { PopularBadgeMobile } from "@/components/common/PopularBadge";
 
 type Props = {
