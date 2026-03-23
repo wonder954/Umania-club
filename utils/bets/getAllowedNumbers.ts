@@ -1,9 +1,9 @@
-import type { Entry } from "@/lib/race/info";
+import type { RaceEntry } from '@/lib/race/types';
 import { Mark } from "@/types/mark";
 
 export function getAllowedNumbers(
     prediction: Record<string, Mark>,
-    entries: Entry[]
+    entries: RaceEntry[]
 ): number[] {
     return Object.keys(prediction)
         .map(name => {

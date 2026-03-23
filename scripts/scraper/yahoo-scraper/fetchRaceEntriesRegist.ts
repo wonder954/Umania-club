@@ -1,4 +1,5 @@
-import type { Entry, RaceInfo } from '../../../lib/race/info';
+import type { RaceInfo } from '../../../lib/race/info';
+import type { RaceEntry } from '../../../lib/race/types';
 import { createBrowserPage, extractRaceInfo } from './helpers';
 import { yahooSelectors } from './selectors';
 import { safeSelectors } from '../../utils/safeSelectors';
@@ -9,7 +10,7 @@ import { safeSelectors } from '../../utils/safeSelectors';
  */
 export async function fetchRaceEntriesRegist(
     url: string
-): Promise<{ info: Partial<RaceInfo>; entries: Entry[] }> {
+): Promise<{ info: Partial<RaceInfo>; entries: RaceEntry[] }> {
     const { browser, page } = await createBrowserPage();
 
     try {
@@ -29,10 +30,12 @@ export async function fetchRaceEntriesRegist(
                 frame: null;
                 number: null;
                 name: string;
-                sex: undefined;
-                age: undefined;
-                jockey: undefined;
-                weight: undefined;
+                sex: null;
+                age: null;
+                jockey: null;
+                weight: null;
+                odds: null;
+                popular: null;
             }[] = [];
 
             const table = document.querySelector(sel.regist.table);
@@ -51,16 +54,17 @@ export async function fetchRaceEntriesRegist(
                     frame: null,
                     number: null,
                     name,
-                    sex: undefined,
-                    age: undefined,
-                    jockey: undefined,
-                    weight: undefined,
+                    sex: null,
+                    age: null,
+                    jockey: null,
+                    weight: null,
+                    odds: null,       // ★ RaceEntry に合わせる
+                    popular: null,    // ★ RaceEntry に合わせる
                 });
             });
 
             return results;
         }, sel);
-
         console.log(`Found ${entries.length} entries (regist)`);
 
         return { info, entries };

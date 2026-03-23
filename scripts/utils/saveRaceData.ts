@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import type { RaceData, Entry } from '../../lib/race/info';
-
+import type { RaceData } from '../../lib/race/info';
+import type { RaceEntry } from '../../lib/race/types';
 // ESM で __dirname を再現
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -118,7 +118,7 @@ export function loadRaceData(raceId: string, folderName?: string): RaceData | nu
 /**
  * 前週のフォルダから entries を読み込む
  */
-export function loadPreviousWeekEntries(raceId: string): Entry[] | null {
+export function loadPreviousWeekEntries(raceId: string): RaceEntry[] | null {
     const prevFolder = getPreviousRaceFolder();
     if (!prevFolder) {
         return null;

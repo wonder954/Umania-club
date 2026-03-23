@@ -1,4 +1,5 @@
-import type { Entry, RaceInfo } from '../../../lib/race/info';
+import type { RaceInfo } from '../../../lib/race/info';
+import type { RaceEntry } from '../../../lib/race/types';
 import { createBrowserPage, extractRaceInfo } from './helpers';
 import { yahooSelectors } from './selectors';
 import { safeSelectors } from '../../utils/safeSelectors';
@@ -9,7 +10,7 @@ import { safeSelectors } from '../../utils/safeSelectors';
  */
 export async function fetchRaceEntriesDenma(
     url: string
-): Promise<{ info: Partial<RaceInfo>; entries: Entry[] }> {
+): Promise<{ info: Partial<RaceInfo>; entries: RaceEntry[] }> {
     const { browser, page } = await createBrowserPage();
 
     try {
