@@ -4,9 +4,11 @@ import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 import { formatRelativeTime } from "@/utils/formatTime";
 import type { Post } from "@/types/post";
 import { formatRaceName } from "@/utils/race";
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 
 type Props = {
     posts: Post[];
+    raceMap: Record<string, RaceViewModel>;
 };
 
 function extractGradeFromRaceName(name: string): string {
@@ -25,7 +27,7 @@ function getHonmei(post: Post): string | null {
     return null;
 }
 
-export default function GroupPostList({ posts }: Props) {
+export default function GroupPostList({ posts, raceMap }: Props) {
     return (
         <div className="space-y-4">
             <h2 className="text-lg font-bold text-slate-800">グループの投稿</h2>
@@ -38,7 +40,7 @@ export default function GroupPostList({ posts }: Props) {
                 {posts.map((post) => {
                     const grade = normalizeGrade(post.grade ?? "OP");
                     const style = getGradeStyleUI(grade);
-
+                    const raceVm = raceMap[post.raceId];
                     // 🔥 createdAt を Date に変換
                     const createdAt =
                         post.createdAt?.toDate
@@ -87,7 +89,7 @@ export default function GroupPostList({ posts }: Props) {
         ${style.bg} ${style.text}
     `}
                                 >
-                                    {post.raceTitleLabel ?? formatRaceName(post.raceName)}
+                                    {raceVm ? raceVm.titleLabel : post.raceName}
                                 </span>
 
                                 {/* ◎ 本命馬 */}

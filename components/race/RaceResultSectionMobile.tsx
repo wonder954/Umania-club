@@ -2,6 +2,9 @@
 
 import type { RaceOrder } from "@/lib/race/types";
 import { frameColors } from "@/constants/race";
+import { mobileOddsColor } from "@/utils/race/oddsColor";
+import { mobilePopularColor } from "@/utils/race/popularColor";
+import { PopularBadgeMobile } from "@/components/common/PopularBadge";
 
 type Props = {
     horses: RaceOrder[];        // 表示する馬のリスト（showAll済みのものを渡す）
@@ -94,7 +97,7 @@ function RaceResultSectionMobileCard({ horse }: CardProps) {
                 {/* 人気 */}
                 <div className="grid grid-cols-[auto_auto] gap-1 justify-end">
                     <span className="text-slate-500 text-right">人気:</span>
-                    <PopularBadge popular={horse.popular} />
+                    <PopularBadgeMobile popular={horse.popular} />
                 </div>
             </div>
         </div>
@@ -121,38 +124,14 @@ function RankBadge({ rank }: { rank: number }) {
 
 // --- オッズバッジ ---
 function OddsBadge({ odds }: { odds: number | null }) {
-    const colorClass =
-        odds == null
-            ? "bg-slate-100/60 text-slate-500"
-            : odds >= 100
-                ? "bg-red-100/60 text-red-700"
-                : odds > 10
-                    ? "bg-blue-100/60 text-blue-700"
-                    : "bg-green-100/60 text-green-700";
-
     return (
-        <span className={`px-2 py-0.5 rounded-full text-xs font-mono font-bold ${colorClass}`}>
+        <span
+            className={`
+                px-2 py-0.5 rounded-full text-xs font-mono font-bold
+                ${mobileOddsColor(odds)}
+            `}
+        >
             {odds != null ? `${odds}倍` : "-"}
-        </span>
-    );
-}
-
-// --- 人気バッジ ---
-function PopularBadge({ popular }: { popular: number | null }) {
-    const colorClass =
-        popular === 1
-            ? "bg-red-100/60 text-red-700"
-            : popular === 2
-                ? "bg-blue-100/60 text-blue-700"
-                : popular === 3
-                    ? "bg-green-100/60 text-green-700"
-                    : popular != null
-                        ? "bg-slate-100/60 text-slate-700"
-                        : "bg-slate-100/60 text-slate-400";
-
-    return (
-        <span className={`px-2 py-0.5 rounded-full text-xs font-bold text-right ${colorClass}`}>
-            {popular != null ? `${popular}人気` : "-"}
         </span>
     );
 }

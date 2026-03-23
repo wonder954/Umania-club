@@ -5,6 +5,8 @@ import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import Image from "next/image";
 import type { Mark } from "@/types/mark";
 import { frameColors } from "@/constants/race";
+import { pcOddsColor, mobileOddsColor } from "@/utils/race/oddsColor";
+import { PopularBadgePC, PopularBadgeMobile } from "@/components/common/PopularBadge";
 
 type Props = {
     race: RaceViewModel;
@@ -91,14 +93,17 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
                                                 />
                                             </div>
 
-                                            {/* オッズ＋人気（同じ行） */}
                                             <div className="ml-auto flex items-center gap-2 text-right">
-                                                <span className="text-[13px] font-semibold text-slate-700">
+
+                                                {/* オッズ */}
+                                                <span className={`text-[13px] ${mobileOddsColor(horse.odds)}`}>
                                                     {horse.odds ?? "-"}倍
                                                 </span>
-                                                <span className="text-[12px] text-slate-500">
-                                                    {horse.popular ? `${horse.popular}人気` : "-"}
-                                                </span>
+
+                                                {/* 人気 */}
+                                                <div className="flex justify-end">
+                                                    <PopularBadgeMobile popular={horse.popular} />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -186,8 +191,9 @@ export default function HorseTable({ race, prediction, onPredictionChange }: Pro
 
                                         <td className="px-3 py-2 text-slate-700">{horse.weight}</td>
                                         <td className="px-3 py-2 text-slate-700">{horse.jockey}</td>
-                                        <td className="px-3 py-2 text-slate-700">{horse.odds ?? "-"}</td>
-                                        <td className="px-3 py-2 text-slate-700">{horse.popular ?? "-"}</td>
+                                        <td className={`px-3 py-2 text-right font-mono ${pcOddsColor(horse.odds)}`}>{horse.odds ?? "-"}</td>
+                                        <td className="px-3 py-2 text-center"><PopularBadgePC popular={horse.popular} /></td>
+
                                     </tr>
                                 );
                             })}

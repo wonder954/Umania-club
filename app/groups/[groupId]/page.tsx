@@ -17,6 +17,11 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import type { Post } from "@/types/post";
 
+import { toRaceViewModel } from "@/viewmodels/raceViewModel";
+import { unifyRaceTitle, matchJraRace } from "@/utils/race/normalize";
+import { gradeRaces2026 } from "@/lib/grades2026"; // ← JRA データ取得関数（仮）
+import type { RaceViewModel } from "@/viewmodels/raceViewModel";
+
 import GroupHeader from "@/components/group/GroupHeader";
 import GroupMemberList from "@/components/group/GroupMemberList";
 import GroupPostList from "@/components/group/GroupPostList";
@@ -29,6 +34,7 @@ export default function GroupPage() {
     const [group, setGroup] = useState<any>(null);
     const [memberProfiles, setMemberProfiles] = useState<any[]>([]);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [fsRaces, setFsRaces] = useState<any[]>([]);
 
     // 招待リンクをコピー
     const handleCopyInviteLink = async () => {
@@ -126,6 +132,23 @@ export default function GroupPage() {
         fetchPosts();
     }, [group, user, authLoading]);
 
+    // ④ レース一覧を取得
+    useEffect(() => {
+        const fetchRaces = async () => {
+            const q = query(collectionGroup(db, "races"));
+            const snap = await getDocs(q);
+
+            const list: any[] = [];
+            snap.forEach((d) => {
+                list.push({ id: d.id, ...d.data() });
+            });
+
+            setFsRaces(list);
+        };
+
+        fetchRaces();
+    }, []);
+
     // ローディング中
     if (authLoading) {
         return <div className="p-6 text-center">読み込み中...</div>;
@@ -163,6 +186,25 @@ export default function GroupPage() {
         );
     }
 
+    // ★ fsRaces がまだなら待つ
+    if (fsRaces.length === 0) {
+        return <div className="p-6 text-center">レース情報を読み込み中...</div>;
+    }
+
+    // ★ raceMap を作る
+    const raceMap: Record<string, RaceViewModel> = {};
+
+    for (const fsRace of fsRaces) {
+        const jra = gradeRaces2026.find(
+            (j) => j.date === fsRace.date && matchJraRace(fsRace.title, j.name)
+        );
+
+        const unified = unifyRaceTitle(fsRace, jra);
+        const vm = toRaceViewModel(unified);
+
+        raceMap[fsRace.id] = vm;
+    }
+
     const isMember = group.members?.includes(user.uid);
 
     return (
@@ -181,7 +223,7 @@ export default function GroupPage() {
             </div>
 
             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-white/60">
-                <GroupPostList posts={posts} />
+                <GroupPostList posts={posts} raceMap={raceMap} />
             </div>
 
             {/* 招待ボタン（オーナーのみ） */}

@@ -168,7 +168,7 @@ export default function MyPage() {
                         あなたが所属しているグループの管理や、新しいグループの作成ができます。
                     </p>
 
-                    <div className="flex gap-3">
+                    <div className="flex flex-col gap-3 md:flex-row">
                         <Link
                             href="/groups"
                             className="px-4 py-2 bg-white/80 text-slate-700 rounded-xl border border-white/40 shadow-sm hover:bg-white transition"

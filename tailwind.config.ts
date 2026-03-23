@@ -49,6 +49,29 @@ module.exports = {
         "bg-amber-700/50",
         "bg-amber-600/50",
         "bg-amber-500/50",
+
+        // --- PC 用（カードUI） ---
+        "bg-red-100 text-red-700",
+        "bg-blue-100 text-blue-700",
+        "bg-green-100 text-green-700",
+        "bg-slate-100 text-slate-700",
+
+        // --- スマホ用（カード UI）
+        "bg-red-200", "text-red-800",
+        "bg-blue-200", "text-blue-800",
+        "bg-green-200", "text-green-800",
+        "bg-slate-200", "text-slate-700",
+        "bg-slate-100", "text-slate-400",
+
+        //Oddsカラー（PC)
+        "text-slate-500",
+        "text-red-600/80 font-bold",
+        "text-black font-bold",
+
+        //Oddsカラー(スマホ)
+        "bg-slate-100/60 text-slate-500",
+        "text-red-700 font-bold",
+        "text-black font-bold",
     ],
 
     theme: {

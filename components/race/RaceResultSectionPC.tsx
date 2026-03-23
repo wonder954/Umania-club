@@ -2,6 +2,8 @@
 
 import type { RaceOrder } from "@/lib/race/types";
 import { frameColors } from "@/constants/race";
+import { PopularBadgePC } from "@/components/common/PopularBadge";
+import { pcOddsColor } from "@/utils/race/oddsColor";
 
 type Props = {
     top5: RaceOrder[];
@@ -35,8 +37,8 @@ export default function RaceResultSectionPC({ top5, others, showAll, onToggleSho
                         <th className="px-3 py-2 text-center">タイム</th>
                         <th className="px-3 py-2 text-center">着差</th>
                         <th className="px-3 py-2 text-left">騎手</th>
-                        <th className="px-3 py-2 text-center">人気</th>
-                        <th className="px-3 py-2 text-right">オッズ</th>
+                        <th className="px-3 py-2 text-center">オッズ</th>
+                        <th className="px-3 py-2 text-right">人気</th>
                     </tr>
                 </thead>
 
@@ -105,22 +107,18 @@ function RaceResultSectionPCRow({ horse, className }: RowProps) {
             <td className="px-3 py-2 text-center font-mono">{horse.time}</td>
             <td className="px-3 py-2 text-center text-slate-500">{horse.margin}</td>
             <td className="px-3 py-2">{horse.jockey}</td>
-
-            {/* 人気 */}
-            <td className="px-3 py-2 text-center">
-                <span
-                    className={`
-                        font-bold
-                        ${horse.popular === 1 ? "text-red-600/80" : ""}
-                        ${horse.popular === 2 ? "text-blue-600/80" : ""}
-                        ${horse.popular === 3 ? "text-green-600/80" : ""}
-                    `}
-                >
-                    {horse.popular}
+            <td className="px-3 py-2 text-right font-mono">
+                <span className={pcOddsColor(horse.odds)}>
+                    {horse.odds}
                 </span>
             </td>
+            {/* 人気 */}
+            <td className="px-3 py-2 text-center">
+                <PopularBadgePC popular={horse.popular} />
+            </td>
 
-            <td className="px-3 py-2 text-right font-mono">{horse.odds}</td>
+
+
         </tr>
     );
 }
