@@ -19,7 +19,7 @@ export function normalizeRace(data: RaceData): FirestoreRace {
             sex: null,
             age: null,
             jockey: o.jockey ?? "",
-            weight: o.weight != null ? String(o.weight) : null,
+            weight: o.weight != null ? Number(o.weight) : null,
             odds: o.odds ?? null,
             popular: o.popular ?? null,
         }));
@@ -32,7 +32,7 @@ export function normalizeRace(data: RaceData): FirestoreRace {
             sex: e.sex ?? null,
             age: e.age ?? null,
             jockey: e.jockey ?? "",
-            weight: e.weight != null ? String(e.weight) : null,
+            weight: e.weight != null ? Number(e.weight) : null,
             odds: e.odds ?? null,
             popular: e.popular ?? null,
         }));
@@ -49,7 +49,7 @@ export function normalizeRace(data: RaceData): FirestoreRace {
                 time: o.time ?? null,
                 margin: o.margin ?? null,
                 jockey: o.jockey ?? "",
-                weight: o.weight != null ? String(o.weight) : null,
+                weight: o.weight != null ? Number(o.weight) : null,
                 popular: o.popular ?? null,
                 odds: o.odds ?? null,
             })),

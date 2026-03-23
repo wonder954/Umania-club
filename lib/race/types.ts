@@ -46,7 +46,9 @@ export type RaceEntry = {
     age: number | null;     // 年齢 / null
 
     jockey: string | null;  // 騎手名 / null
-    weight: number | null;  // 斤量（"56" など）/ null
+    weight: number | null;
+    odds: number | null;     // ← 追加
+    popular: number | null;   // 斤量（"56" など）/ null
 };
 
 
@@ -71,7 +73,7 @@ export type RaceOrder = {
     time: string | null;    // 走破タイム / null
     margin: string | null;  // 着差 / null
     jockey: string | null;  // 騎手名 / null
-    weight: string | null;  // 斤量（"56" など）/ null
+    weight: number | null;  // 斤量（"56" など）/ null
     popular: number | null; // 人気 / null
     odds: number | null;    // オッズ / null
 };
