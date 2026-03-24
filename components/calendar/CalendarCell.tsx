@@ -1,20 +1,20 @@
-import { shortenRaceName, formatRaceName } from "@/utils/race";
+"use client";
+
+import { formatRaceName } from "@/utils/race";
 import type { CalendarRace } from "@/components/calendar/types";
 import Link from "next/link";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
-
 type Props = {
     day: number | null;
     dateStr: string | null;
-    races: CalendarRace[]; // ★ Race → CalendarRace に統一
+    races: CalendarRace[];
     weekday: number;
     isToday: boolean;
     isHoliday: boolean;
     holidayName?: string | null;
     onClick?: () => void;
 };
-
 
 export function CalendarCell({
     day,
@@ -24,10 +24,8 @@ export function CalendarCell({
     isToday,
     isHoliday,
     holidayName,
-    onClick
+    onClick,
 }: Props) {
-
-    // ★ 親コンポーネントで既にマージ済みの CalendarRace[] が渡ってくる
     const allRaces: CalendarRace[] = races;
 
     const bg =
@@ -42,65 +40,75 @@ export function CalendarCell({
                 weekday === 5 ? "text-blue-700 font-bold" :
                     "";
 
-    const todayStyle = isToday ? "ring-2 ring-green-500 ring-offset-2" : "";
+    const todayStyle = isToday ? "ring-2 ring-green-500 ring-offset-1" : "";
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const isPast = dateStr ? dateStr < todayStr : false;
 
     return (
         <div
-            className={`border h-24 p-1 text-xs overflow-hidden cursor-pointer hover:bg-gray-50 ${bg} ${todayStyle}`}
+            className={`border overflow-hidden cursor-pointer hover:bg-gray-50
+        min-h-14 sm:min-h-24 h-auto
+        p-0.5 sm:p-1
+        ${bg} ${todayStyle}`}
             onClick={onClick}
         >
-            {day && <div className={`font-bold ${text}`}>{day}</div>}
-
-            {isHoliday && holidayName && (
-                <div className="text-[10px] text-red-600 font-bold">{holidayName}</div>
+            {/* 日付数字 */}
+            {day && (
+                <div className={`font-bold text-xs leading-tight ${text}`}>{day}</div>
             )}
 
-            <div className="flex flex-wrap gap-1 mt-1">
-                {allRaces.map((race) => {
-                    const isRaceId = /^\d{10}$/.test(race.id);
+            {/* 祝日名：スマホは2文字、PCはフル */}
+            {isHoliday && holidayName && (
+                <div className="text-[9px] sm:text-[10px] text-red-600 font-bold leading-tight">
+                    <span className="sm:hidden">{holidayName.slice(0, 2)}</span>
+                    <span className="hidden sm:inline">{holidayName}</span>
+                </div>
+            )}
 
-                    const todayStr = new Date().toISOString().slice(0, 10);
-                    const isPast = dateStr ? dateStr < todayStr : false;
+            {/* バッジ：縦並び・行間狭く・mt-0で日付に密着 */}
+            <div className="flex flex-col gap-y-0 mt-0 leading-tight">                {allRaces.map((race) => {
+                const isRaceId = /^\d{10}$/.test(race.id);
+                const href = isPast
+                    ? `/races/${race.id}/result`
+                    : `/races/${race.id}`;
+                const style = getGradeStyleUI(race.grade ?? "OP");
+                const raceBg = race.isWeak ? `${style.bg}/50` : style.bg;
+                const raceText = race.isWeak ? `${style.text}/90` : style.text;
 
-                    const href = isPast
-                        ? `/races/${race.id}/result`
-                        : `/races/${race.id}`;
+                const fullName = formatRaceName(race.raceName ?? race.title);
+                const isWeekend = weekday === 5 || weekday === 6;
 
-                    // ★ GradeStyle を取得
-                    const style = getGradeStyleUI(race.grade ?? "OP");
+                // スマホ用の表示テキスト
+                const mobileLabel = isWeekend
+                    ? (fullName.length > 4 ? fullName.slice(0, 4) + "…" : fullName) // 土日: 4文字+…
+                    : (fullName.length > 4 ? fullName.slice(0, 4) : fullName);      // 平日: 4文字のみ
 
-                    // ★ デバッグ
-                    console.log("race:", race.title, "bg:", style.bg, "text:", style.text, "weak:", race.isWeak);
+                const badge = (
+                    <span
+                        className={`px-1 py-0.5 rounded font-bold hover:opacity-80
+                        text-[9px] sm:text-[10px] leading-tight
+                        ${raceBg} ${raceText}`}
+                    >
+                        {/* スマホ: 条件付きラベル / PC: フルネーム */}
+                        <span className="sm:hidden">{mobileLabel}</span>
+                        <span className="hidden sm:inline">{fullName}</span>
+                    </span>
+                );
 
 
-                    // ★ 薄い色にするかどうか（変数名を変更）
-                    const raceBg = race.isWeak ? `${style.bg}/50` : style.bg;
-                    const raceText = race.isWeak ? `${style.text}/90` : style.text;
-
-                    const badge = (
-                        <span
-                            className={`
-                px-1 py-0.5 rounded text-[10px] font-bold
-                ${raceBg} ${raceText}
-                hover:opacity-80
-            `}
-                        >
-                            {shortenRaceName(formatRaceName(race.raceName ?? race.title))}
-                        </span>
-                    );
-
-                    return isRaceId ? (
-                        <Link
-                            key={race.id}
-                            href={href}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {badge}
-                        </Link>
-                    ) : (
-                        <div key={race.id}>{badge}</div>
-                    );
-                })}
+                return isRaceId ? (
+                    <Link
+                        key={race.id}
+                        href={href}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {badge}
+                    </Link>
+                ) : (
+                    <div key={race.id}>{badge}</div>
+                );
+            })}
             </div>
         </div>
     );

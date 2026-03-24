@@ -17,6 +17,9 @@ type RaceCalendarProps = {
     onSelectDate?: (date: string) => void;
 };
 
+// 土日列を2fr、月〜金列を1frにするカスタムグリッド
+const GRID_COLS = "1fr 1fr 1fr 1fr 1fr 2fr 2fr";
+
 export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalendarProps) {
     const today = new Date();
 
@@ -44,13 +47,28 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
         <div className="w-full max-w-3xl mx-auto">
             <CalendarHeader year={year} month={month} changeMonth={changeMonth} />
 
-            <div className="grid grid-cols-7 gap-1">
-                {["月", "火", "水", "木", "金", "土", "日"].map(d => (
-                    <div key={d} className="text-center font-bold text-sm py-1">
+            {/* 曜日ヘッダー */}
+            <div
+                className="grid gap-1"
+                style={{ gridTemplateColumns: GRID_COLS }}
+            >
+                {["月", "火", "水", "木", "金", "土", "日"].map((d, i) => (
+                    <div
+                        key={d}
+                        className={`text-center font-bold text-sm py-1 ${i === 5 ? "text-red-600" :
+                                i === 6 ? "text-red-600" : ""
+                            }`}
+                    >
                         {d}
                     </div>
                 ))}
+            </div>
 
+            {/* 日付セル */}
+            <div
+                className="grid gap-1"
+                style={{ gridTemplateColumns: GRID_COLS }}
+            >
                 {matrix.map((week, wi) =>
                     week.map((day, di) => {
                         const dateKey =

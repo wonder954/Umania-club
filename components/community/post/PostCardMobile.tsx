@@ -109,14 +109,14 @@ export default function PostCardMobile(props: Props) {
             <div className="flex items-center gap-3 mt-3 mb-4">
                 <Link
                     href={`/races/${race.id}`}   // ← 修正
-                    className="text-2xl font-extrabold text-slate-900 hover:underline break-words"
+                    className="text-xl font-bold text-slate-900 hover:underline break-words"
                 >
                     {race.titleLabel}
                 </Link>
 
                 <span
                     className={`
-                        text-xl font-bold px-2.5 py-1 rounded-lg
+                        text-sm font-bold px-2 py-0.5 rounded-lg
                         shadow-sm
                         ${style.bg} ${style.text}
                     `}

@@ -17,8 +17,18 @@ export function abbreviateRaceName(name: string): string {
     return name
         .replace("ステークス", "S")
         .replace("カップ", "C")
-        .replace("記念", "記")
         .replace("ジャンプ", "J")
+        .replace("フィリーズ", "F")
+        .replace("ジュベナイル", "J")
+        .replace("フューチュリティ", "F")
+        .replace("シップ", "S")
+        .replace("チャンピオン", "C")
+        .replace("トロフィー", "T")
+        .replace("ハンデ", "H")
+        .replace("サマーダッシュ", "SD")
+        .replace("ジョッキークラブ", "JC")
+        .replace("グランド", "G")
+        .replace("ニュージーランド", "NZ")
         .replace(/（[^）]+）/g, "") // 括弧削除
         .trim();
 }

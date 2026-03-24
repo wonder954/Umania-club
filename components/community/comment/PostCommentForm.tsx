@@ -55,13 +55,13 @@ export default function PostCommentForm({
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="コメントを入力..."
                 className="
-          flex-1 px-3 py-2 
-          bg-white/70 backdrop-blur-sm
-          border border-white/40 
-          rounded-xl text-sm 
-          text-slate-800
-          focus:outline-none focus:ring-2 focus:ring-blue-300
-          shadow-sm
+            flex-1 min-w-0 px-3 py-2
+            bg-white/70 backdrop-blur-sm
+            border border-white/40
+            rounded-xl text-sm
+            text-slate-800
+            focus:outline-none focus:ring-2 focus:ring-blue-300
+            shadow-sm
         "
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -73,12 +73,12 @@ export default function PostCommentForm({
             <button
                 onClick={() => handleAddComment(commentText)}
                 className="
-          px-4 py-2 
-          bg-blue-500/80 text-white 
-          rounded-xl text-sm font-semibold 
-          shadow-sm 
-          hover:bg-blue-500/90 
-          transition
+            shrink-0 px-4 py-2
+            bg-blue-500/80 text-white
+            rounded-xl text-sm font-semibold
+            shadow-sm
+            hover:bg-blue-500/90
+            transition
         "
             >
                 送信

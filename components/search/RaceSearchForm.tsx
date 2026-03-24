@@ -79,32 +79,31 @@ export default function RaceSearchForm({ races }: Props) {
                                     <Link
                                         key={race.id}
                                         href={`/races/${race.id}`}
-                                        className="w-full text-left px-4 py-3 bg-white/70 backdrop-blur-sm hover:bg-white/90 border-l-4 border border-white/40 rounded-xl shadow-sm transition-all hover:shadow-md flex justify-between items-center group"
+                                        className="w-full text-left px-4 py-3 bg-white/70 backdrop-blur-sm hover:bg-white/90 border-l-4 border border-white/40 rounded-xl shadow-sm transition-all hover:shadow-md block"
                                         style={{ borderLeftColor: style.border }}
                                     >
-                                        <div className="flex flex-col">
-                                            {/* スマホ用（〜md） */}
-                                            <span className="text-xs text-slate-500 mb-0.5 md:hidden">
-                                                {formatShortDate(race.date)} {race.place}
-                                            </span>
-
-                                            {/* PC用（md〜） */}
-                                            <span className="text-xs text-slate-500 mb-0.5 hidden md:inline">
-                                                {formatDateWithWeekday(race.date)} {race.place}
-                                            </span>
-
-                                            <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors">
-                                                {formatRaceName(race.title)}
-                                            </span>
+                                        {/* 1行目：日付＋場所 */}
+                                        <div className="text-xs text-slate-500 mb-0.5 md:hidden">
+                                            {formatShortDate(race.date)} {race.place}
+                                        </div>
+                                        <div className="text-xs text-slate-500 mb-0.5 hidden md:block">
+                                            {formatDateWithWeekday(race.date)} {race.place}
                                         </div>
 
-                                        {race.grade && (
-                                            <span
-                                                className={`text-xs font-bold px-2.5 py-1 rounded ${style.bg} ${style.text} opacity-80`}
-                                            >
-                                                {style.label}
+                                        {/* 2行目：レース名（左）＋ グレード（右） */}
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-slate-800 group-hover:text-blue-600/80 transition-colors flex-1 min-w-0 truncate">
+                                                {formatRaceName(race.title)}
                                             </span>
-                                        )}
+
+                                            {race.grade && (
+                                                <span
+                                                    className={`shrink-0 ml-3 text-xs font-bold px-2.5 py-1 rounded ${style.bg} ${style.text} opacity-80`}
+                                                >
+                                                    {style.label}
+                                                </span>
+                                            )}
+                                        </div>
                                     </Link>
                                 );
                             })}

@@ -63,8 +63,7 @@ export default async function Home() {
                                 leading-tight tracking-tight
                             "
                         >
-                            <span>🏇JRA重賞レース情報を🏇</span>
-                            <span>サクッとチェック</span>
+                            <span>🏇競馬しようぜ🏇</span>
                         </h1>
                         <p className="text-slate-700">
                             🎯仲間内で予想投稿できる競馬アプリ🎯

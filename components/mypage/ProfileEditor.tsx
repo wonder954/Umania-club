@@ -177,22 +177,24 @@ export default function ProfileEditor({
             {/* フッター */}
             <div className="mt-6 flex items-center justify-between">
                 {saved ? (
-                    <span className="text-sm text-green-600">保存しました</span>
+                    <span className="text-sm text-green-600 min-w-0">保存しました</span>
                 ) : (
-                    <span className="text-xs text-slate-500">アイコン・名前・好きな馬が保存されます</span>
+                    <span className="text-xs text-slate-500 min-w-0">
+                        アイコン・名前・好きな馬が保存されます
+                    </span>
                 )}
 
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
                     className={`
-                        px-4 py-2 rounded-xl text-sm font-bold text-white shadow-sm
-                        transition
-                        ${isSaving
+            shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white shadow-sm
+            transition
+            ${isSaving
                             ? "bg-blue-300 cursor-wait scale-95"
                             : "bg-blue-500/80 hover:bg-blue-500/90"
                         }
-                    `}
+        `}
                 >
                     {isSaving ? "保存中..." : "保存する"}
                 </button>

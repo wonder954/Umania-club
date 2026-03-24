@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Comment } from "@/components/community/post/types";
 import { getUserProfile } from "@/lib/userCache";
 import Link from "next/link"; // ← 追加
+import { formatRelativeTime } from "@/utils/formatTime";
 
 type Props = {
     comment: Comment;
@@ -36,16 +37,11 @@ export default function CommentHeader({ comment, currentUserUid, handleDeleteCom
             </Link>
 
             {/* 投稿日時 */}
-            <div className="text-[10px] text-gray-400 ml-auto">
+            <span className="text-[10px] text-gray-400 ml-auto">
                 {comment.createdAt?.toDate
-                    ? comment.createdAt.toDate().toLocaleString("ja-JP", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    })
+                    ? formatRelativeTime(comment.createdAt.toDate())
                     : "たった今"}
-            </div>
+            </span>
 
             {/* 削除ボタン */}
             {currentUserUid === comment.authorId && (
