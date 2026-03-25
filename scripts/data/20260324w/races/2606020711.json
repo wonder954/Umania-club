@@ -1,0 +1,471 @@
+{
+  "raceId": "2606020711",
+  "info": {
+    "date": "2026-03-21",
+    "place": "中山",
+    "title": "フラワーカップ\n                  GIII",
+    "grade": "G3",
+    "distance": 1800,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "馬齢",
+    "raceNumber": "11R",
+    "placeDetail": "2回中山7日",
+    "videoId": "nNuEL1r9UHc"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "エアビーアゲイル",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "岩田 望来",
+      "weight": 55
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "ナックホワイト",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "大野 拓弥",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "ゴディアーモ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "津村 明秀",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "ヒルデグリム",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "柴田 大知",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "クリスレジーナ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "鮫島 克駿",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ラコンチャビエン",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "松本 大輝",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "アーリーハーベスト",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "松岡 正海",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "イクシード",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "C.ルメール",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "ヴィスコンテッサ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "石川 裕紀人",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "スマートプリエール",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "原 優介",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "ロンギングセリーヌ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "石橋 脩",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "バースデイフライト",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "岩田 康誠",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "アメティスタ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "西村 淳也",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "カラペルソナ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "佐々木 大輔",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 15,
+      "name": "リュクスパトロール",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "田辺 裕信",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "コズミックボックス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "戸崎 圭太",
+      "weight": 55
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 5,
+        "number": 10,
+        "name": "スマートプリエール",
+        "time": "1:48.3",
+        "margin": "-",
+        "jockey": "原 優介",
+        "weight": "55.0",
+        "popular": 6,
+        "odds": 12.8
+      },
+      {
+        "rank": 2,
+        "frame": 6,
+        "number": 11,
+        "name": "ロンギングセリーヌ",
+        "time": "1:48.4",
+        "margin": "1/2馬身",
+        "jockey": "石橋 脩",
+        "weight": "55.0",
+        "popular": 9,
+        "odds": 55.4
+      },
+      {
+        "rank": 3,
+        "frame": 4,
+        "number": 8,
+        "name": "イクシード",
+        "time": "1:48.4",
+        "margin": "ハナ",
+        "jockey": "C.ルメール",
+        "weight": "55.0",
+        "popular": 1,
+        "odds": 2.7
+      },
+      {
+        "rank": 4,
+        "frame": 7,
+        "number": 13,
+        "name": "アメティスタ",
+        "time": "1:48.4",
+        "margin": "クビ",
+        "jockey": "西村 淳也",
+        "weight": "55.0",
+        "popular": 3,
+        "odds": 6.3
+      },
+      {
+        "rank": 5,
+        "frame": 7,
+        "number": 14,
+        "name": "カラペルソナ",
+        "time": "1:48.4",
+        "margin": "クビ",
+        "jockey": "佐々木 大輔",
+        "weight": "55.0",
+        "popular": 4,
+        "odds": 7.5
+      },
+      {
+        "rank": 6,
+        "frame": 4,
+        "number": 7,
+        "name": "アーリーハーベスト",
+        "time": "1:48.5",
+        "margin": "アタマ",
+        "jockey": "松岡 正海",
+        "weight": "55.0",
+        "popular": 12,
+        "odds": 99.4
+      },
+      {
+        "rank": 7,
+        "frame": 2,
+        "number": 3,
+        "name": "ゴディアーモ",
+        "time": "1:48.5",
+        "margin": "クビ",
+        "jockey": "津村 明秀",
+        "weight": "55.0",
+        "popular": 2,
+        "odds": 3.9
+      },
+      {
+        "rank": 8,
+        "frame": 1,
+        "number": 2,
+        "name": "ナックホワイト",
+        "time": "1:48.5",
+        "margin": "アタマ",
+        "jockey": "大野 拓弥",
+        "weight": "55.0",
+        "popular": 15,
+        "odds": 136.8
+      },
+      {
+        "rank": 9,
+        "frame": 6,
+        "number": 12,
+        "name": "バースデイフライト",
+        "time": "1:48.6",
+        "margin": "クビ",
+        "jockey": "岩田 康誠",
+        "weight": "55.0",
+        "popular": 13,
+        "odds": 101.8
+      },
+      {
+        "rank": 10,
+        "frame": 3,
+        "number": 5,
+        "name": "クリスレジーナ",
+        "time": "1:48.7",
+        "margin": "3/4馬身",
+        "jockey": "鮫島 克駿",
+        "weight": "55.0",
+        "popular": 7,
+        "odds": 19
+      },
+      {
+        "rank": 11,
+        "frame": 1,
+        "number": 1,
+        "name": "エアビーアゲイル",
+        "time": "1:48.8",
+        "margin": "1/2馬身",
+        "jockey": "岩田 望来",
+        "weight": "55.0",
+        "popular": 5,
+        "odds": 10.1
+      },
+      {
+        "rank": 12,
+        "frame": 5,
+        "number": 9,
+        "name": "ヴィスコンテッサ",
+        "time": "1:48.8",
+        "margin": "クビ",
+        "jockey": "石川 裕紀人",
+        "weight": "55.0",
+        "popular": 8,
+        "odds": 32.6
+      },
+      {
+        "rank": 13,
+        "frame": 8,
+        "number": 15,
+        "name": "リュクスパトロール",
+        "time": "1:48.9",
+        "margin": "クビ",
+        "jockey": "田辺 裕信",
+        "weight": "55.0",
+        "popular": 14,
+        "odds": 134.1
+      },
+      {
+        "rank": 14,
+        "frame": 8,
+        "number": 16,
+        "name": "コズミックボックス",
+        "time": "1:49.0",
+        "margin": "1 1/4馬身",
+        "jockey": "戸崎 圭太",
+        "weight": "55.0",
+        "popular": 10,
+        "odds": 67.6
+      },
+      {
+        "rank": 15,
+        "frame": 3,
+        "number": 6,
+        "name": "ラコンチャビエン",
+        "time": "1:49.1",
+        "margin": "1/2馬身",
+        "jockey": "松本 大輝",
+        "weight": "55.0",
+        "popular": 11,
+        "odds": 83.8
+      },
+      {
+        "rank": 16,
+        "frame": 2,
+        "number": 4,
+        "name": "ヒルデグリム",
+        "time": "1:49.2",
+        "margin": "クビ",
+        "jockey": "柴田 大知",
+        "weight": "55.0",
+        "popular": 16,
+        "odds": 402.8
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            10
+          ],
+          "amount": 1280,
+          "popular": 6
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            10
+          ],
+          "amount": 290,
+          "popular": 5
+        },
+        {
+          "numbers": [
+            11
+          ],
+          "amount": 870,
+          "popular": 9
+        },
+        {
+          "numbers": [
+            8
+          ],
+          "amount": 160,
+          "popular": 1
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            5,
+            6
+          ],
+          "amount": 9500,
+          "popular": 24
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            10,
+            11
+          ],
+          "amount": 19270,
+          "popular": 43
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            8,
+            10
+          ],
+          "amount": 780,
+          "popular": 8
+        },
+        {
+          "numbers": [
+            8,
+            11
+          ],
+          "amount": 2260,
+          "popular": 25
+        },
+        {
+          "numbers": [
+            10,
+            11
+          ],
+          "amount": 4560,
+          "popular": 41
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            10,
+            11
+          ],
+          "amount": 37120,
+          "popular": 80
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            8,
+            10,
+            11
+          ],
+          "amount": 22810,
+          "popular": 66
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            10,
+            11,
+            8
+          ],
+          "amount": 213970,
+          "popular": 561
+        }
+      ]
+    }
+  }
+}

@@ -121,6 +121,7 @@ export async function fetchRaceResult(
             const typeMap: any = {
                 "単勝": "win",
                 "複勝": "place",
+                "枠連": "bracket",
                 "馬連": "quinella",
                 "ワイド": "wide",
                 "馬単": "exacta",

@@ -1,0 +1,513 @@
+{
+  "raceId": "2607010411",
+  "info": {
+    "date": "2026-03-22",
+    "place": "中京",
+    "title": "愛知杯",
+    "grade": "GⅢ",
+    "distance": 1400,
+    "surface": "芝",
+    "direction": "左",
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "1回中京4日",
+    "videoId": "D62xwRUjm0Y"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "マピュース",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "田辺 裕信",
+      "weight": 56
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "レディマリオン",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "吉村 誠之助",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "モリノドリーム",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "小林 美駒",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "カンパニョーラ",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "嶋田 純次",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ウイントワイライト",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "横山 典弘",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ナムラクララ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "浜中 俊",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "チェルビアット",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "西村 淳也",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ソルトクィーン",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "富田 暁",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "マサノカナリア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "古川 吉洋",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "セフィロ",
+      "sex": "牝",
+      "age": 6,
+      "jockey": "吉田 隼人",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "スリールミニョン",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "丸山 元気",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "カルプスペルシュ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "横山 武史",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "アブキールベイ",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "小崎 綾也",
+      "weight": 56
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "シンバーシア",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "団野 大成",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 15,
+      "name": "ワイドラトゥール",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "西塚 洸二",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "ドロップオブライト",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "松若 風馬",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 17,
+      "name": "リラボニート",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "田山 旺佑",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 18,
+      "name": "アイサンサン",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "幸 英明",
+      "weight": 55
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 18,
+        "name": "アイサンサン",
+        "time": "1:19.6",
+        "margin": "-",
+        "jockey": "幸 英明",
+        "weight": "55.0",
+        "popular": 12,
+        "odds": 27.6
+      },
+      {
+        "rank": 2,
+        "frame": 4,
+        "number": 8,
+        "name": "ソルトクィーン",
+        "time": "1:19.6",
+        "margin": "アタマ",
+        "jockey": "富田 暁",
+        "weight": "55.0",
+        "popular": 5,
+        "odds": 9.1
+      },
+      {
+        "rank": 3,
+        "frame": 5,
+        "number": 10,
+        "name": "セフィロ",
+        "time": "1:19.8",
+        "margin": "1 1/4馬身",
+        "jockey": "吉田 隼人",
+        "weight": "55.0",
+        "popular": 13,
+        "odds": 34.1
+      },
+      {
+        "rank": 4,
+        "frame": 7,
+        "number": 15,
+        "name": "ワイドラトゥール",
+        "time": "1:19.8",
+        "margin": "アタマ",
+        "jockey": "西塚 洸二",
+        "weight": "56.0",
+        "popular": 7,
+        "odds": 11.9
+      },
+      {
+        "rank": 5,
+        "frame": 4,
+        "number": 7,
+        "name": "チェルビアット",
+        "time": "1:19.8",
+        "margin": "ハナ",
+        "jockey": "西村 淳也",
+        "weight": "55.0",
+        "popular": 2,
+        "odds": 5.9
+      },
+      {
+        "rank": 6,
+        "frame": 1,
+        "number": 1,
+        "name": "マピュース",
+        "time": "1:19.9",
+        "margin": "1/2馬身",
+        "jockey": "田辺 裕信",
+        "weight": "56.0",
+        "popular": 3,
+        "odds": 7.4
+      },
+      {
+        "rank": 7,
+        "frame": 3,
+        "number": 5,
+        "name": "ウイントワイライト",
+        "time": "1:19.9",
+        "margin": "ハナ",
+        "jockey": "横山 典弘",
+        "weight": "55.0",
+        "popular": 4,
+        "odds": 8.6
+      },
+      {
+        "rank": 8,
+        "frame": 3,
+        "number": 6,
+        "name": "ナムラクララ",
+        "time": "1:19.9",
+        "margin": "クビ",
+        "jockey": "浜中 俊",
+        "weight": "55.0",
+        "popular": 6,
+        "odds": 10.3
+      },
+      {
+        "rank": 9,
+        "frame": 8,
+        "number": 17,
+        "name": "リラボニート",
+        "time": "1:20.0",
+        "margin": "1/2馬身",
+        "jockey": "田山 旺佑",
+        "weight": "55.0",
+        "popular": 11,
+        "odds": 26.4
+      },
+      {
+        "rank": 10,
+        "frame": 8,
+        "number": 16,
+        "name": "ドロップオブライト",
+        "time": "1:20.2",
+        "margin": "3/4馬身",
+        "jockey": "松若 風馬",
+        "weight": "56.0",
+        "popular": 1,
+        "odds": 5.7
+      },
+      {
+        "rank": 11,
+        "frame": 6,
+        "number": 12,
+        "name": "カルプスペルシュ",
+        "time": "1:20.2",
+        "margin": "ハナ",
+        "jockey": "横山 武史",
+        "weight": "55.0",
+        "popular": 8,
+        "odds": 12.8
+      },
+      {
+        "rank": 12,
+        "frame": 1,
+        "number": 2,
+        "name": "レディマリオン",
+        "time": "1:20.2",
+        "margin": "クビ",
+        "jockey": "吉村 誠之助",
+        "weight": "55.0",
+        "popular": 9,
+        "odds": 13.8
+      },
+      {
+        "rank": 13,
+        "frame": 7,
+        "number": 13,
+        "name": "アブキールベイ",
+        "time": "1:20.2",
+        "margin": "アタマ",
+        "jockey": "小崎 綾也",
+        "weight": "56.0",
+        "popular": 14,
+        "odds": 39.5
+      },
+      {
+        "rank": 14,
+        "frame": 6,
+        "number": 11,
+        "name": "スリールミニョン",
+        "time": "1:20.4",
+        "margin": "1馬身",
+        "jockey": "丸山 元気",
+        "weight": "55.0",
+        "popular": 10,
+        "odds": 23.9
+      },
+      {
+        "rank": 15,
+        "frame": 2,
+        "number": 3,
+        "name": "モリノドリーム",
+        "time": "1:20.4",
+        "margin": "クビ",
+        "jockey": "小林 美駒",
+        "weight": "55.0",
+        "popular": 17,
+        "odds": 126.4
+      },
+      {
+        "rank": 16,
+        "frame": 7,
+        "number": 14,
+        "name": "シンバーシア",
+        "time": "1:20.7",
+        "margin": "1 3/4馬身",
+        "jockey": "団野 大成",
+        "weight": "55.0",
+        "popular": 16,
+        "odds": 58.2
+      },
+      {
+        "rank": 17,
+        "frame": 5,
+        "number": 9,
+        "name": "マサノカナリア",
+        "time": "1:20.8",
+        "margin": "3/4馬身",
+        "jockey": "古川 吉洋",
+        "weight": "55.0",
+        "popular": 15,
+        "odds": 54.4
+      },
+      {
+        "rank": 18,
+        "frame": 2,
+        "number": 4,
+        "name": "カンパニョーラ",
+        "time": "1:20.9",
+        "margin": "クビ",
+        "jockey": "嶋田 純次",
+        "weight": "55.0",
+        "popular": 18,
+        "odds": 204.2
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            18
+          ],
+          "amount": 2760,
+          "popular": 12
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            18
+          ],
+          "amount": 980,
+          "popular": 13
+        },
+        {
+          "numbers": [
+            8
+          ],
+          "amount": 300,
+          "popular": 3
+        },
+        {
+          "numbers": [
+            10
+          ],
+          "amount": 870,
+          "popular": 12
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            4,
+            8
+          ],
+          "amount": 820,
+          "popular": 1
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            8,
+            18
+          ],
+          "amount": 16560,
+          "popular": 60
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            8,
+            10
+          ],
+          "amount": 3950,
+          "popular": 49
+        },
+        {
+          "numbers": [
+            8,
+            18
+          ],
+          "amount": 5020,
+          "popular": 60
+        },
+        {
+          "numbers": [
+            10,
+            18
+          ],
+          "amount": 14690,
+          "popular": 111
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            18,
+            8
+          ],
+          "amount": 31830,
+          "popular": 122
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            8,
+            10,
+            18
+          ],
+          "amount": 162740,
+          "popular": 393
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            18,
+            8,
+            10
+          ],
+          "amount": 733950,
+          "popular": 2021
+        }
+      ]
+    }
+  }
+}
