@@ -12,6 +12,7 @@ import {
     where,
     getDocs,
     updateDoc,
+    deleteDoc,
     arrayRemove,
 } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
@@ -54,6 +55,20 @@ export default function GroupPage() {
         } catch (e) {
             console.error(e);
             alert("退出に失敗しました");
+        }
+    };
+
+    //グループを削除
+    const handleDeleteGroup = async () => {
+        if (!confirm("本当にこのグループを削除しますか？\n投稿やメンバー情報もすべて消えます。")) return;
+
+        try {
+            await deleteDoc(doc(db, "groups", group.id));
+            alert("グループを削除しました");
+            router.push("/groups");
+        } catch (e) {
+            console.error(e);
+            alert("削除に失敗しました");
         }
     };
 
@@ -263,6 +278,16 @@ export default function GroupPage() {
                     className="w-full bg-red-500/90 text-white py-3 rounded-xl shadow-sm hover:bg-red-600 transition font-semibold"
                 >
                     グループを退出する
+                </button>
+            )}
+
+            {/* グループ削除ボタン（オーナーのみ） */}
+            {user.uid === group.ownerId && (
+                <button
+                    onClick={handleDeleteGroup}
+                    className="w-full bg-red-600/90 text-white py-3 rounded-xl shadow-sm hover:bg-red-700 transition font-semibold"
+                >
+                    グループを削除する
                 </button>
             )}
 

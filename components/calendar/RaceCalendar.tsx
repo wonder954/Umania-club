@@ -5,10 +5,10 @@ import { getCalendarMatrix } from "./calendarMatrix";
 import { CalendarHeader } from "./CalendarHeader";
 import { CalendarCell } from "./CalendarCell";
 
-import type { CalendarRace } from "@/components/calendar/types";
+import type { CalendarRaceVM } from "@/viewmodels/raceViewModel";
 
 export type RacesByDate = {
-    [date: string]: CalendarRace[];
+    [date: string]: CalendarRaceVM[];
 };
 
 type RaceCalendarProps = {
@@ -56,7 +56,7 @@ export function RaceCalendar({ racesByDate, holidays, onSelectDate }: RaceCalend
                     <div
                         key={d}
                         className={`text-center font-bold text-sm py-1 ${i === 5 ? "text-red-600" :
-                                i === 6 ? "text-red-600" : ""
+                            i === 6 ? "text-red-600" : ""
                             }`}
                     >
                         {d}

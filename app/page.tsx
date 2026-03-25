@@ -33,7 +33,6 @@ export default async function Home() {
     const {
         upcomingRaces,
         lastWeekRaces,
-        calendarRaces,
     } = getWeeklyRaceData(races);
 
 
@@ -186,7 +185,7 @@ export default async function Home() {
                         レースカレンダー
                         <img src="/calendar-icon.png" alt="" className="w-8 h-8" />
                     </h2>
-                    <RaceCalendarSection races={fsRaces} holidays={holidays} />
+                    <RaceCalendarSection races={races} holidays={holidays} />
                 </section>
 
             </div>

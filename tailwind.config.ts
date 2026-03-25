@@ -34,13 +34,13 @@ module.exports = {
         "text-white/90",
 
         // border
-        "border-blue-900",
-        "border-red-700",
-        "border-green-700",
-        "border-amber-700",
-        "border-amber-600",
-        "border-amber-500",
-        "border-gray-300",
+        "border-l-blue-900",
+        "border-l-red-700",
+        "border-l-green-700",
+        "border-l-amber-700",
+        "border-l-amber-600",
+        "border-l-amber-500",
+        "border-l-gray-300",
 
         // isWeak 用（必要なら）
         "bg-blue-900/50",

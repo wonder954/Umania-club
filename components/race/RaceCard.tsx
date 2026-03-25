@@ -17,7 +17,7 @@ export default function RaceCard({ race, variant = "upcoming" }: Props) {
             className={`
                 p-6 rounded-2xl transition-shadow border-l-4
                 ${isPast
-                    ? "bg-white/50 backdrop-blur-sm border-white/40 shadow-sm"
+                    ? `bg-white/50 backdrop-blur-sm ${style.border} border-white/40 shadow-sm`
                     : `bg-white/70 backdrop-blur-sm ${style.border} shadow-sm hover:shadow-md border border-white/40`
                 }
             `}

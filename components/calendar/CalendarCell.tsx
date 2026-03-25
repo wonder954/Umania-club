@@ -1,14 +1,14 @@
 "use client";
 
 import { formatRaceName } from "@/utils/race";
-import type { CalendarRace } from "@/components/calendar/types";
+import type { CalendarRaceVM } from "@/viewmodels/raceViewModel";
 import Link from "next/link";
 import { getGradeStyleUI } from "@/utils/race/raceGradeUtils.ui";
 
 type Props = {
     day: number | null;
     dateStr: string | null;
-    races: CalendarRace[];
+    races: CalendarRaceVM[];
     weekday: number;
     isToday: boolean;
     isHoliday: boolean;
@@ -26,7 +26,7 @@ export function CalendarCell({
     holidayName,
     onClick,
 }: Props) {
-    const allRaces: CalendarRace[] = races;
+    const allRaces: CalendarRaceVM[] = races;
 
     const bg =
         isHoliday ? "bg-red-50" :
@@ -73,10 +73,12 @@ export function CalendarCell({
                     ? `/races/${race.id}/result`
                     : `/races/${race.id}`;
                 const style = getGradeStyleUI(race.grade ?? "OP");
+
                 const raceBg = race.isWeak ? `${style.bg}/50` : style.bg;
                 const raceText = race.isWeak ? `${style.text}/90` : style.text;
 
-                const fullName = formatRaceName(race.raceName ?? race.title);
+
+                const fullName = formatRaceName(race.raceName);
                 const isWeekend = weekday === 5 || weekday === 6;
 
                 // スマホ用の表示テキスト

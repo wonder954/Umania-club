@@ -29,6 +29,8 @@ export function abbreviateRaceName(name: string): string {
         .replace("ジョッキークラブ", "JC")
         .replace("グランド", "G")
         .replace("ニュージーランド", "NZ")
+        .replace("（春）", "春")
+        .replace("（秋）", "秋")
         .replace(/（[^）]+）/g, "") // 括弧削除
         .trim();
 }

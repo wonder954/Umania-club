@@ -115,3 +115,27 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         result: r.result ?? null,
     };
 }
+
+export type CalendarRaceVM = {
+    id: string;
+    date: string;     // YYYY-MM-DD
+    title: string;    // 短縮済みタイトル（titleLabel）
+    raceName: string;
+    grade: string;    // G1/G2/G3
+    place: string | null;    // 阪神/中山など
+    isPast: boolean;  // result があるかどうか
+    isWeak: boolean;
+};
+
+export function toCalendarRaceVM(r: RaceViewModel): CalendarRaceVM {
+    return {
+        id: r.id,
+        date: r.date,
+        title: r.titleLabel,   // ← ここがポイント（短縮済みタイトル）
+        raceName: r.titleLabel,
+        grade: r.grade,
+        place: r.place,
+        isPast: !!r.result,
+        isWeak: false,   // ← スクレイピング済み
+    };
+}

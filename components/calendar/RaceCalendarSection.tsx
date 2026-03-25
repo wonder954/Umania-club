@@ -3,29 +3,40 @@
 import { useState } from "react";
 import Link from "next/link";
 import { RaceCalendar } from "@/components/calendar/RaceCalendar";
-import { racesToCalendarRaces, groupByDate } from "@/lib/race/racesToCalendarRaces";
+import { groupByDate } from "@/lib/race/calendarTransform";
 import { Modal } from "@/components/common/Modal";
 import { UnifiedRaceCard } from "@/components/race/UnifiedRaceCard";
 
-import type { FirestoreRace } from "@/lib/race/types";
-import type { CalendarRace } from "@/components/calendar/types";
+import type { RaceViewModel, CalendarRaceVM } from "@/viewmodels/raceViewModel";
+import {
+    toWeakCalendarRaceVM,
+    toStrongCalendarRaceVM,
+    mergeWeakAndStrong,
+} from "@/lib/race/calendarTransform";
 import { gradeRaces2026 } from "@/lib/grades2026";
 
 export function RaceCalendarSection({
-    races,
+    races,      // ← FirestoreRace ではなく RaceViewModel[]
     holidays,
 }: {
-    races: FirestoreRace[];
+    races: RaceViewModel[];
     holidays: Record<string, string>;
 }) {
-    // FirestoreRace → CalendarRace に変換
-    const calendarRaces: CalendarRace[] = racesToCalendarRaces(races, gradeRaces2026);
+    // 強いレース
+    const strong = races.map(toStrongCalendarRaceVM);
 
-    // CalendarRace[] を日付でグループ化
+    // 弱いレース（JRA カレンダー）
+    const weak = gradeRaces2026.map(toWeakCalendarRaceVM);
+
+    // マージ
+    const calendarRaces = mergeWeakAndStrong(weak, strong);
+
+
+    // ★ 日付でグループ化
     const racesByDate = groupByDate(calendarRaces);
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedRaces, setSelectedRaces] = useState<CalendarRace[]>([]);
+    const [selectedRaces, setSelectedRaces] = useState<CalendarRaceVM[]>([]);
 
     function handleDayClick(dateStr: string) {
         const dayRaces = racesByDate[dateStr] ?? [];
@@ -45,41 +56,29 @@ export function RaceCalendarSection({
 
             <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
                 {selectedRaces.map((calRace) => {
-                    const fullRace = races.find((r) =>
-                        r.date === calRace.date &&
-                        (r.title === calRace.title ||
-                            r.title.includes(calRace.title) ||
-                            calRace.title.includes(r.title))
-                    );
+                    // ★ Firestore の詳細データを探す
+                    const fullRace = races.find((r) => r.id === calRace.id) ?? null;
 
-                    const Card = (
-                        <UnifiedRaceCard
-                            calRace={calRace}
-                            fullRace={fullRace ?? null}
-                        />
-                    );
-
-                    if (fullRace) {
-                        const isPast = !!fullRace.result;
-                        const link = isPast
+                    const link = fullRace
+                        ? fullRace.result
                             ? `/races/${fullRace.id}/result`
-                            : `/races/${fullRace.id}`;
+                            : `/races/${fullRace.id}`
+                        : undefined;
 
-                        return (
-                            <Link
-                                key={`fs-${fullRace.id}`}
-                                href={link}
-                                className="block mb-4 hover:opacity-90 transition-opacity"
-                            >
-                                {Card}
-                            </Link>
-                        );
-                    }
-
-                    return (
-                        <div key={`jra-${calRace.id}`} className="mb-4">
-                            {Card}
-                        </div>
+                    return link ? (
+                        <Link
+                            key={calRace.id}
+                            href={link}
+                            className="block mb-4 hover:opacity-90 transition-opacity"
+                        >
+                            <UnifiedRaceCard calRace={calRace} fullRace={fullRace} />
+                        </Link>
+                    ) : (
+                        <UnifiedRaceCard
+                            key={calRace.id}
+                            calRace={calRace}
+                            fullRace={null}
+                        />
                     );
                 })}
             </Modal>

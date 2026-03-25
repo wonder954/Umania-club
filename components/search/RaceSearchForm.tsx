@@ -79,8 +79,11 @@ export default function RaceSearchForm({ races }: Props) {
                                     <Link
                                         key={race.id}
                                         href={`/races/${race.id}`}
-                                        className="w-full text-left px-4 py-3 bg-white/70 backdrop-blur-sm hover:bg-white/90 border-l-4 border border-white/40 rounded-xl shadow-sm transition-all hover:shadow-md block"
-                                        style={{ borderLeftColor: style.border }}
+                                        className={`
+                                            w-full text-left px-4 py-3 bg-white/70 backdrop-blur-sm hover:bg-white/90
+                                            border-l-4 border border-white/40 rounded-xl shadow-sm transition-all hover:shadow-md block
+                                            ${style.border}
+                                        `}
                                     >
                                         {/* 1行目：日付＋場所 */}
                                         <div className="text-xs text-slate-500 mb-0.5 md:hidden">

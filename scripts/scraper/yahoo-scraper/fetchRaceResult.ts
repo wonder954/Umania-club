@@ -35,7 +35,7 @@ export async function fetchRaceResult(
 
             for (const text of statusTexts) {
                 const match = text.match(
-                    /(芝|ダート)[・･]?(右|左|外|内|直線)?[・･]?(外|内)?\s*(\d{3,4})m/
+                    /(芝|ダート)[・･\s]*?(右|左|外|内|直線)?[・･\s]*?(外|内)?[・･\s]*?(\d{3,4})m/
                 );
                 if (match) {
                     surface = match[1];

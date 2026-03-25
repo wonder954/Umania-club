@@ -10,6 +10,22 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "Umania-club | 競馬予想コミュニティ",
     description: "シンプルなUIで楽しむ競馬予想SNS",
+    openGraph: {
+        title: "Umania-club | 競馬予想コミュニティ",
+        description: "シンプルなUIで楽しむ競馬予想SNS",
+        images: [
+            {
+                url: "/ogp.png",
+                width: 1200,
+                height: 630,
+                alt: "Umania-club | 競馬予想コミュニティ",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        images: ["/ogp.png"],
+    },
 };
 
 export default function RootLayout({

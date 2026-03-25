@@ -1,0 +1,343 @@
+{
+  "raceId": "2609011011",
+  "info": {
+    "date": "2026-03-22",
+    "place": "阪神",
+    "title": "阪神大賞典",
+    "grade": "GⅡ",
+    "distance": 3000,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "1回阪神10日",
+    "videoId": "7NBKoRmrZ9I"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "アドマイヤテラ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "武 豊",
+      "weight": 58
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "シュヴァリエローズ",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "北村 友一",
+      "weight": 57
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "ファミリータイム",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "松山 弘平",
+      "weight": 57
+    },
+    {
+      "frame": 4,
+      "number": 4,
+      "name": "アクアヴァーナル",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "坂井 瑠星",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 5,
+      "name": "ダノンシーマ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "川田 将雅",
+      "weight": 56
+    },
+    {
+      "frame": 6,
+      "number": 6,
+      "name": "レッドバンデ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "佐々木 大輔",
+      "weight": 56
+    },
+    {
+      "frame": 7,
+      "number": 7,
+      "name": "マイネルエンペラー",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "丹内 祐次",
+      "weight": 58
+    },
+    {
+      "frame": 7,
+      "number": 8,
+      "name": "メイショウブレゲ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "酒井 学",
+      "weight": 57
+    },
+    {
+      "frame": 8,
+      "number": 9,
+      "name": "サンライズソレイユ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "岩田 望来",
+      "weight": 57
+    },
+    {
+      "frame": 8,
+      "number": 10,
+      "name": "ダンディズム",
+      "jockey": "松本 大輝",
+      "weight": 57
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 1,
+        "number": 1,
+        "name": "アドマイヤテラ",
+        "time": "3:02.0",
+        "margin": "-",
+        "jockey": "武 豊",
+        "weight": "58.0",
+        "popular": 1,
+        "odds": 3.1
+      },
+      {
+        "rank": 2,
+        "frame": 4,
+        "number": 4,
+        "name": "アクアヴァーナル",
+        "time": "3:02.5",
+        "margin": "3馬身",
+        "jockey": "坂井 瑠星",
+        "weight": "55.0",
+        "popular": 6,
+        "odds": 13.6
+      },
+      {
+        "rank": 3,
+        "frame": 5,
+        "number": 5,
+        "name": "ダノンシーマ",
+        "time": "3:02.7",
+        "margin": "1 1/4馬身",
+        "jockey": "川田 将雅",
+        "weight": "56.0",
+        "popular": 2,
+        "odds": 3.3
+      },
+      {
+        "rank": 4,
+        "frame": 2,
+        "number": 2,
+        "name": "シュヴァリエローズ",
+        "time": "3:03.0",
+        "margin": "1 1/2馬身",
+        "jockey": "北村 友一",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 32.8
+      },
+      {
+        "rank": 5,
+        "frame": 7,
+        "number": 7,
+        "name": "マイネルエンペラー",
+        "time": "3:03.0",
+        "margin": "アタマ",
+        "jockey": "丹内 祐次",
+        "weight": "58.0",
+        "popular": 4,
+        "odds": 7.2
+      },
+      {
+        "rank": 6,
+        "frame": 8,
+        "number": 9,
+        "name": "サンライズソレイユ",
+        "time": "3:03.2",
+        "margin": "1 1/2馬身",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 8,
+        "odds": 35.6
+      },
+      {
+        "rank": 7,
+        "frame": 6,
+        "number": 6,
+        "name": "レッドバンデ",
+        "time": "3:03.8",
+        "margin": "3 1/2馬身",
+        "jockey": "佐々木 大輔",
+        "weight": "56.0",
+        "popular": 3,
+        "odds": 3.6
+      },
+      {
+        "rank": 8,
+        "frame": 7,
+        "number": 8,
+        "name": "メイショウブレゲ",
+        "time": "3:03.9",
+        "margin": "1/2馬身",
+        "jockey": "酒井 学",
+        "weight": "57.0",
+        "popular": 9,
+        "odds": 174.1
+      },
+      {
+        "rank": 9,
+        "frame": 3,
+        "number": 3,
+        "name": "ファミリータイム",
+        "time": "3:04.4",
+        "margin": "3馬身",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 5,
+        "odds": 12.6
+      },
+      {
+        "rank": 10,
+        "frame": 8,
+        "number": 10,
+        "name": "ダンディズム",
+        "time": "3:05.4",
+        "margin": "6馬身",
+        "jockey": "松本 大輝",
+        "weight": "57.0",
+        "popular": 10,
+        "odds": 223.9
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            1
+          ],
+          "amount": 310,
+          "popular": 1
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            1
+          ],
+          "amount": 120,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            4
+          ],
+          "amount": 240,
+          "popular": 6
+        },
+        {
+          "numbers": [
+            5
+          ],
+          "amount": 140,
+          "popular": 2
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            1,
+            4
+          ],
+          "amount": 1750,
+          "popular": 9
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            1,
+            4
+          ],
+          "amount": 1690,
+          "popular": 9
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            1,
+            5
+          ],
+          "amount": 260,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            4,
+            5
+          ],
+          "amount": 560,
+          "popular": 8
+        },
+        {
+          "numbers": [
+            1,
+            4
+          ],
+          "amount": 570,
+          "popular": 9
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            1,
+            4
+          ],
+          "amount": 2540,
+          "popular": 13
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            1,
+            4,
+            5
+          ],
+          "amount": 1540,
+          "popular": 6
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            1,
+            4,
+            5
+          ],
+          "amount": 8030,
+          "popular": 28
+        }
+      ]
+    }
+  }
+}

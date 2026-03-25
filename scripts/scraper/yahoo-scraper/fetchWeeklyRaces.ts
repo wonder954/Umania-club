@@ -56,7 +56,7 @@ export async function fetchWeeklyRacesYahoo(): Promise<RaceListItem[]> {
                 const raceId = raceIdMatch ? raceIdMatch[1] : '';
 
                 const courseMatch = status.match(
-                    /(芝|ダート)[・･]?\s*(右|左|外|内|直線)?\s*(外|内)?\s*(\d{3,4})m/
+                    /(芝|ダート)[・･\s]*?(右|左|外|内|直線)?[・･\s]*?(外|内)?[・･\s]*?(\d{3,4})m/
                 );
                 const surface = courseMatch?.[1] ?? null;
                 const direction = courseMatch?.[2] ?? null;
