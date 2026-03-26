@@ -10,6 +10,7 @@ export function toFirestoreRace(json: any): FirestoreRace {
         date: info.date ?? "",
         place: info.place ?? "",
         title: info.title ?? "",
+        name: info.name ?? info.title,
         grade: info.grade ?? null,
         distance: info.distance ?? 0,
         surface: info.surface ?? "",
