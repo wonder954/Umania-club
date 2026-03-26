@@ -18,6 +18,7 @@ export type FirestoreRace = {
     raceNumber: string;         // "11R"
     placeDetail: string | null; // "2回中山3日" / null
     videoId: string | null;     // YouTube ID / null
+    name: string | null;        // JRA の正式名称（"中山牝馬ステークス" など）
 
     // --- 出走馬（フェーズ1〜2で存在、フェーズ3では空配列） ---
     entries: RaceEntry[];

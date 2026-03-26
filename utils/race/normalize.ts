@@ -4,17 +4,23 @@ import type { FirestoreRace } from "@/lib/race/types";
 import type { GradeRace } from "@/lib/grades2026";
 
 
-/** 検索用の正規化（括弧削除・空白削除・S/C 揺れ吸収） */
+/** レース名の強力な正規化（JRA 名寄せ用） */
 export function normalizeRaceName(name: string): string {
     return name
-        .replace(/（[^）]+）/g, "")
-        .replace(/\([^)]+\)/g, "")
-        .replace(/\s+/g, "")
-        .replace(/ステークス|S$/g, "")
-        .replace(/カップ|C$/g, "")
-        .replace(/ジャンプ|J$/g, "")
+        .replace(/\(.*?\)/g, "")          // () を除去
+        .replace(/（.*?）/g, "")          // 全角（）を除去
+        .replace(/[Ａ-Ｚａ-ｚ]/g, (c) =>
+            String.fromCharCode(c.charCodeAt(0) - 0xFEE0)
+        )                                 // 全角英字 → 半角
+        .replace(/\s+/g, "")              // 改行・空白を全部除去
+        .replace(/ステークス|S$/g, "")     // ステークス / S を除去
+        .replace(/カップ|C$/g, "")        // カップ / C を除去
+        .replace(/ジャンプ|J$/g, "")      // ジャンプ / J を除去
+        .replace(/第\d+回/g, "")          // 第○回 を除去
+        .toLowerCase()
         .trim();
 }
+
 
 /** cleanTitle（検索用タイトル） */
 export function cleanTitle(name: string): string {

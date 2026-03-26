@@ -83,18 +83,37 @@ export function CalendarCell({
 
                 // スマホ用の表示テキスト
                 const mobileLabel = isWeekend
-                    ? (fullName.length > 4 ? fullName.slice(0, 4) + "…" : fullName) // 土日: 4文字+…
-                    : (fullName.length > 4 ? fullName.slice(0, 4) : fullName);      // 平日: 4文字のみ
+                    ? (
+                        // 週末：6文字以上 → 4文字 + …
+                        fullName.length >= 6
+                            ? fullName.slice(0, 4) + "…"
+                            : fullName
+                    )
+                    : (
+                        // 平日：4文字以上 → 2文字 + …
+                        fullName.length >= 4
+                            ? fullName.slice(0, 2) + "…"
+                            : fullName
+                    );
 
                 const badge = (
                     <span
-                        className={`px-1 py-0.5 rounded font-bold hover:opacity-80
-                        text-[9px] sm:text-[10px] leading-tight
-                        ${raceBg} ${raceText}`}
+                        className={`
+                            ${isWeekend ? "px-1 py-0.5" : "px-0 py-0"} 
+                            rounded font-bold hover:opacity-80
+                            text-[9px] sm:text-[10px] leading-tight
+                            ${raceBg} ${raceText}
+                        `}
                     >
                         {/* スマホ: 条件付きラベル / PC: フルネーム */}
-                        <span className="sm:hidden">{mobileLabel}</span>
-                        <span className="hidden sm:inline">{fullName}</span>
+                        <span
+                            className={`
+                                sm:hidden
+                                ${isWeekend ? "text-[9px] leading-tight" : "text-[7px] leading-[0.5]"}
+                            `}
+                        >
+                            {mobileLabel}
+                        </span>                        <span className="hidden sm:inline">{fullName}</span>
                     </span>
                 );
 

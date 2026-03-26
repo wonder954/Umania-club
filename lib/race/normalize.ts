@@ -1,5 +1,7 @@
 import { RaceData } from "./info";
-import { FirestoreRace, RaceEntry, RaceOrder, RaceResult } from "./types";
+import { FirestoreRace, RaceEntry, RaceResult } from "./types";
+import { gradeRaces2026 } from "@/lib/grades2026";
+import { normalizeRaceName } from "@/utils/race/normalize"; // ← ここが重要
 
 export function normalizeRace(data: RaceData): FirestoreRace {
     const base = data.info;
@@ -11,7 +13,6 @@ export function normalizeRace(data: RaceData): FirestoreRace {
     const hasResultOrder = data.result?.order && data.result.order.length > 0;
 
     if (!hasEntries && hasResultOrder) {
-        // 結果 JSON で entries が無いケース
         entries = data.result!.order.map(o => ({
             frame: o.frame ?? null,
             number: o.number ?? null,
@@ -24,7 +25,6 @@ export function normalizeRace(data: RaceData): FirestoreRace {
             popular: o.popular ?? null,
         }));
     } else {
-        // 出馬表 JSON（entries があるケース）
         entries = (data.entries ?? []).map(e => ({
             frame: e.frame ?? null,
             number: e.number ?? null,
@@ -57,12 +57,23 @@ export function normalizeRace(data: RaceData): FirestoreRace {
         }
         : null;
 
+    // --- JRA の略称 name を grades2026 から探す ---
+    const fsNorm = normalizeRaceName(base.title);
+
+    const matched = gradeRaces2026.find(j => {
+        const jraNorm = normalizeRaceName(j.name);
+        return j.date === base.date && (fsNorm === jraNorm || fsNorm.includes(jraNorm) || jraNorm.includes(fsNorm));
+    });
+
+    const officialName = matched?.name ?? null;
+
     // --- FirestoreRace を返す ---
     return {
         id: data.raceId,
         date: base.date,
         place: base.place ?? "",
         title: base.title,
+        name: officialName, // ← ここに略称が入る
         grade: base.grade ?? null,
         distance: base.distance ?? 0,
         surface: base.surface ?? "",

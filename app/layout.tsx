@@ -9,13 +9,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "Umania-club | 競馬予想コミュニティ",
-    description: "シンプルなUIで楽しむ競馬予想SNS",
+    description: "仲間でワイワイ競馬を楽しもう！",
     openGraph: {
         title: "Umania-club | 競馬予想コミュニティ",
-        description: "シンプルなUIで楽しむ競馬予想SNS",
+        description: "仲間でワイワイ競馬を楽しもう！",
         images: [
             {
-                url: "/ogp.png",
+                url: "https://umania-club.vercel.app/ogp.png",
                 width: 1200,
                 height: 630,
                 alt: "Umania-club | 競馬予想コミュニティ",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        images: ["/ogp.png"],
+        images: ["https://umania-club.vercel.app/ogp.png"],
     },
 };
 

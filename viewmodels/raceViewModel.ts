@@ -52,6 +52,9 @@ export type RaceViewModel = {
     titleLabel: string;
     gradeLabel: string;
 
+    /** ★ 名寄せ用（略称化しない） */
+    raceName: string;
+
     // ★ 出馬表 + オッズをマージした entries
     entries: RaceEntryViewModel[];
 
@@ -68,12 +71,10 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         : ""
         }`;
 
-    // ★ oddsEntries を number で検索しやすいように Map 化
     const oddsMap = new Map(
         (r.oddsEntries ?? []).map((o) => [o.number, o])
     );
 
-    // ★ entries と oddsEntries をマージ
     const mergedEntries: RaceEntryViewModel[] = (r.entries ?? []).map((e) => {
         const odds = oddsMap.get(e.number ?? -1);
 
@@ -84,6 +85,8 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         };
     });
 
+    // ★ JRA の JSON の name を最優先で使う
+    const shortName = r.name ?? r.title;
     return {
         id: r.id,
 
@@ -91,7 +94,7 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         date: r.date,
         place: r.place,
         raceNumber: r.raceNumber ?? null,
-        title: r.title,
+        title: r.title, // 正式名称は保持しておく
         grade,
         surface: r.surface ?? null,
         distance: r.distance ?? null,
@@ -106,12 +109,11 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
 
         // Header 用
         placeLabel: r.place,
-        titleLabel: formatRaceName(r.title),
+        titleLabel: formatRaceName(shortName), // UI 用
+        raceName: shortName,                   // ← 名寄せ用（略称化しない）
         gradeLabel: grade,
 
-        // ★ マージ済み entries
         entries: mergedEntries,
-
         result: r.result ?? null,
     };
 }
@@ -131,8 +133,8 @@ export function toCalendarRaceVM(r: RaceViewModel): CalendarRaceVM {
     return {
         id: r.id,
         date: r.date,
-        title: r.titleLabel,   // ← ここがポイント（短縮済みタイトル）
-        raceName: r.titleLabel,
+        title: r.titleLabel,   // UI 表示用（略称OK）
+        raceName: r.raceName,  // ← ここが重要（略称化前の shortName）
         grade: r.grade,
         place: r.place,
         isPast: !!r.result,

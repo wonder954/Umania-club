@@ -2,27 +2,13 @@
 
 import type { GradeRace } from "@/lib/grades2026";
 import type { RaceViewModel, CalendarRaceVM } from "@/viewmodels/raceViewModel";
-import { abbreviateRaceName, removeGradeSuffix } from "@/utils/race/displayName";
 import { normalizeRaceName } from "@/utils/race/normalize";
 import { normalizeGrade } from "@/utils/race/raceGradeUtils";
 
-// ★ レース名の強力な正規化
-
-function normalizeName(name: string) {
-    return normalizeRaceName(
-        abbreviateRaceName(removeGradeSuffix(name))
-    )
-        .replace(/記念/g, "")
-        .replace(/特別/g, "")
-        .trim();
-}
-
-
-// ★ レース同一性判定
-function isSameRace(a: string, b: string): boolean {
-    const na = normalizeName(a);
-    const nb = normalizeName(b);
-
+// ★ レース同一性判定（normalizeRaceName に一本化）
+export function isSameRace(a: string, b: string): boolean {
+    const na = normalizeRaceName(a);
+    const nb = normalizeRaceName(b);
     return na === nb || na.includes(nb) || nb.includes(na);
 }
 
@@ -32,7 +18,7 @@ export function toWeakCalendarRaceVM(j: GradeRace): CalendarRaceVM {
         id: `jra-${j.id}`,
         date: j.date,
         title: j.name,
-        raceName: removeGradeSuffix(j.name),
+        raceName: j.name,
         grade: normalizeGrade(j.grade),
         place: null,
         isPast: false,
@@ -46,7 +32,7 @@ export function toStrongCalendarRaceVM(r: RaceViewModel): CalendarRaceVM {
         id: r.id,
         date: r.date,
         title: r.titleLabel,
-        raceName: r.titleLabel,
+        raceName: r.raceName,
         grade: r.grade,
         place: r.place,
         isPast: !!r.result,
