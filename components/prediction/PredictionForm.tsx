@@ -5,8 +5,6 @@ import { Bet } from "@/types/bet";
 import { createPost } from "@/lib/db";
 import type { RaceViewModel } from "@/viewmodels/raceViewModel";
 import { useAuth } from "@/context/AuthContext";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase-auth";
 import PredictionSuccess from "./PredictionSuccess";
 import { getAllowedNumbers } from "@/utils/bets/getAllowedNumbers";
 import { getDoc, doc } from "firebase/firestore";
@@ -14,7 +12,6 @@ import { db } from "@/lib/firebase";
 import { useUserGroups } from "@/hooks/useUserGroups";
 import { signInWithGoogle } from "@/lib/auth";
 import type { Mark } from "@/types/mark";
-
 
 
 type Props = {
@@ -41,7 +38,7 @@ export default function PredictionForm({
     onPostSuccess,
     onReset
 }: Props) {
-    const { user, loginAnonymous } = useAuth();
+    const { user } = useAuth();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);

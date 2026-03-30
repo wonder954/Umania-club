@@ -11,20 +11,21 @@ type Props = {
 
 export default function BetCard({ bet, race, showHit = false }: Props) {
     const structure = formatBetStructure(bet);
-    const hitInfo = showHit && race.result ? judgeHit(bet, race.result) : null;
+
+    const hitInfo =
+        showHit && race.result
+            ? judgeHit(bet, race.result)
+            : null;
 
     return (
-        <div
-            className="
-                bg-white/70 backdrop-blur-sm 
-                p-4 rounded-2xl 
-                border border-white/40 
-                shadow-sm space-y-3
-            "
-        >
+        <div className="
+            bg-white/70 backdrop-blur-sm
+            p-4 rounded-2xl
+            border border-white/40
+            shadow-sm space-y-3
+        ">
             {/* 馬券種 ＋ 買い方 */}
             <div className="flex items-center gap-2 text-xs font-semibold">
-
                 <span className="px-2 py-1 rounded-full bg-green-600/70 text-white shadow-sm">
                     {bet.type}
                 </span>
@@ -45,7 +46,9 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
                 {structure.rows.map((row, i) => (
                     <div key={i} className="text-sm">
                         {row.label && (
-                            <div className="font-bold text-slate-700">{row.label}</div>
+                            <div className="font-bold text-slate-700">
+                                {row.label}
+                            </div>
                         )}
                         <div className="ml-2 text-slate-900">
                             ［{row.values.join(", ")}］
@@ -56,7 +59,6 @@ export default function BetCard({ bet, race, showHit = false }: Props) {
 
             {/* 的中/不的中 ＋ 点数 */}
             <div className="flex items-center justify-between pt-1">
-
                 {hitInfo ? (
                     <span
                         className={`

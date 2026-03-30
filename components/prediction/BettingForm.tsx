@@ -6,8 +6,8 @@ import { Horse } from "@/types/horse";
 
 import { useBettingInput } from "@/components/prediction/hooks/useBettingInput";
 import { AVAILABLE_MODES, isMultiAvailable } from "@/components/prediction/utils/bettingFormConstants";
-import { calculateCurrentPoints } from "@/components/prediction/utils/bettingCalculations";
-import { createBetsFromInput, isBetValid } from "@/components/prediction/utils/createBet";
+import { calculatePointsFromState } from "@/utils/bets/bettingCalculations";
+import { createBetsFromInput, isBetValid } from "@/utils/bets/createBet";
 
 import {
     BetTypeSelector,
@@ -75,7 +75,7 @@ export default function BettingForm({
     }, [horses]);
 
     const calculatedPoints = useMemo(() => {
-        return calculateCurrentPoints(state.selectedType, state.inputMode, state);
+        return calculatePointsFromState(state.selectedType, state.inputMode, state);
     }, [
         state.selectedType,
         state.inputMode,
@@ -91,6 +91,8 @@ export default function BettingForm({
         if (calculatedPoints === 0) return;
 
         const newBets = createBetsFromInput(state);
+        console.log("Created Bets:", newBets);
+
 
         if (!newBets.every((bet) => isBetValid(bet))) {
             alert("選択内容が不完全です。馬券を追加できません。");
@@ -149,7 +151,7 @@ export default function BettingForm({
                     points={calculatedPoints}
                     betType={state.selectedType}
                     inputMode={state.inputMode}
-                    onAdd={handleAddBet}
+                    onAdd={() => handleAddBet()}
                 />
             </div>
 
