@@ -10,7 +10,7 @@
 
 | レース一覧 | 予想投稿 | グループ機能 |
 |:-----------:|:--------:|:------------:|
-| ![レース一覧](./docs/screenshot-races.png) | ![投稿](./docs/screenshot-post.png) | ![グループ](./docs/screenshot-group.png) |
+| ![出馬表](./docs/screenshot-races.png) | ![レース結果](./docs/screenshot-result.png) | ![グループ投稿](./docs/screenshot-group.png) |
 
 ---
 

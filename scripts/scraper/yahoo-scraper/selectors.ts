@@ -17,7 +17,7 @@ export const yahooSelectors = {
 
     entries: {
         table: ".hr-table",
-        rows: "tbody tr",
+        rows: ".hr-table__row",
         frame: ".hr-icon__bracketNum",
         number: ".hr-table__data--number",
         nameCell: ".hr-table__data--name",

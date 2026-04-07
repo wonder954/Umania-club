@@ -194,34 +194,41 @@ export function PointsDisplay({
     return (
         <div
             className="
-                flex justify-between items-center 
-                bg-white/70 backdrop-blur-sm 
-                p-3 rounded-xl 
-                border border-white/40 shadow-sm
-            "
+        bg-white/70 backdrop-blur-sm 
+        p-3 rounded-xl 
+        border border-white/40 shadow-sm
+    "
         >
-            <div className="text-sm">
-                <span className="font-bold text-lg text-blue-600">{points}</span>{" "}
-                <span className="text-slate-700">点</span>
-                <span className="text-slate-500 text-xs ml-2">
-                    （{betType} / {inputMode ? INPUT_MODE_LABELS[inputMode] : "通常"}）
-                </span>
-            </div>
+            <div className="flex justify-between items-center">
+                {/* 点数＋買い目をまとめて中央寄せ */}
+                <div className="flex-1 min-w-0 flex flex-col items-center text-center">
+                    <div className="text-sm">
+                        <span className="font-bold text-lg text-blue-600">{points}</span>{" "}
+                        <span className="text-slate-700">点</span>
+                    </div>
 
-            <button
-                onClick={onAdd}
-                disabled={isDisabled}
-                aria-label="馬券を追加"
-                className={`
-                    px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm
-                    ${isDisabled
-                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                        : "bg-blue-500/80 text-white hover:bg-blue-500/90"
-                    }
-                `}
-            >
-                追加する
-            </button>
+                    <div className="mt-1 text-xs text-slate-500">
+                        （{betType} / {inputMode ? INPUT_MODE_LABELS[inputMode] : "通常"}）
+                    </div>
+                </div>
+
+                {/* 追加するボタン（右上固定） */}
+                <button
+                    onClick={onAdd}
+                    disabled={isDisabled}
+                    aria-label="馬券を追加"
+                    className={`
+                px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm
+                min-w-[90px] text-center ml-3
+                ${isDisabled
+                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                            : "bg-blue-500/80 text-white hover:bg-blue-500/90"
+                        }
+            `}
+                >
+                    追加する
+                </button>
+            </div>
         </div>
     );
 }

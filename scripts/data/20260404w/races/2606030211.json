@@ -1,0 +1,455 @@
+{
+  "raceId": "2606030211",
+  "info": {
+    "date": "2026-03-29",
+    "place": "中山",
+    "title": "マーチステークス\n                  GIII",
+    "grade": "G3",
+    "distance": 1800,
+    "surface": "ダート",
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "ハンデ",
+    "raceNumber": "11R",
+    "placeDetail": "3回中山2日",
+    "videoId": "vYOHMDietg4"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ハピ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "津村 明秀",
+      "weight": 58
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "マテンロウスカイ",
+      "jockey": "横山 典弘",
+      "weight": 59
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "ショウナンライシン",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "柴田 善臣",
+      "weight": 56
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "ブレイクフォース",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "横山 武史",
+      "weight": 58
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "レヴォントゥレット",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "M.ディー",
+      "weight": 57
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "ヴァルツァーシャル",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "丹内 祐次",
+      "weight": 58.5
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "アクションプラン",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "荻野 極",
+      "weight": 57.5
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ピュアキアン",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "吉田 豊",
+      "weight": 56
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "オメガギネス",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "横山 和生",
+      "weight": 59
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "バスタードサフラン",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "舟山 瑠泉",
+      "weight": 54
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "ペイシャエス",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "木幡 巧也",
+      "weight": 58.5
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "ハナウマビーチ",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "石川 裕紀人",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "ミッキーヌチバナ",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "大野 拓弥",
+      "weight": 58
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "チュウワクリスエス",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "原田 和真",
+      "weight": 56
+    },
+    {
+      "frame": 8,
+      "number": 15,
+      "name": "サンデーファンデー",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "角田 大和",
+      "weight": 59
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "コレペティトール",
+      "jockey": "松岡 正海",
+      "weight": 56
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 15,
+        "name": "サンデーファンデー",
+        "time": "1:51.2",
+        "margin": "-",
+        "jockey": "角田 大和",
+        "weight": "59.0",
+        "popular": 8,
+        "odds": 12.8
+      },
+      {
+        "rank": 2,
+        "frame": 4,
+        "number": 7,
+        "name": "アクションプラン",
+        "time": "1:51.6",
+        "margin": "2 1/2馬身",
+        "jockey": "荻野 極",
+        "weight": "57.5",
+        "popular": 5,
+        "odds": 9.6
+      },
+      {
+        "rank": 3,
+        "frame": 2,
+        "number": 4,
+        "name": "ブレイクフォース",
+        "time": "1:51.8",
+        "margin": "1 1/4馬身",
+        "jockey": "横山 武史",
+        "weight": "58.0",
+        "popular": 7,
+        "odds": 12.7
+      },
+      {
+        "rank": 4,
+        "frame": 3,
+        "number": 6,
+        "name": "ヴァルツァーシャル",
+        "time": "1:52.1",
+        "margin": "2馬身",
+        "jockey": "丹内 祐次",
+        "weight": "58.5",
+        "popular": 2,
+        "odds": 4.9
+      },
+      {
+        "rank": 5,
+        "frame": 7,
+        "number": 13,
+        "name": "ミッキーヌチバナ",
+        "time": "1:52.1",
+        "margin": "アタマ",
+        "jockey": "大野 拓弥",
+        "weight": "58.0",
+        "popular": 10,
+        "odds": 14.2
+      },
+      {
+        "rank": 6,
+        "frame": 7,
+        "number": 14,
+        "name": "チュウワクリスエス",
+        "time": "1:52.3",
+        "margin": "1 1/4馬身",
+        "jockey": "原田 和真",
+        "weight": "56.0",
+        "popular": 3,
+        "odds": 7.3
+      },
+      {
+        "rank": 7,
+        "frame": 5,
+        "number": 9,
+        "name": "オメガギネス",
+        "time": "1:52.4",
+        "margin": "クビ",
+        "jockey": "横山 和生",
+        "weight": "59.0",
+        "popular": 1,
+        "odds": 4.9
+      },
+      {
+        "rank": 8,
+        "frame": 6,
+        "number": 11,
+        "name": "ペイシャエス",
+        "time": "1:52.4",
+        "margin": "クビ",
+        "jockey": "木幡 巧也",
+        "weight": "58.5",
+        "popular": 4,
+        "odds": 8.3
+      },
+      {
+        "rank": 9,
+        "frame": 5,
+        "number": 10,
+        "name": "バスタードサフラン",
+        "time": "1:52.8",
+        "margin": "2 1/2馬身",
+        "jockey": "舟山 瑠泉",
+        "weight": "54.0",
+        "popular": 13,
+        "odds": 65.1
+      },
+      {
+        "rank": 10,
+        "frame": 2,
+        "number": 3,
+        "name": "ショウナンライシン",
+        "time": "1:52.8",
+        "margin": "ハナ",
+        "jockey": "柴田 善臣",
+        "weight": "56.0",
+        "popular": 15,
+        "odds": 109
+      },
+      {
+        "rank": 11,
+        "frame": 6,
+        "number": 12,
+        "name": "ハナウマビーチ",
+        "time": "1:52.8",
+        "margin": "アタマ",
+        "jockey": "石川 裕紀人",
+        "weight": "55.0",
+        "popular": 11,
+        "odds": 30.9
+      },
+      {
+        "rank": 12,
+        "frame": 1,
+        "number": 2,
+        "name": "マテンロウスカイ",
+        "time": "1:52.9",
+        "margin": "クビ",
+        "jockey": "横山 典弘",
+        "weight": "59.0",
+        "popular": 9,
+        "odds": 13.8
+      },
+      {
+        "rank": 13,
+        "frame": 8,
+        "number": 16,
+        "name": "コレペティトール",
+        "time": "1:53.2",
+        "margin": "2馬身",
+        "jockey": "松岡 正海",
+        "weight": "56.0",
+        "popular": 14,
+        "odds": 106.6
+      },
+      {
+        "rank": 14,
+        "frame": 4,
+        "number": 8,
+        "name": "ピュアキアン",
+        "time": "1:53.3",
+        "margin": "1/2馬身",
+        "jockey": "吉田 豊",
+        "weight": "56.0",
+        "popular": 12,
+        "odds": 42.5
+      },
+      {
+        "rank": 15,
+        "frame": 3,
+        "number": 5,
+        "name": "レヴォントゥレット",
+        "time": "1:54.8",
+        "margin": "9馬身",
+        "jockey": "M.ディー",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 10.1
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            15
+          ],
+          "amount": 1280,
+          "popular": 8
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            15
+          ],
+          "amount": 430,
+          "popular": 8
+        },
+        {
+          "numbers": [
+            7
+          ],
+          "amount": 280,
+          "popular": 5
+        },
+        {
+          "numbers": [
+            4
+          ],
+          "amount": 390,
+          "popular": 6
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            4,
+            8
+          ],
+          "amount": 4840,
+          "popular": 22
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            7,
+            15
+          ],
+          "amount": 6360,
+          "popular": 27
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            4,
+            7
+          ],
+          "amount": 1320,
+          "popular": 16
+        },
+        {
+          "numbers": [
+            7,
+            15
+          ],
+          "amount": 1970,
+          "popular": 31
+        },
+        {
+          "numbers": [
+            4,
+            15
+          ],
+          "amount": 2460,
+          "popular": 37
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            15,
+            7
+          ],
+          "amount": 13770,
+          "popular": 63
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            4,
+            7,
+            15
+          ],
+          "amount": 17960,
+          "popular": 78
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            15,
+            7,
+            4
+          ],
+          "amount": 117600,
+          "popular": 499
+        }
+      ]
+    }
+  }
+}

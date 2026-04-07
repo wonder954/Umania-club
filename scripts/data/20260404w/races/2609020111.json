@@ -1,0 +1,265 @@
+{
+  "raceId": "2609020111",
+  "info": {
+    "date": "2026-03-28",
+    "place": "阪神",
+    "title": "毎日杯",
+    "grade": "GⅢ",
+    "distance": 1800,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "馬齢",
+    "raceNumber": "11R",
+    "placeDetail": "2回阪神1日",
+    "videoId": "YANM6ChFoPw"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "フレイムスター",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "団野 大成",
+      "weight": 57
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "カフジエメンタール",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "武 豊",
+      "weight": 57
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "ローベルクランツ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "松山 弘平",
+      "weight": 57
+    },
+    {
+      "frame": 4,
+      "number": 4,
+      "name": "アルトラムス",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "岩田 望来",
+      "weight": 57
+    },
+    {
+      "frame": 5,
+      "number": 5,
+      "name": "ブリガンティン",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "原 優介",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 6,
+      "name": "ウップヘリーア",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "吉村 誠之助",
+      "weight": 57
+    },
+    {
+      "frame": 7,
+      "number": 7,
+      "name": "シーズザスローン",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "幸 英明",
+      "weight": 57
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 4,
+        "number": 4,
+        "name": "アルトラムス",
+        "time": "1:45.1",
+        "margin": "-",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 1,
+        "odds": 2.4
+      },
+      {
+        "rank": 2,
+        "frame": 3,
+        "number": 3,
+        "name": "ローベルクランツ",
+        "time": "1:45.2",
+        "margin": "3/4馬身",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 5
+      },
+      {
+        "rank": 3,
+        "frame": 2,
+        "number": 2,
+        "name": "カフジエメンタール",
+        "time": "1:45.7",
+        "margin": "3馬身",
+        "jockey": "武 豊",
+        "weight": "57.0",
+        "popular": 2,
+        "odds": 3
+      },
+      {
+        "rank": 4,
+        "frame": 6,
+        "number": 6,
+        "name": "ウップヘリーア",
+        "time": "1:45.7",
+        "margin": "クビ",
+        "jockey": "吉村 誠之助",
+        "weight": "57.0",
+        "popular": 4,
+        "odds": 5.1
+      },
+      {
+        "rank": 5,
+        "frame": 1,
+        "number": 1,
+        "name": "フレイムスター",
+        "time": "1:45.9",
+        "margin": "1 1/2馬身",
+        "jockey": "団野 大成",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 52
+      },
+      {
+        "rank": 6,
+        "frame": 5,
+        "number": 5,
+        "name": "ブリガンティン",
+        "time": "1:46.1",
+        "margin": "1 1/4馬身",
+        "jockey": "原 優介",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 25.6
+      },
+      {
+        "rank": 7,
+        "frame": 7,
+        "number": 7,
+        "name": "シーズザスローン",
+        "time": "1:46.1",
+        "margin": "ハナ",
+        "jockey": "幸 英明",
+        "weight": "57.0",
+        "popular": 5,
+        "odds": 16.9
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            4
+          ],
+          "amount": 240,
+          "popular": 1
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            4
+          ],
+          "amount": 140,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            3
+          ],
+          "amount": 220,
+          "popular": 4
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            3,
+            4
+          ],
+          "amount": 650,
+          "popular": 3
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            2,
+            4
+          ],
+          "amount": 150,
+          "popular": 1
+        },
+        {
+          "numbers": [
+            3,
+            4
+          ],
+          "amount": 220,
+          "popular": 3
+        },
+        {
+          "numbers": [
+            2,
+            3
+          ],
+          "amount": 270,
+          "popular": 5
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            4,
+            3
+          ],
+          "amount": 1120,
+          "popular": 5
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            2,
+            3,
+            4
+          ],
+          "amount": 420,
+          "popular": 2
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            4,
+            3,
+            2
+          ],
+          "amount": 2440,
+          "popular": 7
+        }
+      ]
+    }
+  }
+}

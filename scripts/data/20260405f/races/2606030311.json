@@ -1,0 +1,163 @@
+{
+  "raceId": "2606030311",
+  "info": {
+    "date": "2026-04-04",
+    "place": "中山",
+    "title": "ダービー卿チャレンジトロフィー",
+    "grade": "G3",
+    "distance": 1600,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": "外",
+    "weightType": "ハンデ",
+    "raceNumber": "11R",
+    "placeDetail": "3回中山3日",
+    "videoId": "deQ5qv1W8ZE"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ゾンニッヒ",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "団野 大成",
+      "weight": 57.5
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "ミニトランザット",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "西村 淳也",
+      "weight": 56
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "エンペラーズソード",
+      "sex": null,
+      "age": null,
+      "jockey": "丹内 祐次",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "メタルスピード",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "岩田 康誠",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ブエナオンダ",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "佐々木 大輔",
+      "weight": 58
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "マテンロウオリオン",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "横山 典弘",
+      "weight": 56
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "タイムトゥヘヴン",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "田辺 裕信",
+      "weight": 56
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ファーヴェント",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "横山 武史",
+      "weight": 57
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "エエヤン",
+      "sex": null,
+      "age": null,
+      "jockey": "杉原 誠人",
+      "weight": 57
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "ケイアイセナ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "津村 明秀",
+      "weight": 57.5
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "スズハローム",
+      "sex": "牡",
+      "age": 6,
+      "jockey": "藤懸 貴志",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "ダディーズビビッド",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "横山 和生",
+      "weight": 57.5
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "イミグラントソング",
+      "sex": "牡",
+      "age": 4,
+      "jockey": "石川 裕紀人",
+      "weight": 57
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "ジュンブロッサム",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "荻野 極",
+      "weight": 58.5
+    },
+    {
+      "frame": 8,
+      "number": 15,
+      "name": "シリウスコルト",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "三浦 皇成",
+      "weight": 58
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "サイルーン",
+      "sex": null,
+      "age": null,
+      "jockey": "大野 拓弥",
+      "weight": 57
+    }
+  ]
+}

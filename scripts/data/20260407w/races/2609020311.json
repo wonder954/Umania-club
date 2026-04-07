@@ -1,0 +1,429 @@
+{
+  "raceId": "2609020311",
+  "info": {
+    "date": "2026-04-04",
+    "place": "阪神",
+    "title": "チャーチルダウンズカップ\n                  GIII",
+    "grade": "G3",
+    "distance": 1600,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": null,
+    "weightType": "馬齢",
+    "raceNumber": "11R",
+    "placeDetail": "2回阪神3日",
+    "videoId": "3Pdv-9wkHhY"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ストームサンダー",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "斎藤 新",
+      "weight": 57
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "メイショウソラリス",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "角田 大和",
+      "weight": 57
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "リゾートアイランド",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "武 豊",
+      "weight": 57
+    },
+    {
+      "frame": 3,
+      "number": 4,
+      "name": "エイシンティザー",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "西塚 洸二",
+      "weight": 57
+    },
+    {
+      "frame": 4,
+      "number": 5,
+      "name": "シーミハットク",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "高杉 吏麒",
+      "weight": 57
+    },
+    {
+      "frame": 4,
+      "number": 6,
+      "name": "サンダーストラック",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "C.ルメール",
+      "weight": 57
+    },
+    {
+      "frame": 5,
+      "number": 7,
+      "name": "サトノセプター",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "岩田 望来",
+      "weight": 57
+    },
+    {
+      "frame": 5,
+      "number": 8,
+      "name": "アンドゥーリル",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "川田 将雅",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 9,
+      "name": "クールデイトナ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "吉村 誠之助",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 10,
+      "name": "バルセシート",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "北村 友一",
+      "weight": 57
+    },
+    {
+      "frame": 7,
+      "number": 11,
+      "name": "ユウファラオ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "松若 風馬",
+      "weight": 57
+    },
+    {
+      "frame": 7,
+      "number": 12,
+      "name": "サーディンラン",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "松山 弘平",
+      "weight": 57
+    },
+    {
+      "frame": 8,
+      "number": 13,
+      "name": "ファンクション",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "鮫島 克駿",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 14,
+      "name": "アスクイキゴミ",
+      "sex": "牡",
+      "age": 3,
+      "jockey": "坂井 瑠星",
+      "weight": 57
+    }
+  ],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 14,
+        "name": "アスクイキゴミ",
+        "time": "1:34.1",
+        "margin": "-",
+        "jockey": "坂井 瑠星",
+        "weight": "57.0",
+        "popular": 5,
+        "odds": 13.8
+      },
+      {
+        "rank": 2,
+        "frame": 7,
+        "number": 11,
+        "name": "ユウファラオ",
+        "time": "1:34.2",
+        "margin": "1/2馬身",
+        "jockey": "松若 風馬",
+        "weight": "57.0",
+        "popular": 14,
+        "odds": 243.9
+      },
+      {
+        "rank": 3,
+        "frame": 6,
+        "number": 10,
+        "name": "バルセシート",
+        "time": "1:34.4",
+        "margin": "1馬身",
+        "jockey": "北村 友一",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 6.9
+      },
+      {
+        "rank": 4,
+        "frame": 4,
+        "number": 5,
+        "name": "シーミハットク",
+        "time": "1:34.6",
+        "margin": "1 1/2馬身",
+        "jockey": "高杉 吏麒",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 18.1
+      },
+      {
+        "rank": 5,
+        "frame": 7,
+        "number": 12,
+        "name": "サーディンラン",
+        "time": "1:34.7",
+        "margin": "クビ",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 12,
+        "odds": 75.7
+      },
+      {
+        "rank": 6,
+        "frame": 6,
+        "number": 9,
+        "name": "クールデイトナ",
+        "time": "1:34.8",
+        "margin": "1/2馬身",
+        "jockey": "吉村 誠之助",
+        "weight": "57.0",
+        "popular": 9,
+        "odds": 69.5
+      },
+      {
+        "rank": 7,
+        "frame": 1,
+        "number": 1,
+        "name": "ストームサンダー",
+        "time": "1:34.9",
+        "margin": "1/2馬身",
+        "jockey": "斎藤 新",
+        "weight": "57.0",
+        "popular": 11,
+        "odds": 75.7
+      },
+      {
+        "rank": 8,
+        "frame": 5,
+        "number": 8,
+        "name": "アンドゥーリル",
+        "time": "1:35.4",
+        "margin": "3馬身",
+        "jockey": "川田 将雅",
+        "weight": "57.0",
+        "popular": 2,
+        "odds": 2.8
+      },
+      {
+        "rank": 9,
+        "frame": 3,
+        "number": 3,
+        "name": "リゾートアイランド",
+        "time": "1:35.4",
+        "margin": "クビ",
+        "jockey": "武 豊",
+        "weight": "57.0",
+        "popular": 4,
+        "odds": 9.9
+      },
+      {
+        "rank": 10,
+        "frame": 2,
+        "number": 2,
+        "name": "メイショウソラリス",
+        "time": "1:35.5",
+        "margin": "3/4馬身",
+        "jockey": "角田 大和",
+        "weight": "57.0",
+        "popular": 13,
+        "odds": 94.5
+      },
+      {
+        "rank": 11,
+        "frame": 3,
+        "number": 4,
+        "name": "エイシンティザー",
+        "time": "1:35.7",
+        "margin": "3/4馬身",
+        "jockey": "西塚 洸二",
+        "weight": "57.0",
+        "popular": 8,
+        "odds": 20.8
+      },
+      {
+        "rank": 12,
+        "frame": 4,
+        "number": 6,
+        "name": "サンダーストラック",
+        "time": "1:35.8",
+        "margin": "1/2馬身",
+        "jockey": "C.ルメール",
+        "weight": "57.0",
+        "popular": 1,
+        "odds": 2.8
+      },
+      {
+        "rank": 13,
+        "frame": 5,
+        "number": 7,
+        "name": "サトノセプター",
+        "time": "1:35.9",
+        "margin": "3/4馬身",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 19.8
+      },
+      {
+        "rank": 14,
+        "frame": 8,
+        "number": 13,
+        "name": "ファンクション",
+        "time": "1:36.1",
+        "margin": "1馬身",
+        "jockey": "鮫島 克駿",
+        "weight": "55.0",
+        "popular": 10,
+        "odds": 70.7
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            14
+          ],
+          "amount": 1380,
+          "popular": 5
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            14
+          ],
+          "amount": 470,
+          "popular": 5
+        },
+        {
+          "numbers": [
+            11
+          ],
+          "amount": 3770,
+          "popular": 14
+        },
+        {
+          "numbers": [
+            10
+          ],
+          "amount": 260,
+          "popular": 3
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            7,
+            8
+          ],
+          "amount": 7240,
+          "popular": 15
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            11,
+            14
+          ],
+          "amount": 135650,
+          "popular": 83
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            10,
+            14
+          ],
+          "amount": 1920,
+          "popular": 20
+        },
+        {
+          "numbers": [
+            10,
+            11
+          ],
+          "amount": 19890,
+          "popular": 76
+        },
+        {
+          "numbers": [
+            11,
+            14
+          ],
+          "amount": 29750,
+          "popular": 83
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            14,
+            11
+          ],
+          "amount": 187740,
+          "popular": 146
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            10,
+            11,
+            14
+          ],
+          "amount": 284200,
+          "popular": 250
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            14,
+            11,
+            10
+          ],
+          "amount": 1649150,
+          "popular": 1361
+        }
+      ]
+    }
+  }
+}

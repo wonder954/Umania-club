@@ -43,6 +43,9 @@ export async function uploadRacesFromJson() {
         // ★ undefined を null に変換
         const safeRace = sanitizeFirestoreRace(race);
 
+        console.log("🟡 race entries sample:", race.entries?.[0]);        // ← 追加
+        console.log("🟢 safeRace entries sample:", safeRace.entries?.[0]); // ← 追加
+
         // ★ Firestore に保存
         await adminDb.collection("races").doc(safeRace.id).set(
             safeRace,

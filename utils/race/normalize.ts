@@ -13,6 +13,8 @@ export function normalizeRaceName(name: string): string {
             String.fromCharCode(c.charCodeAt(0) - 0xFEE0)
         )                                 // 全角英字 → 半角
         .replace(/\s+/g, "")              // 改行・空白を全部除去
+        .replace(/チャレンジトロフィー/g, "チャレンジT")
+        .replace(/ランドトロフィー/g, "ランドT")
         .replace(/ステークス|S$/g, "")     // ステークス / S を除去
         .replace(/カップ|C$/g, "")        // カップ / C を除去
         .replace(/ジャンプ|J$/g, "")      // ジャンプ / J を除去

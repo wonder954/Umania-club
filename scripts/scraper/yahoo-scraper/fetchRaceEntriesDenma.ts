@@ -31,14 +31,17 @@ export async function fetchRaceEntriesDenma(
             const table = document.querySelector(sel.entries.table);
             if (!table) return results;
 
+            // ★ 今の Yahoo は .hr-table__row が正しい
             const rows = table.querySelectorAll(sel.entries.rows);
 
             rows.forEach((row: any) => {
+                // --- 枠番 ---
                 const frameEl = row.querySelector(sel.entries.frame);
                 const frame = frameEl?.textContent?.trim()
                     ? parseInt(frameEl.textContent.trim())
                     : null;
 
+                // --- 馬番（2つあるうちの2つ目）---
                 const numberCells = row.querySelectorAll(sel.entries.number);
                 const numberText =
                     numberCells[1]?.textContent?.trim() ||
@@ -46,19 +49,30 @@ export async function fetchRaceEntriesDenma(
                     null;
                 const number = numberText ? parseInt(numberText) : null;
 
-                const nameCell = row.querySelector(sel.entries.nameCell);
-                const name = nameCell?.querySelector("a")?.textContent?.trim() || "";
+                // --- nameCell は複数あるので 0番目が馬名 ---
+                const nameCells = row.querySelectorAll(sel.entries.nameCell);
+                const horseCell = nameCells[0];
+                const jockeyCell = nameCells[1]; // 騎手＋斤量
 
-                const sexAgeText = nameCell?.querySelector("p")?.textContent?.trim() || "";
+                // --- 馬名 ---
+                const name =
+                    horseCell?.querySelector("a")?.textContent?.trim() || "";
+
+                // --- 性齢（例: 牡8/鹿毛 → 牡8 を抽出）---
+                const sexAgeText =
+                    horseCell?.querySelector("p")?.textContent?.trim() || "";
                 const sexAgeMatch = sexAgeText.match(/^([牡牝セ])(\d+)/);
-                const sex = sexAgeMatch?.[1] || undefined;
-                const age = sexAgeMatch ? parseInt(sexAgeMatch[2]) : undefined;
+                const sex = sexAgeMatch?.[1] || null;
+                const age = sexAgeMatch ? parseInt(sexAgeMatch[2]) : null;
 
-                const jockeyCell = nameCell?.nextElementSibling;
-                const jockey = jockeyCell?.querySelector("a")?.textContent?.trim() || undefined;
-                const weightText = jockeyCell?.querySelector("p")?.textContent?.trim() || "";
-                const weight = weightText ? parseFloat(weightText) : undefined;
+                // --- 騎手 ---
+                const jockey =
+                    jockeyCell?.querySelector("a")?.textContent?.trim() || null;
 
+                // --- 斤量 ---
+                const weightText =
+                    jockeyCell?.querySelector("p")?.textContent?.trim() || "";
+                const weight = weightText ? parseFloat(weightText) : null;
 
                 if (name) {
                     results.push({
