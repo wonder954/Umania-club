@@ -1,0 +1,181 @@
+{
+  "raceId": "2609020611",
+  "info": {
+    "date": "2026-04-12",
+    "place": "阪神",
+    "title": "桜花賞",
+    "grade": "GⅠ",
+    "distance": 1600,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": "外",
+    "weightType": "馬齢",
+    "raceNumber": "11R",
+    "placeDetail": "2回阪神6日",
+    "videoId": "hWmRNVmp5Ok"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "フェスティバルヒル",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "坂井 瑠星",
+      "weight": 55
+    },
+    {
+      "frame": 1,
+      "number": 2,
+      "name": "サンアントワーヌ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "荻野 極",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 3,
+      "name": "ディアダイヤモンド",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "戸崎 圭太",
+      "weight": 55
+    },
+    {
+      "frame": 2,
+      "number": 4,
+      "name": "エレガンスアスク",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "岩田 望来",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 5,
+      "name": "ギャラボーグ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "西村 淳也",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 6,
+      "name": "アイニードユー",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "川田 将雅",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 7,
+      "name": "アランカール",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "武 豊",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 8,
+      "name": "ロンギングセリーヌ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "石橋 脩",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 9,
+      "name": "ルールザウェイヴ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "原 優介",
+      "weight": 55
+    },
+    {
+      "frame": 5,
+      "number": 10,
+      "name": "ナムラコスモス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "田口 貫太",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 11,
+      "name": "ジッピーチューン",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "北村 友一",
+      "weight": 55
+    },
+    {
+      "frame": 6,
+      "number": 12,
+      "name": "スウィートハピネス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "高杉 吏麒",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 13,
+      "name": "リリージョワ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "浜中 俊",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 14,
+      "name": "ドリームコア",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "C.ルメール",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 15,
+      "name": "スターアニス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "松山 弘平",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 16,
+      "name": "ショウナンカリス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "池添 謙一",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 17,
+      "name": "ブラックチャリス",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "津村 明秀",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 18,
+      "name": "プレセピオ",
+      "sex": "牝",
+      "age": 3,
+      "jockey": "富田 暁",
+      "weight": 55
+    }
+  ]
+}

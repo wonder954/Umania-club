@@ -1,0 +1,109 @@
+{
+  "raceId": "2609020511",
+  "info": {
+    "date": "2026-04-11",
+    "place": "阪神",
+    "title": "サンケイスポーツ杯阪神牝馬ステークス",
+    "grade": "G2",
+    "distance": 1600,
+    "surface": "芝",
+    "direction": "右",
+    "courseDetail": "外",
+    "weightType": "別定",
+    "raceNumber": "11R",
+    "placeDetail": "2回阪神5日",
+    "videoId": "GbOz_Y6_BGs"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "エンブロイダリー",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "C.ルメール",
+      "weight": 57
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "カピリナ",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "横山 典弘",
+      "weight": 55
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "ルージュソリテール",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "西塚 洸二",
+      "weight": 55
+    },
+    {
+      "frame": 4,
+      "number": 4,
+      "name": "ラヴァンダ",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "岩田 望来",
+      "weight": 56
+    },
+    {
+      "frame": 5,
+      "number": 5,
+      "name": "カムニャック",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "川田 将雅",
+      "weight": 57
+    },
+    {
+      "frame": 6,
+      "number": 6,
+      "name": "アスコリピチェーノ",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "坂井 瑠星",
+      "weight": 57
+    },
+    {
+      "frame": 7,
+      "number": 7,
+      "name": "クランフォード",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "幸 英明",
+      "weight": 55
+    },
+    {
+      "frame": 7,
+      "number": 8,
+      "name": "カナテープ",
+      "sex": "牝",
+      "age": 7,
+      "jockey": "松山 弘平",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 9,
+      "name": "エポックヴィーナス",
+      "sex": "牝",
+      "age": 5,
+      "jockey": "酒井 学",
+      "weight": 55
+    },
+    {
+      "frame": 8,
+      "number": 10,
+      "name": "ビップデイジー",
+      "sex": "牝",
+      "age": 4,
+      "jockey": "西村 淳也",
+      "weight": 55
+    }
+  ]
+}

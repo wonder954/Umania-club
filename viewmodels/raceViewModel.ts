@@ -75,15 +75,12 @@ export function toRaceViewModel(r: FirestoreRace): RaceViewModel {
         (r.oddsEntries ?? []).map((o) => [o.number, o])
     );
 
-    const mergedEntries: RaceEntryViewModel[] = (r.entries ?? []).map((e) => {
-        const odds = oddsMap.get(e.number ?? -1);
-
-        return {
-            ...e,
-            odds: odds?.odds ?? null,
-            popular: odds?.popular ?? null,
-        };
-    });
+    // ★ oddsEntries を使わず、entries の odds をそのまま使う
+    const mergedEntries: RaceEntryViewModel[] = (r.entries ?? []).map((e) => ({
+        ...e,
+        odds: e.odds ?? null,
+        popular: e.popular ?? null,
+    }));
 
     // ★ JRA の JSON の name を最優先で使う
     const shortName = r.name ?? r.title;

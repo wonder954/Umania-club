@@ -72,7 +72,7 @@ export function normalizeRace(data: RaceData): FirestoreRace {
         id: data.raceId,
         date: base.date,
         place: base.place ?? "",
-        title: base.title,
+        title: officialName ?? base.title, // ← JRA の短い名前を優先
         name: officialName, // ← ここに略称が入る
         grade: base.grade ?? null,
         distance: base.distance ?? 0,

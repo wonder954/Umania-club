@@ -21,38 +21,38 @@ export async function getOdds(url: string): Promise<
 
         const sel = safeSelectors(yahooSelectors);
 
-        const entries = await page.evaluate((sel) => {
+        const entries = await page.evaluate(() => {
             const results: any[] = [];
 
-            const table = document.querySelector(sel.entries.table);
-            if (!table) return results;
-
-            const rows = table.querySelectorAll(sel.entries.rows);
+            const rows = document.querySelectorAll("tr.hr-table__row");
 
             rows.forEach((row: any) => {
-                // 馬番（number）
-                const numberCells = row.querySelectorAll(sel.entries.number);
+                // 馬番（2番目の number セル）
                 const numberText =
-                    numberCells[1]?.textContent?.trim() ||
-                    numberCells[0]?.textContent?.trim() ||
-                    null;
+                    row.querySelector("td.hr-table__data--number:nth-child(2)")
+                        ?.textContent?.trim() ?? null;
                 const number = numberText ? parseInt(numberText) : null;
 
-                // オッズ
-                const oddsCell = row.querySelector(sel.entries.odds);
+                const oddsCell = row.querySelector("td.hr-table__data--odds");
                 let odds: number | null = null;
                 let popular: number | null = null;
 
                 if (oddsCell) {
-                    // 人気順位はテキストの最初の数字
-                    const text = oddsCell.textContent.trim(); // "5(8.9)"
+                    const text = oddsCell.textContent.trim(); // "10(69.1)"
+
+                    // 人気順位（先頭の数字）
                     const match = text.match(/^(\d+)/);
                     popular = match ? parseInt(match[1]) : null;
 
-                    // オッズは <span> の中
-                    const oddsSpan = oddsCell.querySelector("span")?.textContent?.trim() || "";
-                    const o = parseFloat(oddsSpan);
-                    odds = isNaN(o) ? null : o;
+                    // オッズ（span の中 or () の中）
+                    const span = oddsCell.querySelector("span");
+                    if (span) {
+                        odds = parseFloat(span.textContent.trim());
+                    } else {
+                        // span が無い場合 → () の中を取る
+                        const m = text.match(/\((.*?)\)/);
+                        odds = m ? parseFloat(m[1]) : null;
+                    }
                 }
 
                 if (number !== null) {
@@ -61,7 +61,7 @@ export async function getOdds(url: string): Promise<
             });
 
             return results;
-        }, sel);
+        });
 
         console.log(`Found ${entries.length} odds entries`);
         return entries;

@@ -52,9 +52,8 @@ export function UnifiedRaceCard({
             </div>
 
             <h2 className="text-2xl font-bold mb-1 text-slate-800">
-                {formatRaceName(calRace.title)}
+                {fullRace?.titleLabel ?? calRace.title}
             </h2>
-
             {fullRace ? (
                 <p className="text-slate-600 text-sm">
                     {fullRace.surface} {fullRace.distance}m

@@ -12,6 +12,7 @@ import { db } from "@/lib/firebase";
 import { useUserGroups } from "@/hooks/useUserGroups";
 import { signInWithGoogle } from "@/lib/auth";
 import type { Mark } from "@/types/mark";
+import { useTextValidation } from "@/hooks/useTextValidation";
 
 
 type Props = {
@@ -49,6 +50,10 @@ export default function PredictionForm({
 
     const addButtonRef = useRef<HTMLDivElement>(null);
 
+    const { validate } = useTextValidation();
+    const [commentError, setCommentError] = useState("");
+
+
     useEffect(() => {
         if (allowedNumbers.length === 7) {
             addButtonRef.current?.scrollIntoView({
@@ -63,6 +68,13 @@ export default function PredictionForm({
             alert("投稿にはログインが必要です");
             return;
         }
+
+        const err = validate(comment);
+        if (err) {
+            setCommentError(err);
+            return;
+        }
+        setCommentError("");
 
         // 🔥 投稿直前に最新の race を取得
         const raceSnap = await getDoc(doc(db, "races", race.id));
@@ -84,8 +96,7 @@ export default function PredictionForm({
             visibility: finalVisibility,
             prediction,
             bets,
-            comment,
-
+            comment: comment.trim(),
             raceId: race.id,
             raceName: race.title,
             grade: freshRace.grade,
@@ -199,10 +210,12 @@ export default function PredictionForm({
                         placeholder="この馬を選んだ理由は..."
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
-                        maxLength={150}
                     />
+                    {commentError && (
+                        <p className="text-red-500 text-xs mt-1">{commentError}</p>
+                    )}
                     <div className="text-right text-xs text-slate-400 mt-1">
-                        {comment.length} / 150
+                        {comment.length} / 200
                     </div>
                 </section>
 
