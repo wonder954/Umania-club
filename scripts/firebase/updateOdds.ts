@@ -1,6 +1,5 @@
-//オッズ更新実装したら使う
-
-import { adminDb } from "../../src/lib/firebase-admin";
+// scripts/firebase/updateOdds.ts
+import { getAdminDb } from "../../src/lib/firebase-admin";
 
 export type OddsEntry = {
     number: number;
@@ -9,7 +8,9 @@ export type OddsEntry = {
 };
 
 export async function updateOdds(raceId: string, oddsEntries: OddsEntry[]) {
-    const docRef = adminDb.collection("races").doc(raceId);
+    const db = getAdminDb(); // ← 遅延初期化（ここが重要）
+
+    const docRef = db.collection("races").doc(raceId);
     const doc = await docRef.get();
     const data = doc.data();
 

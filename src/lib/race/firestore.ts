@@ -1,11 +1,15 @@
-import { adminDb } from "../firebase-admin";
 import type { FirestoreRace } from "@/src/lib/race/types";
+import { getAdminDb } from "../firebase-admin";
 
 export async function getAllFirestoreRaces(): Promise<FirestoreRace[]> {
-    const snap = await adminDb.collection("races").get();
+    const db = getAdminDb();
+    const snap = await db.collection("races").get();
 
-    return snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-    })) as FirestoreRace[];
+    return snap.docs.map(doc => {
+    const data = doc.data() as FirestoreRace;
+        return {
+            ...data,      // ← 先に展開
+            id: doc.id,   // ← 最後に上書き（これが正しい）
+        };
+    });
 }

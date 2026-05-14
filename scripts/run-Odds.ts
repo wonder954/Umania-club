@@ -1,13 +1,15 @@
 // scripts/run-Odds.ts
-import { adminDb } from "../src/lib/firebase-admin.js";
+import { getAdminDb } from "../src/lib/firebase-admin.js";
 import { getOdds } from "./scraper/yahoo-scraper/getOdds.js";
 import { updateOdds } from "./firebase/updateOdds.js";
 
 async function runOdds() {
     console.log("🟡 オッズ更新開始");
 
+    const db = getAdminDb(); // ← 遅延初期化（ここが重要）
+
     // ① Firestore から「結果が null のレース」を取得
-    const snapshot = await adminDb
+    const snapshot = await db
         .collection("races")
         .where("result", "==", null)
         .get();

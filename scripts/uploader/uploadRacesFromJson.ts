@@ -1,18 +1,20 @@
+// scripts/firebase/uploadRacesFromJson.ts
 import dotenv from "dotenv";
 dotenv.config();
 
 import fs from "fs";
 import path from "path";
-import { adminDb } from "../../src/lib/firebase-admin.js";
+import { getAdminDb } from "../../src/lib/firebase-admin.js";
 
 // ★ 正規形への変換関数を読み込む
 import { toFirestoreRace } from "@/src/lib/race/convert.js";
 import { sanitizeFirestoreRace } from "@/src/lib/race/sanitize.js";
 
-
 const baseDir = path.join(process.cwd(), "scripts", "data");
 
 export async function uploadRacesFromJson() {
+    const db = getAdminDb(); // ← 遅延初期化（ここが重要）
+
     const folders = fs.readdirSync(baseDir).filter(f => /^\d{8}[wf]$/.test(f));
     const latest = folders.sort().reverse()[0];
 
@@ -31,7 +33,6 @@ export async function uploadRacesFromJson() {
 
         console.log("🔥 JSON entries sample:", json.raceId, json.entries?.[0]);
 
-
         if (!json.raceId || !json.info) {
             console.warn(`⚠️ スキップ: 不完全なデータ (${file})`);
             continue;
@@ -43,11 +44,11 @@ export async function uploadRacesFromJson() {
         // ★ undefined を null に変換
         const safeRace = sanitizeFirestoreRace(race);
 
-        console.log("🟡 race entries sample:", race.entries?.[0]);        // ← 追加
-        console.log("🟢 safeRace entries sample:", safeRace.entries?.[0]); // ← 追加
+        console.log("🟡 race entries sample:", race.entries?.[0]);
+        console.log("🟢 safeRace entries sample:", safeRace.entries?.[0]);
 
         // ★ Firestore に保存
-        await adminDb.collection("races").doc(safeRace.id).set(
+        await db.collection("races").doc(safeRace.id).set(
             safeRace,
             { merge: true }
         );
