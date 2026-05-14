@@ -1,5 +1,5 @@
 // scripts/run-Odds.ts
-import { adminDb } from "./scraper/firebase-admin.js";
+import { adminDb } from "../src/lib/firebase-admin.js";
 import { getOdds } from "./scraper/yahoo-scraper/getOdds.js";
 import { updateOdds } from "./firebase/updateOdds.js";
 

@@ -4,7 +4,7 @@ import { processRaceCommon } from "../common/processRaceCommon";
 import { toResultUrl } from "../common/urlTransform";
 import { fetchRaceResult } from "../scraper/yahoo-scraper/index";
 
-import merged from "../../scripts/data/2026_grades_merged.json";
+import merged from "../../src/data/2026_grades_merged.json";
 import { loadRaceData, loadPreviousWeekEntries } from "../utils/saveRaceData";
 import type { LastWeekRaceItem } from "../types/raceList";
 

@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
 import { fetchWeeklyRacesYahoo } from "./scraper/yahoo-scraper/index";
-import { generateFolderName } from "./utils/saveRaceData";
-import { processFridayRace } from "./friday/processFridayRace";
-import { mergeRaceId } from "./mergeRaceId";
+import { generateFolderName } from "./utils/saveRaceData.ts";
+import { processFridayRace } from "./friday/processFridayRace.ts";
+import { mergeRaceId } from "./mergeRaceId.ts";
 
 async function main() {
     console.log("=".repeat(60));

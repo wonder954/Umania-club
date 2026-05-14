@@ -1,7 +1,7 @@
 console.log('✅ mergeRaceInfo.ts が読み込まれました');
 
 
-import type { RaceInfo } from '../../lib/race/info';
+import type { RaceInfo } from '../../src/lib/race/info';
 
 /**
  * スクレイプしたレース情報を既存の info にマージする

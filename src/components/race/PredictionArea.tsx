@@ -1,0 +1,73 @@
+"use client";
+
+import { useState, useRef } from "react";
+import HorseTable from "@/src/components/race/HorseTable";
+import PredictionForm from "@/src/components/prediction/PredictionForm";
+import { Bet } from "@/src/types/bet";
+import type { RaceViewModel } from "@/src/viewmodels/raceViewModel";
+import Image from "next/image";
+import type { Mark } from "@/src/types/mark";
+
+export default function PredictionArea({ race }: { race: RaceViewModel }) {
+    const [prediction, setPrediction] = useState<Record<string, Mark>>({});
+    const [bets, setBets] = useState<Bet[]>([]);
+    const [comment, setComment] = useState("");
+
+    const horseTableRef = useRef<HTMLDivElement>(null);
+
+    const handleReset = () => {
+        setPrediction({});
+        setBets([]);
+        setComment("");
+
+        setTimeout(() => {
+            horseTableRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }, 0);
+    };
+
+    return (
+        <div className="space-y-10 relative overflow-visible">
+            <div ref={horseTableRef} className="scroll-mt-24">
+                <HorseTable
+                    race={race}
+                    prediction={prediction}
+                    onPredictionChange={setPrediction}
+                />
+            </div>
+
+            <section>
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
+                    <Image
+                        src="/prediction.png"
+                        alt="prediction"
+                        width={28}
+                        height={28}
+                        className="h-7 w-auto object-contain drop-shadow-sm"
+                    />
+                    あなたの予想
+                    <Image
+                        src="/prediction.png"
+                        alt="prediction"
+                        width={28}
+                        height={28}
+                        className="h-7 w-auto object-contain drop-shadow-sm"
+                    />
+                </h2>
+
+                <PredictionForm
+                    race={race}
+                    prediction={prediction}
+                    setPrediction={setPrediction}
+                    bets={bets}
+                    setBets={setBets}
+                    comment={comment}
+                    setComment={setComment}
+                    onReset={handleReset}
+                />
+            </section>
+        </div>
+    );
+}

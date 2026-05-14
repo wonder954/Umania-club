@@ -1,5 +1,5 @@
-import type { RaceInfo } from '../../../lib/race/info';
-import type { RaceEntry } from '../../../lib/race/types';
+import type { RaceInfo } from '../../../src/lib/race/info';
+import type { RaceEntry } from '../../../src/lib/race/types';
 import { createBrowserPage, extractRaceInfo } from './helpers';
 import { yahooSelectors } from './selectors';
 import { safeSelectors } from '../../utils/safeSelectors';

@@ -1,5 +1,5 @@
 // scripts/friday/createInitialInfo.ts
-import type { RaceInfo } from "../../lib/race/info";
+import type { RaceInfo } from "../../src/lib/race/info";
 
 export function createInitialInfo(race: any): RaceInfo {
     return {

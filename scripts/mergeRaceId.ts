@@ -108,13 +108,18 @@ export async function mergeRaceId(): Promise<number> {
             console.warn(`⚠️ マッチ失敗: ${race.name} (${race.date}, ${race.grade})`);
         }
     }
+    // ① scripts/data に保存（今まで通り）
+    const scriptOutputPath = path.join(__dirname, "data/2026_grades_merged.json");
+    fs.writeFileSync(scriptOutputPath, JSON.stringify(jraRaces, null, 2), "utf8");
 
-    const outputPath = path.join(__dirname, "data/2026_grades_merged.json");
-    fs.writeFileSync(outputPath, JSON.stringify(jraRaces, null, 2), "utf8");
+    // ② src/data にもコピー（アプリ用）
+    const appOutputPath = path.join(process.cwd(), "src/data/2026_grades_merged.json");
+    fs.writeFileSync(appOutputPath, JSON.stringify(jraRaces, null, 2), "utf8");
 
+    console.log(`\n📄 scripts/data に保存: ${scriptOutputPath}`);
+    console.log(`📄 src/data に保存: ${appOutputPath}`);
     console.log(`\n✅ raceId マージ完了: ${updated} 件更新`);
     console.log(`❌ マッチ失敗: ${notFound} 件`);
-    console.log(`📄 保存先: data/2026_grades_merged.json`);
 
     return updated;
 }

@@ -3,7 +3,7 @@
 import { processRaceCommon } from "../common/processRaceCommon";
 import { toRegistUrl } from "../common/urlTransform";
 import { fetchRaceEntriesRegist } from "../scraper/yahoo-scraper/index";
-import merged from "../../scripts/data/2026_grades_merged.json";
+import merged from "../../src/data/2026_grades_merged.json";
 import type { RaceListItem } from "../types/raceList";
 
 export async function processWeeklyRace(

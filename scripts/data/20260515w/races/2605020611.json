@@ -1,0 +1,350 @@
+{
+  "raceId": "2605020611",
+  "info": {
+    "date": "2026-05-10",
+    "place": "東京",
+    "title": "NHKマイルカップ\n                  GI",
+    "grade": "G1",
+    "distance": 1600,
+    "surface": "芝",
+    "direction": "左",
+    "courseDetail": null,
+    "weightType": "馬齢",
+    "raceNumber": "11R",
+    "placeDetail": "2回東京6日",
+    "videoId": "dfXC48ucwh8"
+  },
+  "entries": [],
+  "result": {
+    "order": [
+      {
+        "rank": 1,
+        "frame": 8,
+        "number": 17,
+        "name": "ロデオドライブ",
+        "time": "1:31.5",
+        "margin": "-",
+        "jockey": "D.レーン",
+        "weight": "57.0",
+        "popular": 1,
+        "odds": 4.6
+      },
+      {
+        "rank": 2,
+        "frame": 8,
+        "number": 16,
+        "name": "アスクイキゴミ",
+        "time": "1:31.5",
+        "margin": "ハナ",
+        "jockey": "戸崎 圭太",
+        "weight": "57.0",
+        "popular": 4,
+        "odds": 8.4
+      },
+      {
+        "rank": 3,
+        "frame": 6,
+        "number": 11,
+        "name": "アドマイヤクワッズ",
+        "time": "1:31.7",
+        "margin": "1 1/4馬身",
+        "jockey": "坂井 瑠星",
+        "weight": "57.0",
+        "popular": 6,
+        "odds": 9.7
+      },
+      {
+        "rank": 4,
+        "frame": 4,
+        "number": 8,
+        "name": "ローベルクランツ",
+        "time": "1:31.9",
+        "margin": "1 1/2馬身",
+        "jockey": "松山 弘平",
+        "weight": "57.0",
+        "popular": 10,
+        "odds": 28.5
+      },
+      {
+        "rank": 5,
+        "frame": 4,
+        "number": 7,
+        "name": "ダイヤモンドノット",
+        "time": "1:32.0",
+        "margin": "1/2馬身",
+        "jockey": "川田 将雅",
+        "weight": "57.0",
+        "popular": 3,
+        "odds": 5.5
+      },
+      {
+        "rank": 6,
+        "frame": 7,
+        "number": 15,
+        "name": "レザベーション",
+        "time": "1:32.0",
+        "margin": "クビ",
+        "jockey": "原 優介",
+        "weight": "57.0",
+        "popular": 11,
+        "odds": 37.3
+      },
+      {
+        "rank": 7,
+        "frame": 5,
+        "number": 9,
+        "name": "サンダーストラック",
+        "time": "1:32.1",
+        "margin": "アタマ",
+        "jockey": "C.ルメール",
+        "weight": "57.0",
+        "popular": 7,
+        "odds": 17
+      },
+      {
+        "rank": 8,
+        "frame": 6,
+        "number": 12,
+        "name": "アンドゥーリル",
+        "time": "1:32.2",
+        "margin": "1/2馬身",
+        "jockey": "岩田 望来",
+        "weight": "57.0",
+        "popular": 8,
+        "odds": 19.7
+      },
+      {
+        "rank": 9,
+        "frame": 5,
+        "number": 10,
+        "name": "エコロアルバ",
+        "time": "1:32.2",
+        "margin": "ハナ",
+        "jockey": "横山 和生",
+        "weight": "57.0",
+        "popular": 2,
+        "odds": 4.9
+      },
+      {
+        "rank": 10,
+        "frame": 7,
+        "number": 14,
+        "name": "バルセシート",
+        "time": "1:32.3",
+        "margin": "3/4馬身",
+        "jockey": "北村 友一",
+        "weight": "57.0",
+        "popular": 9,
+        "odds": 21.3
+      },
+      {
+        "rank": 11,
+        "frame": 3,
+        "number": 5,
+        "name": "ギリーズボール",
+        "time": "1:32.3",
+        "margin": "アタマ",
+        "jockey": "西塚 洸二",
+        "weight": "55.0",
+        "popular": 14,
+        "odds": 46.2
+      },
+      {
+        "rank": 12,
+        "frame": 2,
+        "number": 4,
+        "name": "カヴァレリッツォ",
+        "time": "1:32.4",
+        "margin": "クビ",
+        "jockey": "西村 淳也",
+        "weight": "57.0",
+        "popular": 5,
+        "odds": 9.3
+      },
+      {
+        "rank": 13,
+        "frame": 3,
+        "number": 6,
+        "name": "ジーネキング",
+        "time": "1:32.4",
+        "margin": "クビ",
+        "jockey": "斎藤 新",
+        "weight": "57.0",
+        "popular": 13,
+        "odds": 43.7
+      },
+      {
+        "rank": 14,
+        "frame": 2,
+        "number": 3,
+        "name": "オルネーロ",
+        "time": "1:32.5",
+        "margin": "クビ",
+        "jockey": "津村 明秀",
+        "weight": "57.0",
+        "popular": 15,
+        "odds": 63.2
+      },
+      {
+        "rank": 15,
+        "frame": 8,
+        "number": 18,
+        "name": "フクチャンショウ",
+        "time": "1:33.1",
+        "margin": "3 1/2馬身",
+        "jockey": "横山 武史",
+        "weight": "57.0",
+        "popular": 12,
+        "odds": 38.5
+      },
+      {
+        "rank": 16,
+        "frame": 1,
+        "number": 1,
+        "name": "リゾートアイランド",
+        "time": "1:33.4",
+        "margin": "2馬身",
+        "jockey": "佐々木 大輔",
+        "weight": "57.0",
+        "popular": 18,
+        "odds": 159.8
+      },
+      {
+        "rank": 17,
+        "frame": 1,
+        "number": 2,
+        "name": "ユウファラオ",
+        "time": "1:33.5",
+        "margin": "1/2馬身",
+        "jockey": "松若 風馬",
+        "weight": "57.0",
+        "popular": 16,
+        "odds": 135.7
+      },
+      {
+        "rank": 18,
+        "frame": 7,
+        "number": 13,
+        "name": "ハッピーエンジェル",
+        "time": "1:33.7",
+        "margin": "1馬身",
+        "jockey": "三浦 皇成",
+        "weight": "55.0",
+        "popular": 17,
+        "odds": 144.4
+      }
+    ],
+    "payout": {
+      "win": [
+        {
+          "numbers": [
+            17
+          ],
+          "amount": 460,
+          "popular": 1
+        }
+      ],
+      "place": [
+        {
+          "numbers": [
+            17
+          ],
+          "amount": 230,
+          "popular": 3
+        },
+        {
+          "numbers": [
+            16
+          ],
+          "amount": 300,
+          "popular": 4
+        },
+        {
+          "numbers": [
+            11
+          ],
+          "amount": 300,
+          "popular": 5
+        }
+      ],
+      "bracket": [
+        {
+          "numbers": [
+            8,
+            8
+          ],
+          "amount": 1200,
+          "popular": 5
+        }
+      ],
+      "quinella": [
+        {
+          "numbers": [
+            16,
+            17
+          ],
+          "amount": 1710,
+          "popular": 3
+        }
+      ],
+      "wide": [
+        {
+          "numbers": [
+            16,
+            17
+          ],
+          "amount": 770,
+          "popular": 4
+        },
+        {
+          "numbers": [
+            11,
+            17
+          ],
+          "amount": 1000,
+          "popular": 6
+        },
+        {
+          "numbers": [
+            11,
+            16
+          ],
+          "amount": 1510,
+          "popular": 18
+        }
+      ],
+      "exacta": [
+        {
+          "numbers": [
+            17,
+            16
+          ],
+          "amount": 2990,
+          "popular": 3
+        }
+      ],
+      "trio": [
+        {
+          "numbers": [
+            11,
+            16,
+            17
+          ],
+          "amount": 6160,
+          "popular": 11
+        }
+      ],
+      "trifecta": [
+        {
+          "numbers": [
+            17,
+            16,
+            11
+          ],
+          "amount": 26150,
+          "popular": 35
+        }
+      ]
+    }
+  }
+}

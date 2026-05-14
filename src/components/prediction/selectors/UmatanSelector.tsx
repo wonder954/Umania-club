@@ -1,0 +1,33 @@
+"use client";
+import { Horse } from "@/src/types/horse";
+import { NagashiSelectorValue } from "@/src/types/bet";
+import NagashiBaseSelector from "./NagashiBaseSelector";
+
+type Props = {
+    horses: Horse[];
+    allowedNumbers: number[];
+    onChange: (v: NagashiSelectorValue) => void;
+};
+
+export default function UmatanSelector({
+    horses,
+    allowedNumbers,
+    onChange,
+}: Props) {
+    const handleChange = ({ axis, opponents }: { axis: number[]; opponents: number[] }) => {
+        // 馬単流し: 軸は1頭 (axis[0])
+        onChange({
+            axis: axis[0] ?? null,
+            opponents,
+        });
+    };
+
+    return (
+        <NagashiBaseSelector
+            horses={horses}
+            allowedNumbers={allowedNumbers}
+            onChange={handleChange}
+            axisLimit={1}
+        />
+    );
+}

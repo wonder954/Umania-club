@@ -1,0 +1,85 @@
+{
+  "raceId": "2608030708",
+  "info": {
+    "date": "2026-05-16",
+    "place": "京都",
+    "title": "京都ハイジャンプ",
+    "grade": "J・GⅡ",
+    "distance": 3930,
+    "surface": "芝",
+    "direction": null,
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "8R",
+    "placeDetail": "3回京都7日",
+    "videoId": "Zn0gEuqKpyE"
+  },
+  "entries": [
+    {
+      "frame": null,
+      "number": null,
+      "name": "ゴールデンスロープ",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "シホノスペランツァ",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ダノンロッキー",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ネビーイーム",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "メイショウアツイタ",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    },
+    {
+      "frame": null,
+      "number": null,
+      "name": "ヴラディア",
+      "sex": null,
+      "age": null,
+      "jockey": null,
+      "weight": null,
+      "odds": null,
+      "popular": null
+    }
+  ]
+}

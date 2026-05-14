@@ -1,12 +1,12 @@
 // scripts/common/processRaceCommon.ts
 
-import type { RaceInfo, RaceData } from "../../lib/race/info";
+import type { RaceInfo, RaceData } from "../../src/lib/race/info";
 import { createInitialInfo } from "../friday/createInitialInfo";
 import { mergeRaceInfo } from "../utils/mergeRaceInfo";
 import { saveRaceData } from "../utils/saveRaceData";
-import { normalizeRace } from "../../lib/race/normalize";
+import { normalizeRace } from "../../src/lib/race/normalize";
 import { saveRace } from "../firebase/saveRace";
-import { searchJraOfficialVideo } from "../../lib/searchJraOfficialVideo";
+import { searchJraOfficialVideo } from "../../src/lib/searchJraOfficialVideo";
 
 export async function processRaceCommon(config: {
     race: any;

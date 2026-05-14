@@ -3,11 +3,11 @@ dotenv.config();
 
 import fs from "fs";
 import path from "path";
-import { adminDb } from "../scraper/firebase-admin.js";
+import { adminDb } from "../../src/lib/firebase-admin.js";
 
 // ★ 正規形への変換関数を読み込む
-import { toFirestoreRace } from "@/lib/race/convert";
-import { sanitizeFirestoreRace } from "@/lib/race/sanitize";
+import { toFirestoreRace } from "@/src/lib/race/convert.js";
+import { sanitizeFirestoreRace } from "@/src/lib/race/sanitize.js";
 
 
 const baseDir = path.join(process.cwd(), "scripts", "data");

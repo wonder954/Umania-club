@@ -1,6 +1,6 @@
 //オッズ更新実装したら使う
 
-import { adminDb } from "../scraper/firebase-admin.js";
+import { adminDb } from "../../src/lib/firebase-admin";
 
 export type OddsEntry = {
     number: number;

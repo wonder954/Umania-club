@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import type { RaceInfo } from '../../../lib/race/info';
+import type { RaceInfo } from '../../../src/lib/race/info';
 
 // ============================================
 // 共通ヘルパー

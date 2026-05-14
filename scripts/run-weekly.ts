@@ -11,14 +11,14 @@ dotenv.config({ path: ".env.local" });  // ファイル名を指定
 import { fetchWeeklyRacesYahoo } from './scraper/yahoo-scraper/index';
 import { fetchLastWeekRacesYahoo } from './scraper/yahoo-scraper/index';
 
-import { processWeeklyRace } from './weekly/processWeeklyRace';
-import { processLastWeekRace } from './weekly/processLastWeekRace';
+import { processWeeklyRace } from './weekly/processWeeklyRace.ts';
+import { processLastWeekRace } from './weekly/processLastWeekRace.ts';
 
-import { generateFolderName, getLatestFolderByType } from './utils/saveRaceData';
+import { generateFolderName, getLatestFolderByType } from './utils/saveRaceData.ts';
 
-import { mergeRaceId } from './mergeRaceId';
+import { mergeRaceId } from './mergeRaceId.ts';
 
-import type { RaceListItem, LastWeekRaceItem } from './types/raceList';
+import type { RaceListItem, LastWeekRaceItem } from './types/raceList.ts';
 
 async function main() {
     console.log('='.repeat(60));
