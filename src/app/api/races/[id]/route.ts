@@ -7,13 +7,12 @@ import { loadRaceJson } from '../utils';
  */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = params;
+        const { id } = await context.params;
 
-        const race = loadRaceJson(params.id);
-
+        const race = loadRaceJson(id);
 
         if (!race) {
             return NextResponse.json(
@@ -24,7 +23,7 @@ export async function GET(
 
         return NextResponse.json(race);
     } catch (error) {
-        console.error(`Error in GET /api/races/${params.id}:`, error);
+        console.error(`Error in GET /api/races:`, error);
 
         return NextResponse.json(
             {
