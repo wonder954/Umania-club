@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const revalidate = 0;
 
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
 import type { FirestoreRace } from "@/src/lib/race/types";
 import RaceCard from "@/src/components/race/RaceCard";
 import { RaceCalendarSection } from "@/src/components/calendar/RaceCalendarSection";
@@ -17,9 +19,16 @@ import { gradeRaces2026 } from "@/src/lib/grades2026"; // ← JRA データ取�
 
 export default async function Home() {
     const holidays = await fetchHolidays();
-    const fsRaces: FirestoreRace[] = await fetch("/api/races/all", {
-    cache: "no-store",
-}).then(res => res.json());
+    // ★ Next.js 16: headers() は Promise なので await が必要
+    const headersList = await headers();
+    const host = headersList.get("host");
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+
+    // ★ Edge/Node どちらでも動く絶対URL fetch
+    const fsRaces: FirestoreRace[] = await fetch(
+        `${protocol}://${host}/api/races/all`,
+        { cache: "no-store" }
+    ).then(res => res.json());
 
 
 
