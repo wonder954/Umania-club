@@ -1,25 +1,15 @@
-import { NextResponse } from 'next/server';
-import { loadAllRaces } from './utils';
+import { NextResponse } from "next/server";
+import { db } from "@/src/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 /**
  * レース一覧取得API
  * GET /api/races
  */
 export async function GET() {
-    try {
-        const races = await loadAllRaces();
-        return NextResponse.json(races);
-    } catch (error) {
-        console.error('Error in GET /api/races:', error);
-
-        return NextResponse.json(
-            {
-                error: 'Failed to fetch races',
-                message: error instanceof Error ? error.message : 'Unknown error',
-            },
-            { status: 500 }
-        );
-    }
+    const snap = await getDocs(collection(db, "races"));
+    const races = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return NextResponse.json(races);
 }
 
 // キャッシュ無効化（常に最新データを返す）
