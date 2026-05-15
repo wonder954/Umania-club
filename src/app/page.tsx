@@ -2,7 +2,7 @@ export const revalidate = 0;
 
 import Image from "next/image";
 import Link from "next/link";
-import { getAllFirestoreRaces } from "@/src/lib/race/firestore";
+import type { FirestoreRace } from "@/src/lib/race/types";
 import RaceCard from "@/src/components/race/RaceCard";
 import { RaceCalendarSection } from "@/src/components/calendar/RaceCalendarSection";
 import { fetchHolidays } from "@/src/lib/holidays";
@@ -16,7 +16,12 @@ import { gradeRaces2026 } from "@/src/lib/grades2026"; // ← JRA データ取�
 
 export default async function Home() {
     const holidays = await fetchHolidays();
-    const fsRaces = await getAllFirestoreRaces();
+    const fsRaces: FirestoreRace[] = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/races/all`,
+    { cache: "no-store" }
+).then(res => res.json());
+
+
 
     // ★ FirestoreRace → JRA 名に統一
     const unified = fsRaces.map(r => {

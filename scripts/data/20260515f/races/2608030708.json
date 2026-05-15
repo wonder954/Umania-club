@@ -1,0 +1,73 @@
+{
+  "raceId": "2608030708",
+  "info": {
+    "date": "2026-05-16",
+    "place": "京都",
+    "title": "京都ハイジャンプ",
+    "grade": "J・GⅡ",
+    "distance": 3930,
+    "surface": "芝",
+    "direction": null,
+    "courseDetail": null,
+    "weightType": "別定",
+    "raceNumber": "8R",
+    "placeDetail": "3回京都7日",
+    "videoId": "ALXJsB6py6Q"
+  },
+  "entries": [
+    {
+      "frame": 1,
+      "number": 1,
+      "name": "ダノンロッキー",
+      "sex": "牡",
+      "age": 5,
+      "jockey": "五十嵐 雄祐",
+      "weight": 60
+    },
+    {
+      "frame": 2,
+      "number": 2,
+      "name": "ヴラディア",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "上野 翔",
+      "weight": 60
+    },
+    {
+      "frame": 3,
+      "number": 3,
+      "name": "メイショウアツイタ",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "難波 剛健",
+      "weight": 60
+    },
+    {
+      "frame": 4,
+      "number": 4,
+      "name": "ネビーイーム",
+      "sex": "牡",
+      "age": 8,
+      "jockey": "小牧 加矢太",
+      "weight": 60
+    },
+    {
+      "frame": 5,
+      "number": 5,
+      "name": "シホノスペランツァ",
+      "sex": "牡",
+      "age": 7,
+      "jockey": "高田 潤",
+      "weight": 60
+    },
+    {
+      "frame": 6,
+      "number": 6,
+      "name": "ゴールデンスロープ",
+      "sex": null,
+      "age": null,
+      "jockey": "大江原 圭",
+      "weight": 60
+    }
+  ]
+}
