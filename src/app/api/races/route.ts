@@ -7,9 +7,7 @@ import { loadAllRaces } from './utils';
  */
 export async function GET() {
     try {
-        const races = loadAllRaces();
-
-
+        const races = await loadAllRaces();
         return NextResponse.json(races);
     } catch (error) {
         console.error('Error in GET /api/races:', error);

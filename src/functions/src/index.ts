@@ -1,13 +1,12 @@
 import { setGlobalOptions } from "firebase-functions";
-import { onDocumentDeleted } from "firebase-functions/firestore";
+import { onDocumentDeleted, FirestoreEvent } from "firebase-functions/firestore";
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
-// ★ v2 は setGlobalOptions を export より前に書く
 setGlobalOptions({ maxInstances: 10 });
 
-export const onGroupDelete = onDocumentDeleted("groups/{groupId}", async (event) => {
+export const onGroupDelete = onDocumentDeleted("groups/{groupId}", async (event: FirestoreEvent<any>) => {
     const snap = event.data;
     if (!snap) return;
 
@@ -18,7 +17,7 @@ export const onGroupDelete = onDocumentDeleted("groups/{groupId}", async (event)
         const docs = await ref.listDocuments();
 
         const batch = snap.ref.firestore.batch();
-        docs.forEach((d) => batch.delete(d));
+        docs.forEach((d: FirebaseFirestore.DocumentReference) => batch.delete(d));
         await batch.commit();
     }
 });

@@ -1,5 +1,7 @@
 import fs from "fs";
 import path from "path";
+import { db } from "@/src//lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const DATA_DIR = path.join(process.cwd(), "scripts/scraper/data");
 
@@ -24,15 +26,12 @@ export function loadRaceJson(raceId: string) {
     return JSON.parse(fs.readFileSync(filePath, "utf-8"));
 }
 
-export function loadAllRaces() {
-    const folder = getLatestRaceFolder();
-    if (!folder) return [];
+export async function loadAllRaces() {
+    const ref = collection(db, "races");
+    const snap = await getDocs(ref);
 
-    const racesDir = path.join(DATA_DIR, folder, "races");
-    const files = fs.readdirSync(racesDir);
-
-    return files.map(file => {
-        const json = fs.readFileSync(path.join(racesDir, file), "utf-8");
-        return JSON.parse(json);
-    });
+    return snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
 }
