@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 export const revalidate = 0;
 
 import Image from "next/image";
