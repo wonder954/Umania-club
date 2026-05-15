@@ -10,7 +10,7 @@
 
 | レース一覧 | 予想投稿 | グループ機能 |
 |:-----------:|:--------:|:------------:|
-| ![出馬表](./docs/screenshot-races.png) | ![レース結果](./docs/screenshot-result.png) | ![グループ投稿](./docs/screenshot-group.png) |
+| ![出馬表](./src/docs/screenshot-races.png) | ![レース結果](./src/docs/screenshot-result.png) | ![グループ投稿](./src/docs/screenshot-group.png) |
 
 ---
 
@@ -103,23 +103,31 @@ Firestore の仕様上 `undefined` を保存できないため、オプショナ
 
 ## 🗂 ディレクトリ構成
 
-```
-src/
-├── app/
-│   ├── races/          # レース一覧・詳細ページ
-│   ├── groups/         # グループ機能
-│   └── users/          # ユーザープロフィール
-├── components/
-│   ├── calendar/       # カレンダーUI（RaceCalendar, CalendarCell など）
-│   ├── race/           # レース詳細・出馬表（UnifiedRaceCard, PayoutSection など）
-│   ├── community/      # ポスト・予想関連
-│   └── prediction/     # 予想入力フォーム
-├── hooks/              # Custom Hooks（データ取得ロジック）
-├── lib/                # Firebase設定・型定義・定数データ
-├── viewmodels/         # ViewModel（表示用データ変換）
-├── utils/              # 汎用ユーティリティ関数
-└── scripts/
-    └── scraper/        # スクレイピングスクリプト群
+```text
+├── src/                # フロントエンド・Cloud Functions
+│   ├── app/            # Next.js App Router (ページ・API)
+│   │   ├── api/        # APIエンドポイント
+│   │   ├── groups/     # グループ機能
+│   │   ├── races/      # レース一覧・詳細ページ
+│   │   └── users/      # ユーザープロフィール
+│   ├── components/     # UIコンポーネント
+│   │   ├── calendar/   # カレンダーUI
+│   │   ├── community/  # ポスト・予想関連
+│   │   ├── prediction/ # 予想入力フォーム
+│   │   └── race/       # レース詳細・出馬表・結果表示
+│   ├── constants/      # 定数定義
+│   ├── context/        # React Context
+│   ├── functions/      # Firebase Functions (バックエンド)
+│   ├── hooks/          # Custom Hooks (データ取得ロジック)
+│   ├── lib/            # Firebase設定・ドメインロジック
+│   ├── types/          # TypeScript型定義
+│   ├── utils/          # 汎用ユーティリティ関数
+│   └── viewmodels/     # ViewModel (表示用データ変換)
+└── scripts/            # データ収集（スクレイピング）用スクリプト群
+    ├── scraper/        # Yahoo競馬スクレイパー
+    ├── friday/         # 出馬表取得処理
+    ├── weekly/         # レース結果・登録馬取得処理
+    └── firebase/       # Firestore保存処理
 ```
 
 ---

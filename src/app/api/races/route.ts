@@ -12,5 +12,5 @@ export async function GET() {
     return NextResponse.json(races);
 }
 
-// キャッシュ無効化（常に最新データを返す）
-export const revalidate = 0;
+// キャッシュ有効化
+export const revalidate = 60;
