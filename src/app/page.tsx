@@ -16,10 +16,10 @@ import { gradeRaces2026 } from "@/src/lib/grades2026"; // ← JRA データ取�
 
 export default async function Home() {
     const holidays = await fetchHolidays();
-    const fsRaces: FirestoreRace[] = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/races/all`,
-    { cache: "no-store" }
-).then(res => res.json());
+    const fsRaces: FirestoreRace[] = await fetch("/api/races/all", {
+    cache: "no-store",
+}).then(res => res.json());
+
 
 
 
