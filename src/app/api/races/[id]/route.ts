@@ -1,39 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { loadRaceJson } from '../utils';
+import { db } from "@/src/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-/**
- * 個別レース詳細取得API
- * GET /api/races/[id]
- */
 export async function GET(
     request: NextRequest,
     context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await context.params;
+    
     try {
-        const { id } = await context.params;
 
-        const race = loadRaceJson(id);
+        const ref = doc(db, "races", id);
+        const snap = await getDoc(ref);
 
-        if (!race) {
+        if (!snap.exists()) {
             return NextResponse.json(
-                { error: 'Race not found' },
+                { error: "Race not found" },
                 { status: 404 }
             );
         }
 
-        return NextResponse.json(race);
+        return NextResponse.json({
+            id,
+            ...snap.data(),
+        });
     } catch (error) {
-        console.error(`Error in GET /api/races:`, error);
+        console.error(`Error in GET /api/races/${id}:`, error);
 
         return NextResponse.json(
             {
-                error: 'Failed to fetch race',
-                message: error instanceof Error ? error.message : 'Unknown error',
+                error: "Failed to fetch race",
+                message: error instanceof Error ? error.message : "Unknown error",
             },
             { status: 500 }
         );
     }
 }
 
-// キャッシュ無効化
 export const revalidate = 0;

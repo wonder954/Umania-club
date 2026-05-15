@@ -1,15 +1,16 @@
+// src/lib/race/firestore.ts
 import type { FirestoreRace } from "@/src/lib/race/types";
-import { getAdminDb } from "../firebase-admin";
+import { db } from "@/src/lib/firebase"; // ← Web SDK の db
+import { collection, getDocs } from "firebase/firestore";
 
 export async function getAllFirestoreRaces(): Promise<FirestoreRace[]> {
-    const db = getAdminDb();
-    const snap = await db.collection("races").get();
+    const snap = await getDocs(collection(db, "races"));
 
     return snap.docs.map(doc => {
-    const data = doc.data() as FirestoreRace;
+        const data = doc.data() as FirestoreRace;
         return {
-            ...data,      // ← 先に展開
-            id: doc.id,   // ← 最後に上書き（これが正しい）
+            ...data,
+            id: doc.id,
         };
     });
 }
